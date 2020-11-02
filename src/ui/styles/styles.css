@@ -1,0 +1,10 @@
+.rounded-button {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+    -fx-border-radius: 50%;
+    -fx-background-radius: 50%;
+}
+
+.list-cell {
+    -fx-padding: 0;
+}

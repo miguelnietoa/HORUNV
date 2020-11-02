@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="269.0" style="-fx-background-color: green;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button fx:id="btnRemove" layoutX="181.0" layoutY="15.0" mnemonicParsing="false" styleClass="rounded-button" stylesheets="@../styles/styles.css" AnchorPane.rightAnchor="61.0">
+         <graphic>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+               <Image url="@../../assets/negative.png" />
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="btnFilter" layoutX="228.0" layoutY="15.0" mnemonicParsing="false" styleClass="rounded-button" stylesheets="@../styles/styles.css" AnchorPane.rightAnchor="14.0">
+         <graphic>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../assets/setting.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Label fx:id="lblSubjectName" layoutX="14.0" layoutY="15.0" prefHeight="5.0" prefWidth="137.0" text="Nombre de la materia" AnchorPane.leftAnchor="14.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblInfo" layoutX="14.0" layoutY="32.0" prefHeight="5.0" prefWidth="137.0" text="IST123 | 3 créditos" AnchorPane.leftAnchor="14.0" />
+   </children>
+</AnchorPane>

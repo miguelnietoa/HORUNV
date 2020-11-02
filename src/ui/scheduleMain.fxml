@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeView?>
+<?import java.lang.String?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ScheduleController">
+   <children>
+      <AnchorPane layoutY="6.0" prefHeight="42.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <JFXTextField fx:id="textFieldSearch" layoutX="14.0" layoutY="11.0" prefHeight="25.0" prefWidth="289.0" promptText="Buscar asignatura" AnchorPane.leftAnchor="14.0" />
+            <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="535.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="225.0">
+               <image>
+                  <Image url="@../assets/woman.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="385.0" layoutY="10.0" prefHeight="25.0" prefWidth="107.0" text="Valentina Imitola" AnchorPane.rightAnchor="108.0" />
+            <JFXButton buttonType="RAISED" layoutX="501.0" layoutY="10.0" style="-fx-background-color: red;" text="Cerrar sesión" AnchorPane.rightAnchor="15.0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutY="45.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: green;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0">
+         <children>
+            <JFXTreeView layoutX="14.0" layoutY="14.0" prefHeight="400.0" prefWidth="476.0" AnchorPane.bottomAnchor="41.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="14.0" />
+            <AnchorPane layoutX="504.0" layoutY="14.0" prefHeight="400.0" prefWidth="282.0" style="-fx-background-color: gray;" AnchorPane.bottomAnchor="41.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+               <children>
+                  <Label prefHeight="25.0" prefWidth="282.0" text="Asignaturas seleccionadas" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <JFXListView fx:id="listViewSubjects" layoutY="25.0" prefHeight="373.0" prefWidth="282.0" stylesheets="@styles/styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+                     <styleClass>
+                        <String fx:value="list-cell" />
+                        <String fx:value="list-view" />
+                     </styleClass></JFXListView>
+               </children></AnchorPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
