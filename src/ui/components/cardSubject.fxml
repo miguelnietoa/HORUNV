@@ -9,23 +9,23 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="269.0" style="-fx-background-color: green;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button fx:id="btnRemove" layoutX="181.0" layoutY="15.0" mnemonicParsing="false" styleClass="rounded-button" stylesheets="@../styles/styles.css" AnchorPane.rightAnchor="61.0">
+      <Button fx:id="btnRemove" layoutX="176.0" layoutY="19.0" mnemonicParsing="false" styleClass="rounded-button" stylesheets="@../styles/styles.css" AnchorPane.rightAnchor="56.0">
          <graphic>
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                <Image url="@../../assets/negative.png" />
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="btnFilter" layoutX="228.0" layoutY="15.0" mnemonicParsing="false" styleClass="rounded-button" stylesheets="@../styles/styles.css" AnchorPane.rightAnchor="14.0">
+      <Button fx:id="btnFilter" layoutX="223.0" layoutY="19.0" mnemonicParsing="false" styleClass="rounded-button" stylesheets="@../styles/styles.css" AnchorPane.rightAnchor="14.0">
          <graphic>
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../assets/setting.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
-      <Label fx:id="lblSubjectName" layoutX="14.0" layoutY="15.0" prefHeight="5.0" prefWidth="137.0" text="Nombre de la materia" AnchorPane.leftAnchor="14.0">
+      <Label fx:id="lblSubjectName" layoutX="14.0" layoutY="15.0" prefHeight="17.0" prefWidth="165.0" text="Nombre de la materia" AnchorPane.leftAnchor="14.0">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>

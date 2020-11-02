@@ -7,4 +7,14 @@
 
 .list-cell {
     -fx-padding: 0;
+    -fx-background-color: green;
+}
+
+.mylistview, .mylistview .scroll-bar:vertical {
+    /* This background-color must be equal to above in .list-cell*/
+    -fx-background-color: green;
+}
+
+#my-table .table-column {
+    -fx-alignment: CENTER;
 }
