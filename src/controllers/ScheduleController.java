@@ -1,22 +1,20 @@
 package controllers;
 
-import com.jfoenix.controls.*;
-import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import com.jfoenix.controls.JFXAutoCompletePopup;
+import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXTextField;
+import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import controllers.tablemodel.DragSelectionCellFactory;
 import controllers.tablemodel.HourRow;
 import javafx.application.Platform;
-
+import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 
@@ -27,7 +25,28 @@ import java.util.ResourceBundle;
 public class ScheduleController implements Initializable {
 
     @FXML
-    private JFXTreeTableView<HourRow> treeTableView;
+    private TableView<HourRow> tableView;
+
+    @FXML
+    private TableColumn<HourRow, String> hourID;
+
+    @FXML
+    private TableColumn<HourRow, String> mondayID;
+
+    @FXML
+    private TableColumn<HourRow, String> tuesdayID;
+
+    @FXML
+    private TableColumn<HourRow, String> wednesdayID;
+
+    @FXML
+    private TableColumn<HourRow, String> thursdayID;
+
+    @FXML
+    private TableColumn<HourRow, String> fridayID;
+
+    @FXML
+    private TableColumn<HourRow, String> saturdayID;
 
     @FXML
     private JFXTextField textFieldSearch;
@@ -38,117 +57,71 @@ public class ScheduleController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+
         buildSubjectCards();
         buildAutoCompleteTextField();
         buildTreeTableView();
     }
 
     private void buildTreeTableView() {
-        JFXTreeTableColumn<HourRow, String> hourCol = new JFXTreeTableColumn<>("Hour");
-        //HourRowCol.setPrefWidth(150);
-        hourCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<HourRow, String> param) -> {
-            if (hourCol.validateValue(param)) {
-                return param.getValue().getValue().hourProperty();
-            } else {
-                return hourCol.getComputedValue(param);
+        tableView.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> source, Number oldWidth, Number newWidth) {
+                TableHeaderRow header = (TableHeaderRow) tableView.lookup("TableHeaderRow");
+                header.reorderingProperty().addListener(new ChangeListener<Boolean>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                        header.setReordering(false);
+                    }
+                });
             }
         });
 
-        JFXTreeTableColumn<HourRow, String> mondayCol = new JFXTreeTableColumn<>("Monday");
-        mondayCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<HourRow, String> param) -> {
-            if (mondayCol.validateValue(param)) {
-                return param.getValue().getValue().mondayProperty();
-            } else {
-                return mondayCol.getComputedValue(param);
-            }
-        });
-
-        JFXTreeTableColumn<HourRow, String> tuesdayCol = new JFXTreeTableColumn<>("Tuesday");
-        tuesdayCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<HourRow, String> param) -> {
-            if (tuesdayCol.validateValue(param)) {
-                return param.getValue().getValue().tuesdayProperty();
-            } else {
-                return tuesdayCol.getComputedValue(param);
-            }
-        });
-        JFXTreeTableColumn<HourRow, String> wednesdayCol = new JFXTreeTableColumn<>("Wednesday");
-        wednesdayCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<HourRow, String> param) -> {
-            if (tuesdayCol.validateValue(param)) {
-                return param.getValue().getValue().wednesdayProperty();
-            } else {
-                return wednesdayCol.getComputedValue(param);
-            }
-        });
-        JFXTreeTableColumn<HourRow, String> thursdayCol = new JFXTreeTableColumn<>("Thursday");
-        //mondayCol.setPrefWidth(150);
-        thursdayCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<HourRow, String> param) -> {
-            if (thursdayCol.validateValue(param)) {
-                return param.getValue().getValue().thursdayProperty();
-            } else {
-                return thursdayCol.getComputedValue(param);
-            }
-        });
-        JFXTreeTableColumn<HourRow, String> fridayCol = new JFXTreeTableColumn<>("Friday");
-        fridayCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<HourRow, String> param) -> {
-            if (thursdayCol.validateValue(param)) {
-                return param.getValue().getValue().fridayProperty();
-            } else {
-                return fridayCol.getComputedValue(param);
-            }
-        });
-        JFXTreeTableColumn<HourRow, String> saturdayCol = new JFXTreeTableColumn<>("Saturday");
-        saturdayCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<HourRow, String> param) -> {
-            if (thursdayCol.validateValue(param)) {
-                return param.getValue().getValue().saturdayProperty();
-            } else {
-                return saturdayCol.getComputedValue(param);
-            }
-        });
-
-        // Finished
-        ObservableList<HourRow> rows = FXCollections.observableArrayList();
+        hourID.setCellValueFactory(new PropertyValueFactory<>("hour"));
+        mondayID.setCellValueFactory(new PropertyValueFactory<>("monday"));
+        tuesdayID.setCellValueFactory(new PropertyValueFactory<>("tuesday"));
+        wednesdayID.setCellValueFactory(new PropertyValueFactory<>("wednesday"));
+        thursdayID.setCellValueFactory(new PropertyValueFactory<>("thursday"));
+        fridayID.setCellValueFactory(new PropertyValueFactory<>("friday"));
+        saturdayID.setCellValueFactory(new PropertyValueFactory<>("saturday"));
 
         for (int i = 6; i < 20; i++) {
-            rows.add(
-                    new HourRow(
-                            String.format("%d:30-%d:30", i, i + 1), "", "", "", "", "", "")
-            );
+            tableView.getItems().add(new HourRow(i + ":30 - " + (i + 1) + ":30", "", "", "", "", "", ""));
         }
 
-        final TreeItem<HourRow> root = new RecursiveTreeItem<>(rows, RecursiveTreeObject::getChildren);
+        tableView.setId("my-table");
 
+        tableView.getSelectionModel().getSelectedCells().addListener((InvalidationListener) c -> {
+            for (TablePosition pos : tableView.getSelectionModel().getSelectedCells()) {
+                int row = pos.getRow();
+                int col = pos.getColumn();
 
-        treeTableView.setRoot(root);
+                HourRow item = tableView.getItems().get(row);
 
-        treeTableView.setShowRoot(false);
-        treeTableView.getColumns().setAll(hourCol, mondayCol, tuesdayCol, wednesdayCol, thursdayCol, fridayCol, saturdayCol);
+                if (col == 0) {
+                    Platform.runLater(() -> {
+                        tableView.getSelectionModel().clearSelection();
+                    });
+                    break;
+                }
 
-        final Callback<TreeTableColumn<HourRow, String>, TreeTableCell<HourRow, String>> cellFactory = new DragSelectionCellFactory();
+                System.out.println("x=" + row + "y=" + col);
+                //String dispLastName = (String) pos.getTableColumn().getCellObservableValue(item).getValue();
 
-        treeTableView.getColumns().forEach(tableColumn -> {
-            tableColumn.setSortable(false);
-        });
-
-        mondayCol.setCellFactory(cellFactory);
-        tuesdayCol.setCellFactory(cellFactory);
-        wednesdayCol.setCellFactory(cellFactory);
-        thursdayCol.setCellFactory(cellFactory);
-        fridayCol.setCellFactory(cellFactory);
-        saturdayCol.setCellFactory(cellFactory);
-
-        System.out.println(fridayCol.getClass());
-        // preventColumnReordering
-        Platform.runLater(() -> {
-            for (Node header : treeTableView.lookupAll(".column-header")) {
-                header.addEventFilter(MouseEvent.MOUSE_DRAGGED, Event::consume);
             }
         });
 
+        final Callback<TableColumn<HourRow, String>, TableCell<HourRow, String>> cellFactory = new DragSelectionCellFactory();
+        hourID.setCellFactory(cellFactory);
+        mondayID.setCellFactory(cellFactory);
+        tuesdayID.setCellFactory(cellFactory);
+        wednesdayID.setCellFactory(cellFactory);
+        thursdayID.setCellFactory(cellFactory);
+        fridayID.setCellFactory(cellFactory);
+        saturdayID.setCellFactory(cellFactory);
 
-        treeTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        treeTableView.getSelectionModel().setCellSelectionEnabled(true);
-        //TODO: No select cells in hour column 
-
+        tableView.getSelectionModel().setCellSelectionEnabled(true);
+        tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
     }
 
