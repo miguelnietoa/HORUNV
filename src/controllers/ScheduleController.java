@@ -133,7 +133,9 @@ public class ScheduleController implements Initializable {
 
     private void buildSubjectCards() {
         for (int i = 0; i < 6; i++) {
-            CardSubjectController c = new CardSubjectController("Nombre materia " + i, "IST124", 3);
+            CardSubjectController c = new CardSubjectController("Nombre materia " + i, "IST124",
+                    3, listViewSubjects);
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardSubject.fxml"));
             loader.setController(c);
 
