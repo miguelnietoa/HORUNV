@@ -18,8 +18,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 
+import javax.sound.midi.Soundbank;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLOutput;
 import java.util.ResourceBundle;
 
 public class ScheduleController implements Initializable {
@@ -84,6 +86,9 @@ public class ScheduleController implements Initializable {
         thursdayID.setCellValueFactory(new PropertyValueFactory<>("thursday"));
         fridayID.setCellValueFactory(new PropertyValueFactory<>("friday"));
         saturdayID.setCellValueFactory(new PropertyValueFactory<>("saturday"));
+        tableView.heightProperty().addListener((obs, oldVal, newVal) -> {
+            tableView.setFixedCellSize((newVal.doubleValue() / 15));
+        });
 
         for (int i = 6; i < 20; i++) {
             tableView.getItems().add(new HourRow(i + ":30 - " + (i + 1) + ":30", "", "", "", "", "", ""));
@@ -92,15 +97,16 @@ public class ScheduleController implements Initializable {
         tableView.setId("my-table");
 
         tableView.getSelectionModel().getSelectedCells().addListener((InvalidationListener) c -> {
+
             for (TablePosition pos : tableView.getSelectionModel().getSelectedCells()) {
                 int row = pos.getRow();
                 int col = pos.getColumn();
 
-                HourRow item = tableView.getItems().get(row);
+                // HourRow item = tableView.getItems().get(row);
 
                 if (col == 0) {
                     Platform.runLater(() -> {
-                        tableView.getSelectionModel().clearSelection();
+                        tableView.getSelectionModel().clearSelection(row, hourID);
                     });
                     break;
                 }

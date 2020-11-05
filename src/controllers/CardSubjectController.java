@@ -1,7 +1,5 @@
 package controllers;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -36,10 +34,10 @@ public class CardSubjectController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        btnRemove.setOnAction(event -> System.out.println("Remove #"+subjectName));
+        btnRemove.setOnAction(event -> System.out.println("Remove #" + subjectName));
 
         btnFilter.setOnAction(event -> {
-            System.out.println("Filter #"+subjectName);
+            System.out.println("Filter #" + subjectName);
         });
         lblSubjectName.setText(subjectName);
     }
