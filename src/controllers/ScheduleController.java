@@ -10,6 +10,7 @@ import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -58,8 +59,6 @@ public class ScheduleController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-
         buildSubjectCards();
         buildAutoCompleteTextField();
         buildTreeTableView();
@@ -131,21 +130,27 @@ public class ScheduleController implements Initializable {
 
     }
 
-    private void buildSubjectCards() {
-        for (int i = 0; i < 6; i++) {
-            CardSubjectController c = new CardSubjectController("Nombre materia " + i, "IST124",
-                    3, listViewSubjects);
+    private void buildSubjectCard(String name, String codigo, int creditos) {
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardSubject.fxml"));
-            loader.setController(c);
+        CardSubjectController c = new CardSubjectController(name, codigo, creditos, listViewSubjects);
 
-            try {
-                listViewSubjects.getItems().add(loader.load());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardSubject.fxml"));
+        loader.setController(c);
+
+        try {
+
+            listViewSubjects.getItems().add(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
+    private void buildSubjectCards() {
+        for (int i = 0; i < 6; i++) {
+            buildSubjectCard("Nombre materia " + i, "IST124", 3);
+        }
+    }
+
 
     private void buildAutoCompleteTextField() {
         JFXAutoCompletePopup<String> autoCompletePopup = new JFXAutoCompletePopup<>();
@@ -163,7 +168,7 @@ public class ScheduleController implements Initializable {
             System.out.println(event.getObject());
 
             // TODO: Add subject to listViewSubjects
-
+            buildSubjectCard(event.getObject(), "IST1232", 4);
             textFieldSearch.setText("");
         });
 

@@ -1,0 +1,5 @@
+.tree-view {
+    -fx-background-color: #9DD0FF ;
+    -fx-selection-bar: #ffffff ;
+    -jfx-rippler-fill: #ffffff ;
+}
