@@ -2,6 +2,7 @@ package controllers;
 
 import com.jfoenix.controls.JFXListView;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,8 +19,12 @@ import java.util.ResourceBundle;
 
 public class CardSubjectController implements Initializable {
     private String subjectName;
+
     private String subjectCode;
-    int credits;
+
+    private int subjectCredits;
+
+    @FXML
     JFXListView<AnchorPane> listViewSubjects;
 
     @FXML
@@ -34,56 +39,43 @@ public class CardSubjectController implements Initializable {
     @FXML
     private Label lblInfo;
 
-    public String getSubjectName() {
-        return subjectName;
-    }
 
-    public void setSubjectName(String subjectName) {
-        this.subjectName = subjectName;
-    }
-
-    public String getSubjectCode() {
-        return subjectCode;
-    }
-
-    public void setSubjectCode(String subjectCode) {
-        this.subjectCode = subjectCode;
-    }
-
-    public CardSubjectController(String subjectName, String subjectCode, int credits, JFXListView<AnchorPane> listViewSubjects) {
+    public CardSubjectController(String subjectName, String subjectCode, int subjectCredits,
+                                 JFXListView<AnchorPane> listViewSubjects) {
         this.subjectName = subjectName;
         this.subjectCode = subjectCode;
-        this.credits = credits;
+        this.subjectCredits = subjectCredits;
         this.listViewSubjects = listViewSubjects;
     }
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        btnRemove.setOnAction(event ->
-        {
-            Platform.runLater(() -> {
-                this.listViewSubjects.getItems().remove(btnRemove.getParent());
-            });
-        });
-
-        btnFilter.setOnAction(event -> {
-            Stage stage = new Stage();
-            Parent root;
-            try {
-                root = FXMLLoader.load(getClass().getResource("/ui/windowFilter.fxml"));
-                stage.setTitle("Hello World");
-                stage.setScene(new Scene(root));
-                stage.sizeToScene();
-                stage.show();
-                stage.setMinWidth(stage.getWidth());
-                stage.setMinHeight(stage.getHeight());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        });
         lblSubjectName.setText(subjectName);
-        lblInfo.setText(subjectCode + " | " + credits);
+        lblInfo.setText(subjectCode + " | " + subjectCredits + " créditos");
+    }
+
+    @FXML
+    void btnFilterOnAction(ActionEvent event) {
+        Stage stage = new Stage();
+        Parent root;
+        try {
+            root = FXMLLoader.load(getClass().getResource("/ui/windowFilter.fxml"));
+            stage.setTitle("Hello World");
+            stage.setScene(new Scene(root));
+            stage.sizeToScene();
+            stage.show();
+            stage.setMinWidth(stage.getWidth());
+            stage.setMinHeight(stage.getHeight());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void btnRemoveOnAction(ActionEvent event) {
+        Platform.runLater(() -> {
+            this.listViewSubjects.getItems().remove(btnRemove.getParent());
+        });
     }
 }

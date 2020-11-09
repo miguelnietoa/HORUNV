@@ -1,0 +1,31 @@
+@font-face {
+    font-family: 'Open Sans';
+    src: url('../../assets/fonts/OpenSans-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Open Sans Bold';
+    src: url('../../assets/fonts/OpenSans-Bold.ttf');
+}
+
+@font-face {
+    font-family: 'Open Sans Italic';
+    src: url('../../assets/fonts/OpenSans-Italic.ttf');
+}
+
+@font-face {
+    font-family: 'Open Sans Light';
+    src: url('../../assets/fonts/OpenSans-Light.ttf');
+}
+
+@font-face {
+    font-family: 'Open Sans Semibold';
+    src: url('../../assets/fonts/OpenSans-SemiBold.ttf');
+}
+
+.root{
+    -fx-font-size: 10pt;
+    -fx-font-family: "Open Sans";
+    /* -fx-base: rgb(132, 145, 47);
+    -fx-background: rgb(225, 228, 203);*/
+}

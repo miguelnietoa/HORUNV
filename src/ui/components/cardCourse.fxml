@@ -6,15 +6,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="187.0" prefWidth="410.0" style="-fx-background-color: #739EF2;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.windowfilter.CardCourseController">
-   <children>
-      <Label fx:id="lblCoursesAvailable" layoutX="23.0" layoutY="14.0" prefHeight="17.0" prefWidth="139.0" text="Cupos Disponibles:" textFill="WHITE" />
-      <Label fx:id="lblNRC" layoutX="23.0" layoutY="31.0" text="NRC: 1213" textFill="WHITE" />
-      <Label layoutX="23.0" layoutY="54.0" text="Horario:" textFill="WHITE">
-         <font>
-            <Font name="Georgia" size="12.0" />
-         </font></Label>
-      <JFXListView fx:id="listViewSchedules" layoutX="23.0" layoutY="71.0" prefHeight="99.0" prefWidth="284.0" style="-fx-background-color: #739EF2;" />
-      <JFXToggleButton fx:id="toggleButtonEnable" contentDisplay="GRAPHIC_ONLY" layoutX="330.0" layoutY="65.0" selected="true" />
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="187.0"
+            prefWidth="410.0" style="-fx-background-color: #739EF2;" xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.windowfilter.CardCourseController">
+   <Label fx:id="lblCoursesAvailable" layoutX="23.0" layoutY="14.0" prefHeight="17.0" prefWidth="139.0"
+          text="Cupos Disponibles:" textFill="WHITE"/>
+   <Label fx:id="lblNRC" layoutX="23.0" layoutY="31.0" text="NRC: 1213" textFill="WHITE"/>
+   <Label layoutX="23.0" layoutY="54.0" text="Horario:" textFill="WHITE">
+      <font>
+         <Font name="Georgia" size="12.0"/>
+      </font>
+   </Label>
+   <JFXListView fx:id="listViewSchedules" layoutX="23.0" layoutY="71.0" prefHeight="99.0" prefWidth="284.0"
+                style="-fx-background-color: #739EF2;"/>
+   <JFXToggleButton fx:id="toggleButtonEnable" contentDisplay="GRAPHIC_ONLY" layoutX="330.0" layoutY="65.0"
+                    selected="true"/>
 </AnchorPane>

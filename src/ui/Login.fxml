@@ -3,86 +3,75 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane style="-fx-background-color: #F1FAEF;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
-   <center>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="900.0">
-         <children>
-            <AnchorPane fx:id="layer2" layoutX="605.0" prefHeight="550.0" prefWidth="322.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="-6.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <JFXTextField fx:id="txtuser" focusColor="#ee3348" labelFloat="true" layoutX="33.0" layoutY="161.0" promptText="Username" style="-fx-background-color: white; -fx-background-radius: 5px; -fx-border-radius: 5px;" unFocusColor="#387d9b" AnchorPane.leftAnchor="33.0" AnchorPane.rightAnchor="32.0">
-                     <font>
-                        <Font name="SansSerif Regular" size="14.0" />
-                     </font>
-                  </JFXTextField>
-                  <JFXPasswordField fx:id="psdpass" focusColor="#ee3348" labelFloat="true" layoutX="33.0" layoutY="224.0" prefHeight="25.0" prefWidth="185.0" promptText="Password" style="-fx-background-color: white; -fx-background-radius: 5px; -fx-border-radius: 5px;" unFocusColor="#387d9b" AnchorPane.leftAnchor="33.0" AnchorPane.rightAnchor="32.0">
-                     <font>
-                        <Font name="SansSerif Regular" size="15.0" />
-                     </font>
-                  </JFXPasswordField>
-                  <Label layoutX="33.0" layoutY="42.0" text="Login" textFill="#387d9b">
-                     <font>
-                        <Font name="SansSerif Bold" size="27.0" />
-                     </font>
-                  </Label>
-                  <JFXButton fx:id="btnlogin" buttonType="RAISED" layoutX="38.0" layoutY="307.0" minHeight="-Infinity" minWidth="-Infinity" onAction="#iniciarSesion" prefHeight="40.0" prefWidth="227.0" style="-fx-background-color: #387D9B;" text="Login" textFill="WHITE">
-                     <font>
-                        <Font name="SansSerif Regular" size="16.0" />
-                     </font>
-                  </JFXButton>
-                  <Label layoutX="40.0" layoutY="81.0" text="Welcome back! Please enter you username" textFill="#387d9b">
-                     <font>
-                        <Font name="System Italic" size="12.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="40.0" layoutY="98.0" text="and password." textFill="#387d9b">
-                     <font>
-                        <Font name="SansSerif Regular" size="12.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="lblStatus2" layoutX="37.0" layoutY="260.0" text="Wrong username or password!" textFill="RED" visible="false">
-                     <font>
-                        <Font name="SansSerif Italic" size="12.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="lblStatus1" layoutX="36.0" layoutY="260.0" text="You must enter a username and password." textFill="RED" visible="false">
-                     <font>
-                        <Font name="SansSerif Italic" size="12.0" />
-                     </font>
-                  </Label>
-               </children>
-            </AnchorPane>
-            <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="586.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="314.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <ImageView fx:id="btnslide1" fitHeight="17.0" fitWidth="17.0" layoutX="276.0" layoutY="528.0" onMouseClicked="#btnslide1Action" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../assets/circulo_relleno.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="slide1" fitHeight="523.0" fitWidth="588.0" layoutX="-46.0" pickOnBounds="true" AnchorPane.rightAnchor="-1.0">
-                     <image>
-                        <Image url="@../assets/left_login_1.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="slide2" fitHeight="525.0" fitWidth="593.0" layoutX="-4.0" layoutY="1.0" pickOnBounds="true" visible="false">
-                     <image>
-                        <Image url="@../assets/left_login_2.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="btnslide2" fitHeight="17.0" fitWidth="24.0" layoutX="301.0" layoutY="528.0" onMouseClicked="#btnslide2Clicked" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../assets/circulo_sin_relleno.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </AnchorPane>
-         </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="980.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
+   <AnchorPane layoutX="586.0" prefHeight="600.0" prefWidth="420.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <JFXTextField fx:id="txtUsername" focusColor="#056571" labelFloat="true" layoutX="35.0" layoutY="249.0" prefHeight="37.0" prefWidth="278.0" promptText="Usuario" style="-fx-font-size: 12pt;" unFocusColor="#056571" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="33.0" AnchorPane.topAnchor="249.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </JFXTextField>
+      <JFXPasswordField fx:id="txtPassword" focusColor="#056571" labelFloat="true" layoutX="35.0" layoutY="322.0" prefHeight="25.0" prefWidth="185.0" promptText="Contraseña" style="-fx-font-size: 12pt;" unFocusColor="#056571" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="33.0" AnchorPane.topAnchor="322.0">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </JFXPasswordField>
+      <Label layoutX="35.0" layoutY="117.0" style="-fx-font-weight: bold; -fx-font-size: 24pt;" text="Iniciar sesión" textFill="#123451" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="117.0">
+         <font>
+            <Font name="System Bold" size="27.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="btnLogin" buttonType="RAISED" layoutX="34.0" layoutY="434.0" minHeight="-Infinity" minWidth="-Infinity" onAction="#btnLoginOnAction" prefHeight="40.0" prefWidth="248.0" style="-fx-background-color: #387D9B; -fx-font-size: 13pt; -fx-font-weight: bold;" text="Ingresar" textFill="WHITE" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="34.0" AnchorPane.topAnchor="434.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </JFXButton>
+      <Label layoutX="33.0" layoutY="170.0" prefHeight="44.0" prefWidth="242.0" style="-fx-font-style: italic; -fx-font-size: 11pt;" text="¡Bienvenido! Por favor, ingresa tu usuario y contraseña" textFill="#123451" wrapText="true" AnchorPane.leftAnchor="33.0" AnchorPane.topAnchor="170.0">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblError" alignment="CENTER" contentDisplay="CENTER" layoutX="35.0" layoutY="382.0" prefHeight="23.0" prefWidth="252.0" text="Usuario o contraseña incorrecta" textAlignment="CENTER" textFill="RED" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="33.0" AnchorPane.topAnchor="382.0">
+         <font>
+            <Font name="SansSerif Italic" size="12.0" />
+         </font>
+      </Label>
+   </AnchorPane>
+   <AnchorPane layoutX="37.0" prefHeight="600.0" prefWidth="560.0" AnchorPane.bottomAnchor="0.0"
+               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="420.0" AnchorPane.topAnchor="0.0">
+      <HBox alignment="CENTER" prefHeight="40.0" prefWidth="560.0" spacing="10.0" AnchorPane.bottomAnchor="0.0"
+            AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <ImageView fx:id="btnSlide1" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#btnSlide1OnAction"
+                    pickOnBounds="true" preserveRatio="true">
+            <Image url="@../assets/filled_circle.png"/>
+         </ImageView>
+         <ImageView fx:id="btnSlide2" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#btnSlide2OnAction"
+                    pickOnBounds="true" preserveRatio="true">
+            <Image url="@../assets/unfilled_circle.png"/>
+         </ImageView>
+      </HBox>
+      <AnchorPane fx:id="paneSlide" prefHeight="560.0" prefWidth="560.0" AnchorPane.bottomAnchor="40.0"
+                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <ImageView fx:id="slide2" fitHeight="560.0" fitWidth="560.0" layoutX="10.0" layoutY="10.0"
+                    pickOnBounds="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                    AnchorPane.topAnchor="0.0">
+            <Image url="@../assets/login.png"/>
+         </ImageView>
+         <ImageView fx:id="slide1" fitHeight="560.0" fitWidth="560.0" pickOnBounds="true"
+                    AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                    AnchorPane.topAnchor="0.0">
+            <Image url="@../assets/schedule.png"/>
+         </ImageView>
       </AnchorPane>
-   </center>
-</BorderPane>
+   </AnchorPane>
+</AnchorPane>

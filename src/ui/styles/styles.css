@@ -1,3 +1,11 @@
+.gradient {
+    -fx-background-color:  linear-gradient(white, #387D9B);
+}
+
+.card-subject {
+    -fx-background-color: #056571;
+}
+
 .rounded-button {
     -fx-padding: 0;
     -fx-background-color: transparent;
@@ -5,16 +13,49 @@
     -fx-background-radius: 50%;
 }
 
-.list-cell {
+.popup {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
+.mylistview .list-cell {
     -fx-padding: 0;
-    -fx-background-color: green;
+    -fx-background-color: #056571;
 }
 
 .mylistview, .mylistview .scroll-bar:vertical {
     /* This background-color must be equal to above in .list-cell*/
-    -fx-background-color: green;
+    /*-fx-padding: 0;*/
+    -fx-background-color: white;
 }
 
-#my-table .table-column {
+.my-table {
+    -fx-selection-bar: #FF533D;
+    -fx-selection-bar-non-focused: #FF533D;
+}
+
+.my-table .table-column {
     -fx-alignment: CENTER;
+}
+
+.my-table:focused {
+    /* #C8C8C8: default border color  */
+    -fx-focus-color: #C8C8C8;
+}
+
+.my-table .column-header,
+.my-table .column-header .filler,
+.my-table .column-header-background .filler {
+    -fx-background-color: #414141;
+}
+
+.my-table .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.tree-view {
+    -fx-background-color: #9DD0FF;
+    -fx-selection-bar: #ffffff;
+    -jfx-rippler-fill: #ffffff;
 }

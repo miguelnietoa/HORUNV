@@ -3,49 +3,42 @@ package controllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
-public class LoginController {
-    private Image image_relleno = new Image("\\assets\\circulo_relleno.png");
-    private Image image_rellenont = new Image("\\assets\\circulo_sin_relleno.png");
+import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
-
-    @FXML
-    private AnchorPane layer2;
+public class LoginController implements Initializable {
+    private final Image filledCircle = new Image("\\assets\\filled_circle.png");
+    private final Image unfilledCircle = new Image("\\assets\\unfilled_circle.png");
 
     @FXML
-    private JFXTextField txtuser;
+    private JFXTextField txtUsername;
 
     @FXML
-    private JFXPasswordField psdpass;
+    private JFXPasswordField txtPassword;
 
     @FXML
-    private JFXButton btnlogin;
+    private JFXButton btnLogin;
 
     @FXML
-    private Label lblStatus2;
+    private Label lblError;
 
     @FXML
-    private Label lblStatus1;
-
-    @FXML
-    private ImageView btnslide1;
+    private AnchorPane paneSlide;
 
     @FXML
     private ImageView slide1;
@@ -54,56 +47,73 @@ public class LoginController {
     private ImageView slide2;
 
     @FXML
-    private ImageView btnslide2;
+    private ImageView btnSlide2;
 
     @FXML
-    void btnslide1Action(MouseEvent event) {
+    private ImageView btnSlide1;
 
+    @FXML
+    private void btnSlide1OnAction() {
         Platform.runLater(() -> {
             slide1.setVisible(true);
             slide2.setVisible(false);
-            btnslide1.setImage(image_relleno);
-            btnslide2.setImage(image_rellenont);
+            btnSlide1.setImage(filledCircle);
+            btnSlide2.setImage(unfilledCircle);
         });
     }
 
 
     @FXML
-    void btnslide2Clicked(MouseEvent event) {
+    private void btnSlide2OnAction() {
         Platform.runLater(() -> {
             slide2.setVisible(true);
             slide1.setVisible(false);
-            btnslide2.setImage(image_relleno);
-            btnslide1.setImage(image_rellenont);
+            btnSlide2.setImage(filledCircle);
+            btnSlide1.setImage(unfilledCircle);
         });
     }
 
     @FXML
-    void iniciarSesion(ActionEvent event) {
+    void btnLoginOnAction() {
         Platform.runLater(() -> {
-            lblStatus1.setVisible(false);
-            lblStatus2.setVisible(false);
-            String user = txtuser.getText();
-            String pass = psdpass.getText();
-            if (user.length() == 0 || pass.length() == 0) {
-                lblStatus1.setVisible(true);
+            String username = txtUsername.getText();
+            String password = txtPassword.getText();
+            if (username.trim().isEmpty() || password.trim().isEmpty()) {
+                lblError.setText("Debes ingresar un usuario y contraseña");
+                lblError.setVisible(true);
             } else {
+                Platform.runLater(() -> {
+                    Stage newStage = new Stage();
+                    Parent root;
+                    try {
+                        root = FXMLLoader.load(getClass().getResource("../ui/schedule.fxml"));
+                        newStage.setTitle("HORUNV - Arma tu horario");
+                        newStage.setScene(new Scene(root));
+                        newStage.sizeToScene();
+                        newStage.show();
+                        newStage.setMinWidth(newStage.getWidth());
+                        newStage.setMinHeight(newStage.getHeight());
+                        Stage stage1 = (Stage) btnLogin.getScene().getWindow();
+                        stage1.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
 
+                // if incorrect credentials
+                //lblError.setText("Usuario o contraseña incorrecta");
+                //lblError.setVisible(true);
             }
         });
     }
 
-    @FXML
-    void initialize() {
-        assert layer2 != null : "fx:id=\"layer2\" was not injected: check your FXML file 'Login.fxml'.";
-        assert txtuser != null : "fx:id=\"txtuser\" was not injected: check your FXML file 'Login.fxml'.";
-        assert psdpass != null : "fx:id=\"psdpass\" was not injected: check your FXML file 'Login.fxml'.";
-        assert btnlogin != null : "fx:id=\"btnlogin\" was not injected: check your FXML file 'Login.fxml'.";
-        assert lblStatus2 != null : "fx:id=\"lblStatus2\" was not injected: check your FXML file 'Login.fxml'.";
-        assert lblStatus1 != null : "fx:id=\"lblStatus1\" was not injected: check your FXML file 'Login.fxml'.";
-        assert btnslide1 != null : "fx:id=\"btnslide1\" was not injected: check your FXML file 'Login.fxml'.";
-        assert slide1 != null : "fx:id=\"slide1\" was not injected: check your FXML file 'Login.fxml'.";
-        assert slide2 != null : "fx:id=\"slide2\" was not injected: check your FXML file 'Login.fxml'.";
-        assert btnslide2 != null : "fx:id=\"btnslide2\" was not injected: check your FXML file 'Login.fxml'.";
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        lblError.setVisible(false);
+        slide1.fitWidthProperty().bind(paneSlide.widthProperty());
+        slide1.fitHeightProperty().bind(paneSlide.heightProperty());
+        slide2.fitWidthProperty().bind(paneSlide.widthProperty());
+        slide2.fitHeightProperty().bind(paneSlide.heightProperty());
     }
 }
