@@ -10,5 +10,5 @@
 - [Woman icon](src/assets/woman.png) made by [Freepik](https://www.flaticon.com/authors/freepik "Freepik") from [www.flaticon.com](https://www.flaticon.com/ "Flaticon")
 - [Login icon](src/assets/login.png) from [unDraw](https://undraw.co/search)
 - [Schedule icon](src/assets/schedule.png) from [unDraw](https://undraw.co/search)
-- [Filled circle](src/assets/filled_circle.png)
-- [Unfilled circle](src/assets/unfilled_circle.png)  
+- [Filled circle](src/assets/filled_circle.png) made by [Freepik](https://www.flaticon.es/autores/freepik "Freepik") from [www.flaticon.es](https://www.flaticon.es/ "Flaticon")
+- [Unfilled circle](src/assets/unfilled_circle.png) made by [Freepik](https://www.flaticon.es/autores/freepik "Freepik") from [www.flaticon.es](https://www.flaticon.es/ "Flaticon")
