@@ -11,7 +11,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0"
             prefWidth="269.0" styleClass="card-subject" stylesheets="@../styles/styles.css"
             xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
-   <Button fx:id="btnRemove" layoutX="176.0" layoutY="19.0" mnemonicParsing="false" onAction="#btnRemoveOnAction"
+   <Button fx:id="btnRemove" layoutX="176.0" layoutY="19.0" mnemonicParsing="false"
            styleClass="rounded-button" stylesheets="@../styles/styles.css" AnchorPane.rightAnchor="56.0">
       <graphic>
          <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
@@ -20,7 +20,7 @@
       </graphic>
    </Button>
    <Button fx:id="btnFilter" contentDisplay="GRAPHIC_ONLY" layoutX="223.0" layoutY="19.0" mnemonicParsing="false"
-           onAction="#btnFilterOnAction" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: F7B90C;"
+           prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: F7B90C;"
            styleClass="rounded-button" stylesheets="@../styles/styles.css" AnchorPane.rightAnchor="14.0">
       <graphic>
          <SVGPath content="M14 1H1V1.56522L6.08696 6.65217V11.7391L8.34783 14V6.65217L14 1Z" fill="TRANSPARENT"

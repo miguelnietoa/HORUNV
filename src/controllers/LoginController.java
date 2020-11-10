@@ -83,18 +83,20 @@ public class LoginController implements Initializable {
                 lblError.setVisible(true);
             } else {
                 Platform.runLater(() -> {
-                    Stage newStage = new Stage();
+                    Stage schedule = new Stage();
                     Parent root;
+                    Stage login = (Stage) btnLogin.getScene().getWindow();
                     try {
                         root = FXMLLoader.load(getClass().getResource("../ui/schedule.fxml"));
-                        newStage.setTitle("HORUNV - Arma tu horario");
-                        newStage.setScene(new Scene(root));
-                        newStage.sizeToScene();
-                        newStage.show();
-                        newStage.setMinWidth(newStage.getWidth());
-                        newStage.setMinHeight(newStage.getHeight());
-                        Stage stage1 = (Stage) btnLogin.getScene().getWindow();
-                        stage1.close();
+                        schedule.setTitle("HORUNV - Arma tu horario");
+                        Scene scene = new Scene(root, login.getWidth(), login.getHeight());
+                        scene.getStylesheets().add(getClass().getResource("/ui/styles/application.css").toExternalForm());
+                        schedule.setScene(scene);
+                        schedule.sizeToScene();
+                        schedule.show();
+                        schedule.setMinWidth(schedule.getWidth());
+                        schedule.setMinHeight(schedule.getHeight());
+                        login.close();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

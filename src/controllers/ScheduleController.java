@@ -14,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
 
 import java.io.IOException;
@@ -21,6 +22,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ScheduleController implements Initializable {
+
+    @FXML
+    private StackPane stackPane;
 
     @FXML
     private TableView<HourRow> tableView;
@@ -112,7 +116,7 @@ public class ScheduleController implements Initializable {
 
     private void buildSubjectCard(String name, String code, int credits) {
 
-        CardSubjectController c = new CardSubjectController(name, code, credits, listViewSubjects);
+        CardSubjectController c = new CardSubjectController(name, code, credits, listViewSubjects, stackPane);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardSubject.fxml"));
         loader.setController(c);
