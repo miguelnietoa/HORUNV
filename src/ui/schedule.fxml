@@ -9,10 +9,10 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 
-
- <StackPane fx:id="stackPane" prefHeight="600.0" prefWidth="980.0" styleClass="gradient" stylesheets="@styles/styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ScheduleController">
+<StackPane fx:id="stackPane" prefHeight="600.0" prefWidth="980.0" styleClass="gradient" stylesheets="@styles/styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ScheduleController">
      <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;">
         <JFXTextField fx:id="textFieldSearch" focusColor="#ff533d" layoutX="14.0" layoutY="13.0" prefHeight="25.0" prefWidth="289.0" promptText="Buscar asignatura" unFocusColor="#e82828" AnchorPane.leftAnchor="14.0" />
         <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="650.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="297.0">
@@ -38,5 +38,51 @@
                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
              </columnResizePolicy>
          </TableView>
+         <ImageView fx:id="btnProjection" fitHeight="32.0" fitWidth="32.0" layoutX="326.0" layoutY="11.0" onMouseClicked="#btnProjectionOnAction" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="326.0">
+             <Image url="@../assets/list.png" />
+         </ImageView>
+      <StackPane layoutX="14.0" layoutY="559.0" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="310.0">
+         <children>
+            <HBox>
+               <children>
+                  <ImageView fx:id="btnProjection1" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/list.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="btnProjection11" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/list.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="btnProjection12" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/list.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="btnProjection13" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/list.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER">
+               <children>
+                  <ImageView fx:id="btnLeft" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/left-arrow.png" />
+                     </image>
+                  </ImageView>
+                  <Label alignment="CENTER" prefHeight="32.0" prefWidth="55.0" text="1/15" textFill="WHITE" />
+                  <ImageView fx:id="btnLeft1" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/right-arrow.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+         </children>
+      </StackPane>
      </AnchorPane>
  </StackPane>

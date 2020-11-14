@@ -13,6 +13,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
@@ -56,10 +58,20 @@ public class ScheduleController implements Initializable {
     @FXML
     private JFXListView<AnchorPane> listViewSubjects;
 
+    @FXML
+    private ImageView btnProjection;
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        Tooltip.install(btnProjection, new Tooltip("Ver proyección"));
         buildAutoCompleteTextField();
         buildTableView();
+    }
+
+    @FXML
+    void btnProjectionOnAction(MouseEvent event) {
+        System.out.println("click");
     }
 
     private void buildTableView() {
@@ -126,7 +138,6 @@ public class ScheduleController implements Initializable {
             e.printStackTrace();
         }
     }
-
 
     private void buildAutoCompleteTextField() {
         JFXAutoCompletePopup<String> autoCompletePopup = new JFXAutoCompletePopup<>();
