@@ -15,16 +15,23 @@
 <StackPane fx:id="stackPane" prefHeight="600.0" prefWidth="980.0" styleClass="gradient" stylesheets="@styles/styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ScheduleController">
      <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;">
         <JFXTextField fx:id="textFieldSearch" focusColor="#ff533d" layoutX="14.0" layoutY="13.0" prefHeight="25.0" prefWidth="289.0" promptText="Buscar asignatura" unFocusColor="#e82828" AnchorPane.leftAnchor="14.0" />
-        <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="650.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="297.0">
-            <Image url="@../assets/woman.png" />
+      <JFXButton fx:id="btnProjection" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" layoutX="303.0" layoutY="7.0" onAction="#btnProjectionOnAction" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: white;" styleClass="rounded-button" stylesheets="@styles/styles.css" AnchorPane.leftAnchor="310.0">
+         <graphic>
+               <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                   <Image url="@../assets/list.png" />
+               </ImageView>
+         </graphic>
+      </JFXButton>
+        <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="650.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="300.0">
+            <Image url="@../assets/man.png" />
         </ImageView>
-        <Label layoutX="694.0" layoutY="14.0" prefHeight="25.0" prefWidth="153.0" text="Valentina Imitola" AnchorPane.rightAnchor="133.0" />
+        <Label layoutX="643.0" layoutY="9.0" prefHeight="40.0" prefWidth="102.0" text="Jesús Ángel Camacho Utria" wrapText="true" AnchorPane.rightAnchor="184.0" />
         <JFXButton buttonType="RAISED" layoutX="856.0" layoutY="10.0" prefHeight="33.0" prefWidth="110.0" style="-fx-background-color: #FF533D; -fx-border-radius: 13px; -fx-background-radius: 13px;" text="Cerrar sesión" textAlignment="CENTER" textFill="WHITE" AnchorPane.rightAnchor="14.0" />
-         <AnchorPane layoutX="504.0" layoutY="14.0" prefHeight="400.0" prefWidth="282.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="41.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="60.0">
+         <AnchorPane layoutX="504.0" layoutY="14.0" prefHeight="485.0" prefWidth="282.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="55.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="60.0">
              <Label alignment="CENTER" prefHeight="25.0" prefWidth="282.0" text="Asignaturas seleccionadas" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
              <JFXListView fx:id="listViewSubjects" layoutY="25.0" prefHeight="373.0" prefWidth="282.0" styleClass="mylistview" stylesheets="@styles/styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
          </AnchorPane>
-         <TableView fx:id="tableView" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" styleClass="my-table" stylesheets="@styles/styles.css" AnchorPane.bottomAnchor="41.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="60.0">
+         <TableView fx:id="tableView" layoutX="14.0" layoutY="14.0" prefHeight="485.0" prefWidth="656.0" styleClass="my-table" stylesheets="@styles/styles.css" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="60.0">
              <columns>
                  <TableColumn fx:id="hourID" editable="false" prefWidth="75.0" sortable="false" text="Hora" />
                  <TableColumn fx:id="mondayID" editable="false" prefWidth="75.0" sortable="false" text="Lunes" />
@@ -38,51 +45,64 @@
                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
              </columnResizePolicy>
          </TableView>
-         <ImageView fx:id="btnProjection" fitHeight="32.0" fitWidth="32.0" layoutX="326.0" layoutY="11.0" onMouseClicked="#btnProjectionOnAction" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="326.0">
-             <Image url="@../assets/list.png" />
-         </ImageView>
-      <StackPane layoutX="14.0" layoutY="559.0" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="310.0">
+      <StackPane layoutX="14.0" layoutY="546.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="310.0">
          <children>
-            <HBox>
+            <AnchorPane prefHeight="48.0" prefWidth="656.0">
                <children>
-                  <ImageView fx:id="btnProjection1" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../assets/list.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="btnProjection11" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../assets/list.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="btnProjection12" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../assets/list.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="btnProjection13" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../assets/list.png" />
-                     </image>
-                  </ImageView>
+                  <JFXButton fx:id="btnSave" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" layoutX="14.0" layoutY="6.0" prefHeight="40.0" prefWidth="40.0" ripplerFill="#7900d0" style="-fx-background-color: white;" styleClass="rounded-button" stylesheets="@styles/styles.css" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="6.0">
+                     <graphic>
+                        <ImageView fx:id="btnProjection12" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/save.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton fx:id="btnCompare" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" layoutX="65.0" layoutY="5.0" prefHeight="40.0" prefWidth="40.0" ripplerFill="#00bf13" style="-fx-background-color: white;" styleClass="rounded-button" stylesheets="@styles/styles.css" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="64.0" AnchorPane.topAnchor="6.0">
+                     <graphic>
+                        <ImageView fx:id="btnProjection1211" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/compare.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton fx:id="btnPdf" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" layoutX="120.0" layoutY="6.0" prefHeight="40.0" prefWidth="40.0" ripplerFill="RED" style="-fx-background-color: white;" styleClass="rounded-button" stylesheets="@styles/styles.css" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="114.0" AnchorPane.topAnchor="6.0">
+                     <graphic>
+                        <ImageView fx:id="btnProjection121" fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/pdf.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <HBox alignment="CENTER" layoutX="281.0" layoutY="10.0" AnchorPane.leftAnchor="281.0" AnchorPane.rightAnchor="280.0">
+                     <children>
+                        <ImageView fx:id="btnLeft" fitHeight="20.0" fitWidth="20.0" onMouseEntered="#btnLeftMouseEntered" onMouseExited="#btnLeftMouseExited" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/left-arrow.png" />
+                           </image>
+                        </ImageView>
+                        <Label alignment="CENTER" prefHeight="32.0" prefWidth="55.0" text="1/15" textFill="WHITE" />
+                        <ImageView fx:id="btnRight" fitHeight="20.0" fitWidth="20.0" onMouseEntered="#btnRightMouseEntered" onMouseExited="#btnRightMouseExited" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/right-arrow.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
                </children>
-            </HBox>
-            <HBox alignment="CENTER">
-               <children>
-                  <ImageView fx:id="btnLeft" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../assets/left-arrow.png" />
-                     </image>
-                  </ImageView>
-                  <Label alignment="CENTER" prefHeight="32.0" prefWidth="55.0" text="1/15" textFill="WHITE" />
-                  <ImageView fx:id="btnLeft1" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../assets/right-arrow.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </HBox>
+            </AnchorPane>
          </children>
       </StackPane>
+      <JFXButton fx:id="btnNotifications" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" layoutX="582.0" layoutY="6.0" onAction="#btnNotificationsOnAction" prefHeight="40.0" prefWidth="40.0" ripplerFill="#fff23d" style="-fx-background-color: white;" styleClass="rounded-button" stylesheets="@styles/styles.css" AnchorPane.rightAnchor="133.0">
+         <graphic>
+            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/notification.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
      </AnchorPane>
  </StackPane>

@@ -1,22 +1,23 @@
 package controllers;
 
-import com.jfoenix.controls.JFXAutoCompletePopup;
-import com.jfoenix.controls.JFXListView;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import controllers.tablemodel.DragSelectionCellFactory;
 import controllers.tablemodel.HourRow;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 
 import java.io.IOException;
@@ -24,6 +25,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ScheduleController implements Initializable {
+
+    private final Image leftOn = new Image("/assets/left-arrow-hover.png");
+    private final Image leftOff = new Image("/assets/left-arrow.png");
+    private final Image rightOn = new Image("/assets/right-arrow-hover.png");
+    private final Image rightOff = new Image("/assets/right-arrow.png");
 
     @FXML
     private StackPane stackPane;
@@ -59,19 +65,75 @@ public class ScheduleController implements Initializable {
     private JFXListView<AnchorPane> listViewSubjects;
 
     @FXML
-    private ImageView btnProjection;
+    private JFXButton btnProjection;
 
+    @FXML
+    private ImageView btnLeft;
+
+    @FXML
+    private ImageView btnRight;
+
+    @FXML
+    private JFXButton btnNotifications;
+
+    @FXML
+    private JFXButton btnSave;
+
+    @FXML
+    private JFXButton btnCompare;
+
+    @FXML
+    private JFXButton btnPdf;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Tooltip.install(btnProjection, new Tooltip("Ver proyección"));
+        Tooltip.install(btnSave, new Tooltip("Guardar horario"));
+        Tooltip.install(btnCompare, new Tooltip("Comparar horarios"));
+        Tooltip.install(btnPdf, new Tooltip("Descargar PDF"));
+        btnSave.setOnAction(this::btnSaveOnAction);
         buildAutoCompleteTextField();
         buildTableView();
     }
 
     @FXML
-    void btnProjectionOnAction(MouseEvent event) {
+    void btnProjectionOnAction(ActionEvent event) {
         System.out.println("click");
+        JFXDialogLayout content = new JFXDialogLayout();
+        content.setHeading(new Text("Proyección"));
+        content.setBody(new Text("aloo"));
+        JFXDialog dialog = new JFXDialog(stackPane, content, JFXDialog.DialogTransition.BOTTOM);
+        dialog.show();
+    }
+
+    @FXML
+    void btnSaveOnAction(ActionEvent event) {
+        System.out.println("ali");
+    }
+
+    @FXML
+    void btnNotificationsOnAction(ActionEvent event) {
+        System.out.println("click send req");
+    }
+
+    @FXML
+    void btnLeftMouseEntered(MouseEvent event) {
+        btnLeft.setImage(leftOn);
+    }
+
+    @FXML
+    void btnLeftMouseExited(MouseEvent event) {
+        btnLeft.setImage(leftOff);
+    }
+
+    @FXML
+    void btnRightMouseEntered(MouseEvent event) {
+        btnRight.setImage(rightOn);
+    }
+
+    @FXML
+    void btnRightMouseExited(MouseEvent event) {
+        btnRight.setImage(rightOff);
     }
 
     private void buildTableView() {
