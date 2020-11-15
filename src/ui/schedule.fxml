@@ -49,7 +49,7 @@
          <children>
             <AnchorPane prefHeight="48.0" prefWidth="656.0">
                <children>
-                  <JFXButton fx:id="btnSave" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" layoutX="14.0" layoutY="6.0" prefHeight="40.0" prefWidth="40.0" ripplerFill="#7900d0" style="-fx-background-color: white;" styleClass="rounded-button" stylesheets="@styles/styles.css" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="6.0">
+                  <JFXButton fx:id="btnSave" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" layoutX="14.0" layoutY="6.0" onAction="#btnSaveOnAction" prefHeight="40.0" prefWidth="40.0" ripplerFill="#7900d0" style="-fx-background-color: white;" styleClass="rounded-button" stylesheets="@styles/styles.css" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="6.0">
                      <graphic>
                         <ImageView fx:id="btnProjection12" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                            <image>

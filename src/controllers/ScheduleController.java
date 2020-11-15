@@ -5,6 +5,8 @@ import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import controllers.tablemodel.DragSelectionCellFactory;
 import controllers.tablemodel.HourRow;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -91,7 +93,6 @@ public class ScheduleController implements Initializable {
         Tooltip.install(btnSave, new Tooltip("Guardar horario"));
         Tooltip.install(btnCompare, new Tooltip("Comparar horarios"));
         Tooltip.install(btnPdf, new Tooltip("Descargar PDF"));
-        btnSave.setOnAction(this::btnSaveOnAction);
         buildAutoCompleteTextField();
         buildTableView();
     }
@@ -153,7 +154,8 @@ public class ScheduleController implements Initializable {
                 tableView.setFixedCellSize((newVal.doubleValue() / 15)));
 
         for (int i = 6; i < 20; i++) {
-            tableView.getItems().add(new HourRow(i + ":30 - " + (i + 1) + ":30", "", "", "", "", "", ""));
+            //tableView.getItems().add(new HourRow(i + ":30 - " + (i + 1) + ":30", "", "", "", "", "", ""));
+            tableView.getItems().add(new HourRow(i + ":30 - " + (i + 1) + ":30", "Hola\nComoEstas", "", "ABC", "", "", ""));
         }
 
         tableView.getSelectionModel().getSelectedCells().addListener((ListChangeListener<? super TablePosition>) c -> {
