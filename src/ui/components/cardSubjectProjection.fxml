@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="269.0" styleClass="card-subject" stylesheets="@../styles/styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <Button fx:id="btnFilter" contentDisplay="GRAPHIC_ONLY" layoutX="223.0" layoutY="19.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" styleClass="rounded-button" stylesheets="@../styles/styles.css" AnchorPane.rightAnchor="14.0">
+      <graphic>
+         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../../assets/plus.png" />
+            </image>
+         </ImageView>
+      </graphic>
+   </Button>
+   <Label fx:id="lblSubjectName" layoutX="14.0" layoutY="15.0" prefHeight="17.0" prefWidth="165.0" style="-fx-font-weight: bold;" text="Nombre de la materia" textFill="WHITE" AnchorPane.leftAnchor="14.0">
+      <font>
+         <Font name="System Bold" size="12.0" />
+      </font>
+   </Label>
+   <Label fx:id="lblInfo" layoutX="14.0" layoutY="32.0" prefHeight="5.0" prefWidth="137.0" text="IST123 | 3 créditos" textFill="WHITE" AnchorPane.leftAnchor="14.0" />
+</AnchorPane>

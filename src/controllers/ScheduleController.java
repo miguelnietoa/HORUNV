@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -99,12 +100,18 @@ public class ScheduleController implements Initializable {
 
     @FXML
     void btnProjectionOnAction(ActionEvent event) {
-        System.out.println("click");
-        JFXDialogLayout content = new JFXDialogLayout();
-        content.setHeading(new Text("Proyección"));
-        content.setBody(new Text("aloo"));
-        JFXDialog dialog = new JFXDialog(stackPane, content, JFXDialog.DialogTransition.BOTTOM);
-        dialog.show();
+        try {
+            JFXDialogLayout content = new JFXDialogLayout();
+            CardProjectionController c = new CardProjectionController();
+            FXMLLoader parent = new FXMLLoader(getClass().getResource("/ui/components/cardProjection.fxml"));
+            parent.setController(c);
+            content.setBody((Parent) parent.load());
+            content.setHeading(new Text("Proyección"));
+            JFXDialog dialog = new JFXDialog(stackPane, content, JFXDialog.DialogTransition.BOTTOM);
+            dialog.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -114,7 +121,15 @@ public class ScheduleController implements Initializable {
 
     @FXML
     void btnNotificationsOnAction(ActionEvent event) {
-        System.out.println("click send req");
+        try {
+            JFXDialogLayout content = new JFXDialogLayout();
+            Parent parent = FXMLLoader.load(getClass().getResource("/ui/components/cardNotifications.fxml"));
+            content.setBody(parent);
+            JFXDialog dialog = new JFXDialog(stackPane, content, JFXDialog.DialogTransition.BOTTOM);
+            dialog.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -135,6 +150,18 @@ public class ScheduleController implements Initializable {
     @FXML
     void btnRightMouseExited(MouseEvent event) {
         btnRight.setImage(rightOff);
+    }
+
+
+    private <T> void columnCells(TableColumn<HourRow, T> column, int col) {
+
+        Callback<TableColumn<HourRow, T>, TableCell<HourRow, T>> existingCellFactory
+                = column.getCellFactory();
+        column.setCellFactory(c -> {
+            TableCell<HourRow, T> cell = existingCellFactory.call(c);
+            return cell;
+        });
+
     }
 
     private void buildTableView() {
@@ -159,31 +186,43 @@ public class ScheduleController implements Initializable {
         }
 
         tableView.getSelectionModel().getSelectedCells().addListener((ListChangeListener<? super TablePosition>) c -> {
+
             for (TablePosition pos : c.getList()) {
                 int row = pos.getRow();
                 int col = pos.getColumn();
 
-                // HourRow item = tableView.getItems().get(row);
+                HourRow item = tableView.getItems().get(row);
 
                 if (col == 0) {
-                    Platform.runLater(() -> tableView.getSelectionModel().clearSelection(row, hourID));
+
+                    Platform.runLater(() -> {
+
+                        tableView.getSelectionModel().clearSelection(row, hourID);
+                    });
                     break;
+                } else {
+                    columnCells(tableView.getColumns().get(col), col);
                 }
 
+                item.setFromIndex(col, "");
+                //System.out.println(tableView.getSelectionModel().getSelectedCells().get(0));
                 //System.out.println("x=" + row + "y=" + col);
                 //String dispLastName = (String) pos.getTableColumn().getCellObservableValue(item).getValue();
+
+                // tableView.getItems().set(row,item);
 
             }
         });
 
         final Callback<TableColumn<HourRow, String>, TableCell<HourRow, String>> cellFactory = new DragSelectionCellFactory();
-        hourID.setCellFactory(cellFactory);
+        // hourID.setCellFactory(cellFactory);
         mondayID.setCellFactory(cellFactory);
         tuesdayID.setCellFactory(cellFactory);
         wednesdayID.setCellFactory(cellFactory);
         thursdayID.setCellFactory(cellFactory);
         fridayID.setCellFactory(cellFactory);
         saturdayID.setCellFactory(cellFactory);
+
 
         tableView.getSelectionModel().setCellSelectionEnabled(true);
         tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);

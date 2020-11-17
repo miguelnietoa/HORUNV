@@ -107,4 +107,27 @@ public class HourRow {
     public void setSaturday(String saturday) {
         this.saturday.set(saturday);
     }
+
+    public void setFromIndex(int i, String value) {
+        switch (i) {
+            case 1:
+                setMonday(value);
+                break;
+            case 2:
+                setTuesday(value);
+                break;
+            case 3:
+                setWednesday(value);
+                break;
+            case 4:
+                setThursday(value);
+                break;
+            case 5:
+                setFriday(value);
+                break;
+            case 6:
+                setSaturday(value);
+                break;
+        }
+    }
 }

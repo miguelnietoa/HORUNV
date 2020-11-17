@@ -21,8 +21,26 @@ public class CardCourseController implements Initializable {
     @FXML
     private JFXToggleButton toggleButtonEnable;
 
+    private String nrc;
+    private boolean enableToggleButton;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        setNRC(nrc);
+        setEnableToggleButton(enableToggleButton);
     }
+
+    public CardCourseController(String nrc, boolean enableToggleButton) {
+        this.nrc = nrc;
+        this.enableToggleButton = enableToggleButton;
+    }
+
+    public void setNRC(String nrc) {
+        lblNRC.setText(nrc);
+    }
+
+    public void setEnableToggleButton(boolean enableToggleButton) {
+        toggleButtonEnable.setSelected(enableToggleButton);
+    }
+
 }

@@ -23,8 +23,10 @@ public class DragSelectionCell extends TableCell<HourRow, String> {
         }
         if (empty || item.equals("")) {
             setTooltip(null);
-        } else {
+        } else if (item.contains("\n")) {
             setTooltip(new Tooltip(item));
+            setStyle("-fx-background-color: yellow");
         }
+
     }
 }

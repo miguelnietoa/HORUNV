@@ -31,9 +31,9 @@ public class WindowFilterController implements Initializable {
 
     private void buildSubjectCard() {
         for (int i = 0; i < 10; i++) {
-
+            CardProfessorController c = new CardProfessorController("Luis Alejandro LLach Transito", true);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardProfessor.fxml"));
-
+            loader.setController(c);
             try {
                 if (i == 0) {
                     root = new TreeItem<>(loader.load());
@@ -52,7 +52,10 @@ public class WindowFilterController implements Initializable {
         for (int i = 0; i < 5; i++) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardCourse.fxml"));
             try {
-                root.getChildren().get(0).getChildren().add(new TreeItem<>(loader.load()));
+                AnchorPane course = loader.load();
+                root.getChildren().get(0).getChildren().add(new TreeItem<>(course));
+                CardProfessorController c = (CardProfessorController) root.getChildren().get(0).getValue().getUserData();
+                c.addCourse(course);
             } catch (IOException e) {
                 e.printStackTrace();
             }
