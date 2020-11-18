@@ -22,6 +22,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import model.Student;
 
 import java.io.IOException;
 import java.net.URL;
@@ -88,6 +89,12 @@ public class ScheduleController implements Initializable {
     @FXML
     private JFXButton btnPdf;
 
+    @FXML
+    private Label lblFullname;
+
+    @FXML
+    private ImageView imageAvatar;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Tooltip.install(btnProjection, new Tooltip("Ver proyección"));
@@ -96,6 +103,12 @@ public class ScheduleController implements Initializable {
         Tooltip.install(btnPdf, new Tooltip("Descargar PDF"));
         buildAutoCompleteTextField();
         buildTableView();
+        lblFullname.setText(Student.getFullname());
+        if (Student.getGender() == 'M')
+            imageAvatar.setImage(new Image("\\assets\\man.png"));
+        else
+            imageAvatar.setImage(new Image("\\assets\\woman.png"));
+
     }
 
     @FXML
