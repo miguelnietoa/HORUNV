@@ -4,9 +4,8 @@ import com.jfoenix.controls.*;
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import controllers.tablemodel.DragSelectionCellFactory;
 import controllers.tablemodel.HourRow;
+import database.DatabaseManager;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringBinding;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,6 +26,7 @@ import model.Student;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class ScheduleController implements Initializable {
 
@@ -97,6 +97,8 @@ public class ScheduleController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        Student.setProjection(DatabaseManager.getProjection(Student.getCodeUser()));
+        System.out.println(Student.getProjection().size());
         Tooltip.install(btnProjection, new Tooltip("Ver proyección"));
         Tooltip.install(btnSave, new Tooltip("Guardar horario"));
         Tooltip.install(btnCompare, new Tooltip("Comparar horarios"));
@@ -258,12 +260,9 @@ public class ScheduleController implements Initializable {
     private void buildAutoCompleteTextField() {
         JFXAutoCompletePopup<String> autoCompletePopup = new JFXAutoCompletePopup<>();
         autoCompletePopup.getSuggestions().addAll(
-                "Valentina Nieto", "Valentina Imitola", "Valentina Utria",
-                "Valentina Reyes", "Valentina Camacho", "Valentina Camelo",
-                "Valentina Cavadia", "Valentina Lopez", "Valentina Gonzalez",
-                "Valentina Nietoo", "Valentina Imitolaa", "Valentina Utriaa",
-                "Valentina Reyees", "Valentina Camachoo", "Valentina Cameelo",
-                "Valentina Cavadaia", "Valentina Loopez", "Valentina Gonzalezz"
+                Student.getProjection().stream().map(
+                        subject -> subject.getName() + " (" + subject.getCode() +")"
+                ).collect(Collectors.toList())
         );
 
         // detect selection

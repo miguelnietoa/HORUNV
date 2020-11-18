@@ -1,5 +1,7 @@
 package model;
 
+import java.util.LinkedList;
+
 public class Student {
     private static String username;
     private static int codeUser;
@@ -7,8 +9,11 @@ public class Student {
     private static char gender;
     private static int idPlan;
     private static String period;
+    private static LinkedList<Subject> projection;
 
     private Student() {}
+
+
 
     public static char getGender() {
         return gender;
@@ -56,5 +61,13 @@ public class Student {
 
     public static void setCodeUser(int codeUser) {
         Student.codeUser = codeUser;
+    }
+
+    public static LinkedList<Subject> getProjection() {
+        return projection;
+    }
+
+    public static void setProjection(LinkedList<Subject> projection) {
+        Student.projection = projection;
     }
 }
