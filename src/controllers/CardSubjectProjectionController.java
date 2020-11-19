@@ -1,14 +1,16 @@
 package controllers;
 
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
+import com.jfoenix.controls.JFXListView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
+import model.Student;
+import model.Subject;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,31 +25,43 @@ public class CardSubjectProjectionController implements Initializable {
     private Label lblInfo;
 
     @FXML
-    private Button btnFilter;
+    private Button btnAdd;
 
-    String subjectName;
-    String subjectInfo;
+    private Subject subject;
+
+    private JFXListView<AnchorPane> listViewSubjects;
+
+    private StackPane stackPane;
+
+    public CardSubjectProjectionController(Subject subject, JFXListView<AnchorPane> listViewSubjects,
+                                           StackPane stackPane) {
+        this.subject = subject;
+        this.listViewSubjects = listViewSubjects;
+        this.stackPane = stackPane;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setSubjectInfo(subjectName);
-        setSubjectInfo(subjectInfo);
+        lblSubjectName.setText(subject.getName());
+        lblInfo.setText(subject.getCode() + " | " + subject.getCredits() + " créditos");
+        btnAdd.setOnAction(this::btnAddOnAction);
+        btnAdd.setVisible(!Student.getSelectedSubjects().contains(subject));
+
     }
 
-    public CardSubjectProjectionController(String subjectName, String info) {
-        this.subjectName = subjectName;
-        this.subjectInfo = info;
+    void btnAddOnAction(ActionEvent event) {
+        System.out.println("Se añade la materia " + subject.getCode());
+        btnAdd.setVisible(false);
+        Student.addSelectedSubject(subject);
+        CardSubjectController c = new CardSubjectController(subject, listViewSubjects, stackPane);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardSubject.fxml"));
+        loader.setController(c);
+        try {
+            listViewSubjects.getItems().add(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void setSubjectName(String subjectName) {
-        lblSubjectName.setText(subjectName);
-    }
-
-    public void setSubjectInfo(String subjectInfo) {
-        lblInfo.setText(subjectInfo);
-    }
-
-    void btnFilterOnAction(ActionEvent event) {
-        System.out.println("Click");
-    }
 }

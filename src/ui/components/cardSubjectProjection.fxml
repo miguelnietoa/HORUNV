@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="81.0" prefWidth="350.0" styleClass="card-subject" stylesheets="@../styles/styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
-   <Button fx:id="btnFilter" contentDisplay="GRAPHIC_ONLY" layoutX="304.0" layoutY="25.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" styleClass="rounded-button" stylesheets="@../styles/styles.css" AnchorPane.rightAnchor="14.0">
+   <Button fx:id="btnAdd" contentDisplay="GRAPHIC_ONLY" layoutX="304.0" layoutY="25.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" styleClass="rounded-button" stylesheets="@../styles/styles.css" AnchorPane.rightAnchor="14.0">
       <graphic>
          <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
             <image>

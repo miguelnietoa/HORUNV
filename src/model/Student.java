@@ -1,5 +1,6 @@
 package model;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class Student {
@@ -9,7 +10,8 @@ public class Student {
     private static char gender;
     private static int idPlan;
     private static String period;
-    private static LinkedList<Subject> projection;
+    private static HashMap<String, Subject> projection;
+    private static LinkedList<Subject> selectedSubjects = new LinkedList<>();
 
     private Student() {}
 
@@ -63,11 +65,23 @@ public class Student {
         Student.codeUser = codeUser;
     }
 
-    public static LinkedList<Subject> getProjection() {
+    public static HashMap<String, Subject> getProjection() {
         return projection;
     }
 
-    public static void setProjection(LinkedList<Subject> projection) {
+    public static void setProjection(HashMap<String, Subject> projection) {
         Student.projection = projection;
+    }
+
+    public static LinkedList<Subject> getSelectedSubjects() {
+        return selectedSubjects;
+    }
+
+    public static void setSelectedSubjects(LinkedList<Subject> selectedSubjects) {
+        Student.selectedSubjects = selectedSubjects;
+    }
+
+    public static void addSelectedSubject(Subject subject) {
+        selectedSubjects.add(subject);
     }
 }

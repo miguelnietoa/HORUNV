@@ -26,7 +26,7 @@
             <Image url="@../assets/man.png" />
         </ImageView>
         <Label fx:id="lblFullname" layoutX="643.0" layoutY="9.0" prefHeight="40.0" prefWidth="102.0" text="Jesús Ángel Camacho Utria" wrapText="true" AnchorPane.rightAnchor="184.0" />
-        <JFXButton buttonType="RAISED" layoutX="856.0" layoutY="10.0" prefHeight="33.0" prefWidth="110.0" style="-fx-background-color: #FF533D; -fx-border-radius: 13px; -fx-background-radius: 13px;" text="Cerrar sesión" textAlignment="CENTER" textFill="WHITE" AnchorPane.rightAnchor="14.0" />
+        <JFXButton fx:id="btnLogOut" buttonType="RAISED" layoutX="856.0" layoutY="10.0" onAction="#btnLogOutOnAction" prefHeight="33.0" prefWidth="110.0" style="-fx-background-color: #FF533D; -fx-border-radius: 13px; -fx-background-radius: 13px;" text="Cerrar sesión" textAlignment="CENTER" textFill="WHITE" AnchorPane.rightAnchor="14.0" />
          <AnchorPane layoutX="504.0" layoutY="14.0" prefHeight="485.0" prefWidth="282.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="55.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="60.0">
              <Label alignment="CENTER" prefHeight="25.0" prefWidth="282.0" text="Asignaturas seleccionadas" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
              <JFXListView fx:id="listViewSubjects" layoutY="25.0" prefHeight="373.0" prefWidth="282.0" styleClass="mylistview" stylesheets="@styles/styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />

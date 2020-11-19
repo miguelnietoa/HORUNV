@@ -8,32 +8,38 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class DatabaseManager {
 
     private static Connection conn = null;
 
-    private DatabaseManager() {}
+    private DatabaseManager() {
+    }
 
-    public static Connection getConnection(String address, String user, String pass) {
-        if (conn != null) {
-            return conn;
+    public static Connection getConnection() {
+        if (conn == null) {
+            return getConnection("localhost", "horunv", "sa123456");
         } else {
-            try {
-                OracleDataSource ds = new OracleDataSource();
-                ds.setServerName(address);
-                ds.setPortNumber(1521);
-                ds.setDriverType("thin");
-                ds.setDatabaseName("XE");
-                ds.setUser(user);
-                ds.setPassword(pass);
-                return conn = ds.getConnection();
-            } catch (SQLException error) {
-                System.out.println("Error en la conexión con la BD: " + error);
-            }
-            return null;
+            return conn;
         }
+    }
+
+    private static Connection getConnection(String address, String user, String pass) {
+        try {
+            OracleDataSource ds = new OracleDataSource();
+            ds.setServerName(address);
+            ds.setPortNumber(1521);
+            ds.setDriverType("thin");
+            ds.setDatabaseName("XE");
+            ds.setUser(user);
+            ds.setPassword(pass);
+            return conn = ds.getConnection();
+        } catch (SQLException error) {
+            System.out.println("Error en la conexión con la BD: " + error);
+        }
+        return null;
     }
 
     public static void closeConnection() {
@@ -69,8 +75,8 @@ public class DatabaseManager {
         try {
             PreparedStatement ps = conn.prepareStatement(
                     "SELECT \"nombre1\", \"nombre2\", \"apellido1\", \"apellido2\", \"sexo\", " +
-                    "\"id_plan_estudio\", \"periodo_inscrito\" " +
-                    "FROM \"Estudiante\" WHERE \"codigo\" = ?"
+                            "\"id_plan_estudio\", \"periodo_inscrito\" " +
+                            "FROM \"Estudiante\" WHERE \"codigo\" = ?"
             );
             ps.setInt(1, codeUser);
             rs = ps.executeQuery();
@@ -94,21 +100,21 @@ public class DatabaseManager {
         }
     }
 
-    public static LinkedList<Subject> getProjection(int codeStudent) {
+    public static HashMap<String, Subject> getProjection(int codeStudent) {
         ResultSet rs;
         try {
             PreparedStatement ps = conn.prepareStatement(
                     "SELECT * FROM \"Asignatura\"\n" +
-                    "WHERE \"codigo\" IN(\n" +
-                    "SELECT \"cod_asig\" \n" +
-                    "FROM \"Proyeccion\" \n" +
-                    "WHERE \"cod_estu\" = ?)"
+                            "WHERE \"codigo\" IN(\n" +
+                            "SELECT \"cod_asig\" \n" +
+                            "FROM \"Proyeccion\" \n" +
+                            "WHERE \"cod_estu\" = ?)"
             );
             ps.setInt(1, codeStudent);
             rs = ps.executeQuery();
-            LinkedList<Subject> projection = new LinkedList<Subject>();
+            HashMap<String, Subject> projection = new HashMap<>();
             while (rs.next()) {
-                projection.add(new Subject(rs.getString(1), rs.getString(2), rs.getInt(3)));
+                projection.put(rs.getString(1), new Subject(rs.getString(1), rs.getString(2), rs.getInt(3)));
             }
             return projection;
         } catch (SQLException e) {

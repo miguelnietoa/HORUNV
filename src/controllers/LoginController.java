@@ -88,11 +88,6 @@ public class LoginController implements Initializable {
                     });
                 } else {
                     if (DatabaseManager.isLogged(username, password)) {
-                        System.out.println(Student.getCodeUser());
-                        System.out.println(Student.getFullname());
-                        System.out.println(Student.getGender());
-                        System.out.println(Student.getIdPlan());
-                        System.out.println(Student.getPeriod());
                         // Show Schedule window
                         Platform.runLater(() -> {
                             Stage schedule = new Stage();

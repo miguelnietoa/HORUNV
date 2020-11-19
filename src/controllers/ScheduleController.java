@@ -12,16 +12,20 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import model.Student;
+import model.Subject;
 
 import java.io.IOException;
 import java.net.URL;
@@ -81,6 +85,9 @@ public class ScheduleController implements Initializable {
     private JFXButton btnNotifications;
 
     @FXML
+    private JFXButton btnLogOut;
+
+    @FXML
     private JFXButton btnSave;
 
     @FXML
@@ -98,7 +105,6 @@ public class ScheduleController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Student.setProjection(DatabaseManager.getProjection(Student.getCodeUser()));
-        System.out.println(Student.getProjection().size());
         Tooltip.install(btnProjection, new Tooltip("Ver proyección"));
         Tooltip.install(btnSave, new Tooltip("Guardar horario"));
         Tooltip.install(btnCompare, new Tooltip("Comparar horarios"));
@@ -116,13 +122,13 @@ public class ScheduleController implements Initializable {
     @FXML
     void btnProjectionOnAction(ActionEvent event) {
         try {
-            JFXDialogLayout content = new JFXDialogLayout();
-            CardProjectionController c = new CardProjectionController();
-            FXMLLoader parent = new FXMLLoader(getClass().getResource("/ui/components/cardProjection.fxml"));
+            JFXDialogLayout contentProjection = new JFXDialogLayout();
+            ProjectionController c = new ProjectionController(listViewSubjects, stackPane);
+            FXMLLoader parent = new FXMLLoader(getClass().getResource("/ui/components/projection.fxml"));
             parent.setController(c);
-            content.setBody((Parent) parent.load());
-            content.setHeading(new Text("Proyección"));
-            JFXDialog dialog = new JFXDialog(stackPane, content, JFXDialog.DialogTransition.BOTTOM);
+            contentProjection.setBody((Parent) parent.load());
+            contentProjection.setHeading(new Text("Proyección"));
+            JFXDialog dialog = new JFXDialog(stackPane, contentProjection, JFXDialog.DialogTransition.BOTTOM);
             dialog.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -142,6 +148,27 @@ public class ScheduleController implements Initializable {
             content.setBody(parent);
             JFXDialog dialog = new JFXDialog(stackPane, content, JFXDialog.DialogTransition.BOTTOM);
             dialog.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void btnLogOutOnAction(ActionEvent event) {
+        Stage login = new Stage();
+        Parent root;
+        Stage schedule = (Stage) btnLogOut.getScene().getWindow();
+        try {
+            root = FXMLLoader.load(getClass().getResource("../ui/Login.fxml"));
+            login.setTitle("HORUNV - Login");
+            Scene scene = new Scene(root, schedule.getWidth(), schedule.getHeight());
+            scene.getStylesheets().add(getClass().getResource("/ui/styles/application.css").toExternalForm());
+            login.setScene(scene);
+            login.sizeToScene();
+            login.show();
+            login.setMinWidth(schedule.getWidth());
+            login.setMinHeight(schedule.getHeight());
+            schedule.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -244,9 +271,9 @@ public class ScheduleController implements Initializable {
 
     }
 
-    private void buildSubjectCard(String name, String code, int credits) {
+    private void buildSubjectCard(Subject subject) {
 
-        CardSubjectController c = new CardSubjectController(name, code, credits, listViewSubjects, stackPane);
+        CardSubjectController c = new CardSubjectController(subject, listViewSubjects, stackPane);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardSubject.fxml"));
         loader.setController(c);
@@ -260,17 +287,30 @@ public class ScheduleController implements Initializable {
     private void buildAutoCompleteTextField() {
         JFXAutoCompletePopup<String> autoCompletePopup = new JFXAutoCompletePopup<>();
         autoCompletePopup.getSuggestions().addAll(
-                Student.getProjection().stream().map(
+                Student.getProjection().values().stream().map(
                         subject -> subject.getName() + " (" + subject.getCode() +")"
                 ).collect(Collectors.toList())
         );
 
         // detect selection
         autoCompletePopup.setSelectionHandler(event -> {
-            System.out.println(event.getObject());
-
-            // TODO: Add subject to listViewSubjects
-            buildSubjectCard(event.getObject(), "IST1232", 4);
+            String codeSubject = event.getObject().split("\\(")[1].substring(0, 7);
+            Subject subject = Student.getProjection().get(codeSubject);
+            if (!Student.getSelectedSubjects().contains(subject)) {
+                Student.addSelectedSubject(subject);
+                buildSubjectCard(subject);
+            } else {
+                JFXDialogLayout layout = new JFXDialogLayout();
+                layout.setHeading(new Text("Advertencia"));
+                layout.setBody(new Text("Esta asignatura ya ha sido añadida."));
+                JFXButton button=new JFXButton("Okay");
+                JFXDialog dialog = new JFXDialog(stackPane, layout, JFXDialog.DialogTransition.BOTTOM);
+                button.setOnAction(event1 -> dialog.close());
+                button.setStyle("-fx-background-color: #FF533D");
+                layout.setActions(button);
+                dialog.setContent(layout);
+                dialog.show();
+            }
             textFieldSearch.setText("");
         });
 
