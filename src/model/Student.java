@@ -12,10 +12,10 @@ public class Student {
     private static String period;
     private static HashMap<String, Subject> projection;
     private static LinkedList<Subject> selectedSubjects = new LinkedList<>();
+    private static LinkedList<Course> activeCourses = new LinkedList<>();
 
-    private Student() {}
-
-
+    private Student() {
+    }
 
     public static char getGender() {
         return gender;

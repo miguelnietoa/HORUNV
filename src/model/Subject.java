@@ -1,14 +1,19 @@
 package model;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+
 public class Subject {
     private String code;
     private String name;
     private int credits;
+    private HashMap<Integer, Course> courses;
 
     public Subject(String code, String name, int credits) {
         this.code = code;
         this.name = name;
         this.credits = credits;
+        this.courses = new HashMap<>();
     }
 
     public String getCode() {
@@ -33,5 +38,9 @@ public class Subject {
 
     public void setCredits(int credits) {
         this.credits = credits;
+    }
+
+    public void setCourses(HashMap<Integer, Course> courses) {
+        this.courses = courses;
     }
 }

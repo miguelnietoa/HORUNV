@@ -19,7 +19,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -288,7 +287,7 @@ public class ScheduleController implements Initializable {
         JFXAutoCompletePopup<String> autoCompletePopup = new JFXAutoCompletePopup<>();
         autoCompletePopup.getSuggestions().addAll(
                 Student.getProjection().values().stream().map(
-                        subject -> subject.getName() + " (" + subject.getCode() +")"
+                        subject -> subject.getName() + " (" + subject.getCode() + ")"
                 ).collect(Collectors.toList())
         );
 
@@ -298,12 +297,14 @@ public class ScheduleController implements Initializable {
             Subject subject = Student.getProjection().get(codeSubject);
             if (!Student.getSelectedSubjects().contains(subject)) {
                 Student.addSelectedSubject(subject);
+                
+
                 buildSubjectCard(subject);
             } else {
                 JFXDialogLayout layout = new JFXDialogLayout();
                 layout.setHeading(new Text("Advertencia"));
                 layout.setBody(new Text("Esta asignatura ya ha sido añadida."));
-                JFXButton button=new JFXButton("Okay");
+                JFXButton button = new JFXButton("Okay");
                 JFXDialog dialog = new JFXDialog(stackPane, layout, JFXDialog.DialogTransition.BOTTOM);
                 button.setOnAction(event1 -> dialog.close());
                 button.setStyle("-fx-background-color: #FF533D");
@@ -320,7 +321,7 @@ public class ScheduleController implements Initializable {
             if (autoCompletePopup.getFilteredSuggestions().isEmpty() || textFieldSearch.getText().trim().isEmpty()) {
                 autoCompletePopup.hide();
                 // if you remove textField.getText.trim().isEmpty() when text field is empty it suggests all options
-                // so you can choose
+                // so you can choose YEH
             } else {
                 autoCompletePopup.show(textFieldSearch);
             }

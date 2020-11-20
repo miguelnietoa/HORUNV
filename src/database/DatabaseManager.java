@@ -1,5 +1,6 @@
 package database;
 
+import model.Course;
 import model.Subject;
 import oracle.jdbc.pool.OracleDataSource;
 import model.Student;
@@ -114,11 +115,37 @@ public class DatabaseManager {
             rs = ps.executeQuery();
             HashMap<String, Subject> projection = new HashMap<>();
             while (rs.next()) {
-                projection.put(rs.getString(1), new Subject(rs.getString(1), rs.getString(2), rs.getInt(3)));
+                Subject sub = new Subject(rs.getString(1), rs.getString(2), rs.getInt(3));
+                sub.setCourses(linkCourses(sub));
+                projection.put(rs.getString(1), sub);
             }
             return projection;
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static HashMap<Integer, Course> linkCourses(Subject subject) {
+        ResultSet rs;
+        try {
+            PreparedStatement ps = conn.prepareStatement(
+                    "SELECT \"nrc\", \"cupos_totales\", \"modalidad\"  " +
+                            "FROM \"Curso\"" +
+                            " WHERE \"cod_asig\" = ?"
+            );
+            ps.setString(1, subject.getCode());
+
+            rs = ps.executeQuery();
+            HashMap<Integer, Course> courses = new HashMap<>();
+            while (rs.next()) {
+                Course c = new Course(subject, rs.getInt(1), rs.getString(3).charAt(0), rs.getInt(2));
+                courses.put(c.getNrc(), c);
+            }
+            return courses;
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
         return null;
     }
