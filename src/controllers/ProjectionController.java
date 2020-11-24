@@ -6,7 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import model.Student;
+import model.User;
 import model.Subject;
 
 import java.io.IOException;
@@ -44,6 +44,6 @@ public class ProjectionController implements Initializable {
     }
 
     public void addCardSubjects() {
-        Student.getProjection().values().forEach(this::buildCardSubject);
+        User.getProjection().values().forEach(this::buildCardSubject);
     }
 }

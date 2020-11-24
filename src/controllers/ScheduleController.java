@@ -23,7 +23,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import model.Student;
+import model.Course;
+import model.User;
 import model.Subject;
 
 import java.io.IOException;
@@ -103,15 +104,15 @@ public class ScheduleController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Student.setProjection(DatabaseManager.getProjection(Student.getCodeUser()));
+        User.setProjection(DatabaseManager.getProjection(User.getCodeUser()));
         Tooltip.install(btnProjection, new Tooltip("Ver proyección"));
         Tooltip.install(btnSave, new Tooltip("Guardar horario"));
         Tooltip.install(btnCompare, new Tooltip("Comparar horarios"));
         Tooltip.install(btnPdf, new Tooltip("Descargar PDF"));
         buildAutoCompleteTextField();
         buildTableView();
-        lblFullname.setText(Student.getFullname());
-        if (Student.getGender() == 'M')
+        lblFullname.setText(User.getFullname());
+        if (User.getGender() == 'M')
             imageAvatar.setImage(new Image("\\assets\\man.png"));
         else
             imageAvatar.setImage(new Image("\\assets\\woman.png"));
@@ -270,11 +271,11 @@ public class ScheduleController implements Initializable {
 
     }
 
-    private void buildSubjectCard(Subject subject) {
+    private void buildSubjectCard(Course course) {
 
-        CardSubjectController c = new CardSubjectController(subject, listViewSubjects, stackPane);
+        CardActiveCourseController c = new CardActiveCourseController(course, listViewSubjects, stackPane);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardSubject.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardActiveCourse.fxml"));
         loader.setController(c);
         try {
             listViewSubjects.getItems().add(loader.load());
@@ -286,7 +287,7 @@ public class ScheduleController implements Initializable {
     private void buildAutoCompleteTextField() {
         JFXAutoCompletePopup<String> autoCompletePopup = new JFXAutoCompletePopup<>();
         autoCompletePopup.getSuggestions().addAll(
-                Student.getProjection().values().stream().map(
+                User.getProjection().values().stream().map(
                         subject -> subject.getName() + " (" + subject.getCode() + ")"
                 ).collect(Collectors.toList())
         );
@@ -294,12 +295,19 @@ public class ScheduleController implements Initializable {
         // detect selection
         autoCompletePopup.setSelectionHandler(event -> {
             String codeSubject = event.getObject().split("\\(")[1].substring(0, 7);
-            Subject subject = Student.getProjection().get(codeSubject);
-            if (!Student.getSelectedSubjects().contains(subject)) {
-                Student.addSelectedSubject(subject);
-                
-
-                buildSubjectCard(subject);
+            Subject subject = User.getProjection().get(codeSubject);
+            if (!User.getSelectedSubjects().contains(subject)) {
+                User.addSelectedSubject(subject);
+                User.setActiveIndexSchedule(0);
+                DatabaseManager.setSchedule(0);
+                Course newCourse = null;
+                for (Course course : User.getCurrentCourses()) {
+                    if (course.getSubject().equals(subject)) {
+                        newCourse = course;
+                        break;
+                    }
+                }
+                buildSubjectCard(newCourse);
             } else {
                 JFXDialogLayout layout = new JFXDialogLayout();
                 layout.setHeading(new Text("Advertencia"));

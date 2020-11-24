@@ -1,6 +1,7 @@
 package controllers;
 
 import com.jfoenix.controls.JFXListView;
+import database.DatabaseManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,7 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import model.Student;
+import model.Course;
+import model.User;
 import model.Subject;
 
 import java.io.IOException;
@@ -45,17 +47,25 @@ public class CardSubjectProjectionController implements Initializable {
         lblSubjectName.setText(subject.getName());
         lblInfo.setText(subject.getCode() + " | " + subject.getCredits() + " créditos");
         btnAdd.setOnAction(this::btnAddOnAction);
-        btnAdd.setVisible(!Student.getSelectedSubjects().contains(subject));
+        btnAdd.setVisible(!User.getSelectedSubjects().contains(subject));
 
     }
 
     void btnAddOnAction(ActionEvent event) {
-        System.out.println("Se añade la materia " + subject.getCode());
         btnAdd.setVisible(false);
-        Student.addSelectedSubject(subject);
-        CardSubjectController c = new CardSubjectController(subject, listViewSubjects, stackPane);
+        User.addSelectedSubject(subject);
+        User.setActiveIndexSchedule(0);
+        DatabaseManager.setSchedule(0);
+        Course newCourse = null;
+        for (Course course : User.getCurrentCourses()) {
+            if (course.getSubject().equals(subject)) {
+                newCourse = course;
+                break;
+            }
+        }
+        CardActiveCourseController c = new CardActiveCourseController(newCourse, /*course,*/ listViewSubjects, stackPane);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardSubject.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardActiveCourse.fxml"));
         loader.setController(c);
         try {
             listViewSubjects.getItems().add(loader.load());

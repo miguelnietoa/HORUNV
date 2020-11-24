@@ -3,14 +3,13 @@ package database;
 import model.Course;
 import model.Subject;
 import oracle.jdbc.pool.OracleDataSource;
-import model.Student;
+import model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 public class DatabaseManager {
 
@@ -21,7 +20,7 @@ public class DatabaseManager {
 
     public static Connection getConnection() {
         if (conn == null) {
-            return getConnection("localhost", "horunv", "sa123456");
+            return getConnection("181.130.217.56", "horunv", "sa123456");
         } else {
             return conn;
         }
@@ -61,7 +60,7 @@ public class DatabaseManager {
             ps.setString(2, pass);
             rs = ps.executeQuery();
             if (rs.next()) {
-                Student.setUsername(rs.getString(1));
+                User.setUsername(rs.getString(1));
                 getInfoUser(rs.getInt(3));
                 return true;
             }
@@ -91,11 +90,11 @@ public class DatabaseManager {
                     fullname.append(" ");
                 }
             }
-            Student.setCodeUser(codeUser);
-            Student.setFullname(fullname.toString());
-            Student.setGender(rs.getString(5).charAt(0));
-            Student.setIdPlan(rs.getInt(6));
-            Student.setPeriod(rs.getString(7));
+            User.setCodeUser(codeUser);
+            User.setFullname(fullname.toString());
+            User.setGender(rs.getString(5).charAt(0));
+            User.setIdPlan(rs.getInt(6));
+            User.setPeriod(rs.getString(7));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -148,5 +147,41 @@ public class DatabaseManager {
             throwables.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * calculate the schedule <code>index</code>
+     * and set it to User.currentCourses
+     * taking each subjectCode from User.selectedSubjects
+     *
+     * @param index
+     */
+    public static void setSchedule(int index) {
+        StringBuilder query = new StringBuilder("SELECT * FROM ");
+        int size = User.getSelectedSubjects().size();
+        Subject last = User.getSelectedSubjects().getLast();
+        for (Subject selectedSubject : User.getSelectedSubjects()) {
+            query.append("(SELECT \"nrc\" FROM \"Curso\" WHERE \"cod_asig\" = '").append(selectedSubject.getCode()).append("')\n");
+            if (!selectedSubject.equals(last)) {
+                query.append("CROSS JOIN\n");
+            }
+        }
+        query.append("OFFSET ").append(index).append(" ROWS FETCH NEXT 1 ROWS ONLY");
+
+        ResultSet rs;
+        try {
+            rs = conn.createStatement().executeQuery(String.valueOf(query));
+            if (rs.next()) {
+                User.getCurrentCourses().clear();
+                for (int i = 0; i < size; i++) {
+                    Course course = User.getSelectedSubjects().get(i).getCourses().get(rs.getInt(i+1));
+                    User.getCurrentCourses().add(course);
+                }
+            }
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 }

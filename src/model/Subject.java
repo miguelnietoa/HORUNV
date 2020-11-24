@@ -43,4 +43,8 @@ public class Subject {
     public void setCourses(HashMap<Integer, Course> courses) {
         this.courses = courses;
     }
+
+    public HashMap<Integer, Course> getCourses() {
+        return courses;
+    }
 }

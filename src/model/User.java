@@ -3,7 +3,7 @@ package model;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class Student {
+public class User {
     private static String username;
     private static int codeUser;
     private static String fullname;
@@ -12,9 +12,12 @@ public class Student {
     private static String period;
     private static HashMap<String, Subject> projection;
     private static LinkedList<Subject> selectedSubjects = new LinkedList<>();
-    private static LinkedList<Course> activeCourses = new LinkedList<>();
+    private static LinkedList<Course> currentCourses = new LinkedList<>();
+    private static int activeIndexSchedule = 0;
+    private static int cantGeneratedSchedules;
 
-    private Student() {
+
+    private User() {
     }
 
     public static char getGender() {
@@ -22,7 +25,7 @@ public class Student {
     }
 
     public static void setGender(char gender) {
-        Student.gender = gender;
+        User.gender = gender;
     }
 
     public static int getIdPlan() {
@@ -30,7 +33,7 @@ public class Student {
     }
 
     public static void setIdPlan(int idPlan) {
-        Student.idPlan = idPlan;
+        User.idPlan = idPlan;
     }
 
     public static String getPeriod() {
@@ -38,7 +41,7 @@ public class Student {
     }
 
     public static void setPeriod(String period) {
-        Student.period = period;
+        User.period = period;
     }
 
     public static String getFullname() {
@@ -46,7 +49,7 @@ public class Student {
     }
 
     public static void setFullname(String fullname) {
-        Student.fullname = fullname;
+        User.fullname = fullname;
     }
 
     public static String getUsername() {
@@ -54,7 +57,7 @@ public class Student {
     }
 
     public static void setUsername(String username) {
-        Student.username = username;
+        User.username = username;
     }
 
     public static int getCodeUser() {
@@ -62,7 +65,7 @@ public class Student {
     }
 
     public static void setCodeUser(int codeUser) {
-        Student.codeUser = codeUser;
+        User.codeUser = codeUser;
     }
 
     public static HashMap<String, Subject> getProjection() {
@@ -70,7 +73,7 @@ public class Student {
     }
 
     public static void setProjection(HashMap<String, Subject> projection) {
-        Student.projection = projection;
+        User.projection = projection;
     }
 
     public static LinkedList<Subject> getSelectedSubjects() {
@@ -78,10 +81,34 @@ public class Student {
     }
 
     public static void setSelectedSubjects(LinkedList<Subject> selectedSubjects) {
-        Student.selectedSubjects = selectedSubjects;
+        User.selectedSubjects = selectedSubjects;
     }
 
     public static void addSelectedSubject(Subject subject) {
         selectedSubjects.add(subject);
+    }
+
+    public static int getActiveIndexSchedule() {
+        return activeIndexSchedule;
+    }
+
+    public static void setActiveIndexSchedule(int activeIndexSchedule) {
+        User.activeIndexSchedule = activeIndexSchedule;
+    }
+
+    public static int getCantGeneratedSchedules() {
+        return cantGeneratedSchedules;
+    }
+
+    public static void setCantGeneratedSchedules(int cantGeneratedSchedules) {
+        User.cantGeneratedSchedules = cantGeneratedSchedules;
+    }
+
+    public static LinkedList<Course> getCurrentCourses() {
+        return currentCourses;
+    }
+
+    public static void setCurrentCourses(LinkedList<Course> currentCourses) {
+        User.currentCourses = currentCourses;
     }
 }

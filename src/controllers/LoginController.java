@@ -15,7 +15,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import model.Student;
 
 import java.io.IOException;
 import java.net.URL;

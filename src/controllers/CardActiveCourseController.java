@@ -9,21 +9,21 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import model.Student;
+import model.Course;
+import model.User;
 import model.Subject;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CardSubjectController implements Initializable {
+public class CardActiveCourseController implements Initializable {
 
-    private Subject subject;
+    private Course course;
 
     private StackPane stackPane;
 
@@ -42,9 +42,18 @@ public class CardSubjectController implements Initializable {
     @FXML
     private Label lblInfo;
 
-    public CardSubjectController(Subject subject,
-                                 JFXListView<AnchorPane> listViewSubjects, StackPane stackPane) {
-        this.subject = subject;
+    @FXML
+    private Label lblProfessor;
+
+    @FXML
+    private Label lblCapacity;
+
+    @FXML
+    private Label lblNrc;
+
+    public CardActiveCourseController(Course course,
+                                      JFXListView<AnchorPane> listViewSubjects, StackPane stackPane) {
+        this.course = course;
         this.listViewSubjects = listViewSubjects;
         this.stackPane = stackPane;
     }
@@ -52,14 +61,17 @@ public class CardSubjectController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        lblSubjectName.setText(subject.getName());
-        lblInfo.setText(subject.getCode() + " | " + subject.getCredits() + " créditos");
+        lblSubjectName.setText(course.getSubject().getName());
+        lblInfo.setText(course.getSubject().getCode() + " | " + course.getSubject().getCredits() + " créditos");
+
+        //lblProfessor
+        lblCapacity.setText("Capacidad: " + course.getTotalStudents());
+        lblNrc.setText("NRC: " + course.getNrc());
         btnFilter.setOnAction(this::btnFilterOnAction);
         btnRemove.setOnAction(this::btnRemoveOnAction);
     }
 
     void btnFilterOnAction(ActionEvent event) {
-        System.out.println("filter " + subject.getName());
         try {
             JFXDialogLayout content = new JFXDialogLayout();
             Parent parent = FXMLLoader.load(getClass().getResource("../ui/windowFilter.fxml"));
@@ -72,7 +84,16 @@ public class CardSubjectController implements Initializable {
     }
 
     void btnRemoveOnAction(ActionEvent event) {
-        Student.getSelectedSubjects().remove(subject);
+        User.getSelectedSubjects().remove(course.getSubject());
         Platform.runLater(() -> this.listViewSubjects.getItems().remove(btnRemove.getParent()));
+        User.setActiveIndexSchedule(0);
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 }
