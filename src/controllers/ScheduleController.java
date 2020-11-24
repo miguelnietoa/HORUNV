@@ -7,6 +7,7 @@ import controllers.tablemodel.HourRow;
 import database.DatabaseManager;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,16 +18,22 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import model.Course;
 import model.User;
 import model.Subject;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.image.RenderedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -108,7 +115,7 @@ public class ScheduleController implements Initializable {
         Tooltip.install(btnProjection, new Tooltip("Ver proyección"));
         Tooltip.install(btnSave, new Tooltip("Guardar horario"));
         Tooltip.install(btnCompare, new Tooltip("Comparar horarios"));
-        Tooltip.install(btnPdf, new Tooltip("Descargar PDF"));
+        Tooltip.install(btnPdf, new Tooltip("Descargar Imagen"));
         buildAutoCompleteTextField();
         buildTableView();
         lblFullname.setText(User.getFullname());
@@ -334,6 +341,23 @@ public class ScheduleController implements Initializable {
                 autoCompletePopup.show(textFieldSearch);
             }
         });
+    }
+
+    public void savePDF(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos de imagen (*.png)", "*.png"));
+        File file = fileChooser.showSaveDialog(null);
+
+        if (file != null) {
+            try {
+                WritableImage writableImage = new WritableImage((int) tableView.getWidth(), (int) tableView.getHeight());
+                tableView.snapshot(null, writableImage);
+                RenderedImage renderedImage = SwingFXUtils.fromFXImage(writableImage, null);
+                ImageIO.write(renderedImage, "png", file);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 }
 
