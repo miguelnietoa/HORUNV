@@ -5,12 +5,14 @@ public class Course {
     private int nrc;
     private char mode;
     private int totalStudents;
+    private Professor professor;
 
-    public Course(Subject subject, int nrc, char mode, int totalStudents) {
+    public Course(Subject subject, int nrc, char mode, int totalStudents, Professor professor) {
         this.subject = subject;
         this.nrc = nrc;
         this.mode = mode;
         this.totalStudents = totalStudents;
+        this.professor = professor;
     }
 
     public Subject getSubject() {
@@ -27,5 +29,13 @@ public class Course {
 
     public int getTotalStudents() {
         return totalStudents;
+    }
+
+    public Professor getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(Professor professor) {
+        this.professor = professor;
     }
 }

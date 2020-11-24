@@ -1,6 +1,7 @@
 package database;
 
 import model.Course;
+import model.Professor;
 import model.Subject;
 import oracle.jdbc.pool.OracleDataSource;
 import model.User;
@@ -14,6 +15,8 @@ import java.util.HashMap;
 public class DatabaseManager {
 
     private static Connection conn = null;
+    private static PreparedStatement psLinkCourses;
+    private static PreparedStatement psCourseProfessor;
 
     private DatabaseManager() {
     }
@@ -35,7 +38,22 @@ public class DatabaseManager {
             ds.setDatabaseName("XE");
             ds.setUser(user);
             ds.setPassword(pass);
-            return conn = ds.getConnection();
+            conn = ds.getConnection();
+
+            psLinkCourses = conn.prepareStatement(
+                "SELECT \"nrc\", \"cupos_totales\", \"modalidad\"  " +
+                "FROM \"Curso\"" +
+                " WHERE \"cod_asig\" = ?"
+            );
+            psCourseProfessor = conn.prepareStatement(
+                "SELECT * FROM \"Docente\" " +
+                "WHERE \"codigo\" IN " +
+                    "(SELECT \"cod_doc\" " +
+                    "FROM \"DocenteDictaCurso\" " +
+                    "WHERE \"nrc_curso\" = ?)"
+            );
+
+            return conn;
         } catch (SQLException error) {
             System.out.println("Error en la conexión con la BD: " + error);
         }
@@ -128,17 +146,27 @@ public class DatabaseManager {
     private static HashMap<Integer, Course> linkCourses(Subject subject) {
         ResultSet rs;
         try {
-            PreparedStatement ps = conn.prepareStatement(
-                    "SELECT \"nrc\", \"cupos_totales\", \"modalidad\"  " +
-                            "FROM \"Curso\"" +
-                            " WHERE \"cod_asig\" = ?"
-            );
-            ps.setString(1, subject.getCode());
 
-            rs = ps.executeQuery();
+            psLinkCourses.setString(1, subject.getCode());
+
+            rs = psLinkCourses.executeQuery();
             HashMap<Integer, Course> courses = new HashMap<>();
             while (rs.next()) {
-                Course c = new Course(subject, rs.getInt(1), rs.getString(3).charAt(0), rs.getInt(2));
+                ResultSet rs1;
+                psCourseProfessor.setInt(1, rs.getInt(1));
+                rs1 = psCourseProfessor.executeQuery();
+                Professor professor = null;
+                if (rs1.next()) {
+                    professor = new Professor(
+                            rs1.getString(1),
+                            rs1.getString(2) + " " +
+                                    (rs1.getString(3) == null ? "" : rs1.getString(3) + " ") +
+                                    rs1.getString(4) + " " + rs1.getString(5)
+                    );
+                } else {
+                    System.err.println("Error: Course " + rs.getInt(1) + " does not have professors.");
+                }
+                Course c = new Course(subject, rs.getInt(1), rs.getString(3).charAt(0), rs.getInt(2), professor);
                 courses.put(c.getNrc(), c);
             }
             return courses;

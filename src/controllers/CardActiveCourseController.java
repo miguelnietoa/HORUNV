@@ -64,7 +64,7 @@ public class CardActiveCourseController implements Initializable {
         lblSubjectName.setText(course.getSubject().getName());
         lblInfo.setText(course.getSubject().getCode() + " | " + course.getSubject().getCredits() + " créditos");
 
-        //lblProfessor
+        lblProfessor.setText(course.getProfessor().getFullname());
         lblCapacity.setText("Capacidad: " + course.getTotalStudents());
         lblNrc.setText("NRC: " + course.getNrc());
         btnFilter.setOnAction(this::btnFilterOnAction);
