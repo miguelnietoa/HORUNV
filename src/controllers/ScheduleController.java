@@ -27,6 +27,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import model.Course;
+import model.Schedule;
 import model.User;
 import model.Subject;
 
@@ -36,6 +37,7 @@ import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -112,6 +114,7 @@ public class ScheduleController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         User.setProjection(DatabaseManager.getProjection(User.getCodeUser()));
+        System.out.println("hola");
         Tooltip.install(btnProjection, new Tooltip("Ver proyección"));
         Tooltip.install(btnSave, new Tooltip("Guardar horario"));
         Tooltip.install(btnCompare, new Tooltip("Comparar horarios"));
@@ -231,7 +234,7 @@ public class ScheduleController implements Initializable {
 
         for (int i = 6; i < 20; i++) {
             //tableView.getItems().add(new HourRow(i + ":30 - " + (i + 1) + ":30", "", "", "", "", "", ""));
-            tableView.getItems().add(new HourRow(i + ":30 - " + (i + 1) + ":30", "Hola\nComoEstas", "", "ABC", "", "", ""));
+            tableView.getItems().add(new HourRow(i + ":30 - " + (i + 1) + ":30", "", "", "", "", "", ""));
         }
 
         tableView.getSelectionModel().getSelectedCells().addListener((ListChangeListener<? super TablePosition>) c -> {
@@ -343,7 +346,21 @@ public class ScheduleController implements Initializable {
         });
     }
 
-    public void savePDF(ActionEvent actionEvent) {
+    private void showSchedule() {
+        LinkedList<Course> currentCourses = User.getCurrentCourses();
+        for (Course c : currentCourses) {
+            LinkedList<Schedule> schedules = c.getSchedules();
+            for (Schedule s : schedules) {
+                //int start = s.getStart();
+                //int start = s.getStart();
+            }
+
+        }
+
+    }
+
+
+    private void savePDF(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos de imagen (*.png)", "*.png"));
         File file = fileChooser.showSaveDialog(null);

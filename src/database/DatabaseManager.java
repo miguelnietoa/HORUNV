@@ -1,22 +1,21 @@
 package database;
 
-import model.Course;
-import model.Professor;
-import model.Subject;
+import model.*;
 import oracle.jdbc.pool.OracleDataSource;
-import model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 public class DatabaseManager {
 
     private static Connection conn = null;
     private static PreparedStatement psLinkCourses;
     private static PreparedStatement psCourseProfessor;
+    private static PreparedStatement psScheduleCourse;
 
     private DatabaseManager() {
     }
@@ -41,16 +40,19 @@ public class DatabaseManager {
             conn = ds.getConnection();
 
             psLinkCourses = conn.prepareStatement(
-                "SELECT \"nrc\", \"cupos_totales\", \"modalidad\"  " +
-                "FROM \"Curso\"" +
-                " WHERE \"cod_asig\" = ?"
+                    "SELECT \"nrc\", \"cupos_totales\", \"modalidad\"  " +
+                            "FROM \"Curso\"" +
+                            " WHERE \"cod_asig\" = ?"
             );
             psCourseProfessor = conn.prepareStatement(
-                "SELECT * FROM \"Docente\" " +
-                "WHERE \"codigo\" IN " +
-                    "(SELECT \"cod_doc\" " +
-                    "FROM \"DocenteDictaCurso\" " +
-                    "WHERE \"nrc_curso\" = ?)"
+                    "SELECT * FROM \"Docente\" " +
+                            "WHERE \"codigo\" IN " +
+                            "(SELECT \"cod_doc\" " +
+                            "FROM \"DocenteDictaCurso\" " +
+                            "WHERE \"nrc_curso\" = ?)"
+            );
+            psScheduleCourse = conn.prepareStatement(
+                    "SELECT * FROM \"Horario\" WHERE \"nrc_curso\" = ?"
             );
 
             return conn;
@@ -168,9 +170,28 @@ public class DatabaseManager {
                 }
                 Course c = new Course(subject, rs.getInt(1), rs.getString(3).charAt(0), rs.getInt(2), professor);
                 courses.put(c.getNrc(), c);
+                c.setSchedules(getSchedule(c.getNrc()));
             }
             return courses;
 
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
+    private static LinkedList<Schedule> getSchedule(int nrc) {
+        ResultSet rs;
+        LinkedList<Schedule> schedules = new LinkedList<>();
+        try {
+            psScheduleCourse.setInt(1, nrc);
+            rs = psScheduleCourse.executeQuery();
+
+            while (rs.next()) {
+                Schedule s = new Schedule(rs.getString(3).charAt(0), rs.getInt(4), rs.getInt(5), rs.getString(2));
+                schedules.add(s);
+            }
+            return schedules;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -202,7 +223,7 @@ public class DatabaseManager {
             if (rs.next()) {
                 User.getCurrentCourses().clear();
                 for (int i = 0; i < size; i++) {
-                    Course course = User.getSelectedSubjects().get(i).getCourses().get(rs.getInt(i+1));
+                    Course course = User.getSelectedSubjects().get(i).getCourses().get(rs.getInt(i + 1));
                     User.getCurrentCourses().add(course);
                 }
             }
