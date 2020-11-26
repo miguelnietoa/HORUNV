@@ -23,19 +23,22 @@ public class ProjectionController implements Initializable {
 
     private StackPane stackPane;
 
+    private ScheduleController sc;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         addCardSubjects();
     }
 
-    public ProjectionController(JFXListView<AnchorPane> listViewSubjects, StackPane stackPane) {
+    public ProjectionController(JFXListView<AnchorPane> listViewSubjects, StackPane stackPane, ScheduleController sc) {
         this.listViewSubjects = listViewSubjects;
         this.stackPane = stackPane;
+        this.sc=sc;
     }
 
     public void buildCardSubject(Subject subject) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardSubjectProjection.fxml"));
-        loader.setController(new CardSubjectProjectionController(subject, listViewSubjects, stackPane));
+        loader.setController(new CardSubjectProjectionController(subject, listViewSubjects, stackPane,sc));
         try {
             listViewProjection.getItems().add(loader.load());
         } catch (IOException e) {

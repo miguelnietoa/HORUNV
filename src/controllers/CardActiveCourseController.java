@@ -3,6 +3,7 @@ package controllers;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXListView;
+import database.DatabaseManager;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -51,11 +52,14 @@ public class CardActiveCourseController implements Initializable {
     @FXML
     private Label lblNrc;
 
+    ScheduleController sc;
+
     public CardActiveCourseController(Course course,
-                                      JFXListView<AnchorPane> listViewSubjects, StackPane stackPane) {
+                                      JFXListView<AnchorPane> listViewSubjects, StackPane stackPane,ScheduleController sc) {
         this.course = course;
         this.listViewSubjects = listViewSubjects;
         this.stackPane = stackPane;
+        this.sc=sc;
     }
 
 
@@ -87,6 +91,11 @@ public class CardActiveCourseController implements Initializable {
         User.getSelectedSubjects().remove(course.getSubject());
         Platform.runLater(() -> this.listViewSubjects.getItems().remove(btnRemove.getParent()));
         User.setActiveIndexSchedule(0);
+        sc.showDeleteSchedule();
+        User.getSelectedSubjects().remove(course.getSubject());
+        User.getCurrentCourses().clear();
+        DatabaseManager.setSchedule(0);
+        sc.showAddSchedule();
     }
 
     public Course getCourse() {

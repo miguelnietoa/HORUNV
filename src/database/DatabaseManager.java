@@ -208,29 +208,31 @@ public class DatabaseManager {
     public static void setSchedule(int index) {
         StringBuilder query = new StringBuilder("SELECT * FROM ");
         int size = User.getSelectedSubjects().size();
-        Subject last = User.getSelectedSubjects().getLast();
-        for (Subject selectedSubject : User.getSelectedSubjects()) {
-            query.append("(SELECT \"nrc\" FROM \"Curso\" WHERE \"cod_asig\" = '").append(selectedSubject.getCode()).append("')\n");
-            if (!selectedSubject.equals(last)) {
-                query.append("CROSS JOIN\n");
-            }
-        }
-        query.append("OFFSET ").append(index).append(" ROWS FETCH NEXT 1 ROWS ONLY");
-
-        ResultSet rs;
-        try {
-            rs = conn.createStatement().executeQuery(String.valueOf(query));
-            if (rs.next()) {
-                User.getCurrentCourses().clear();
-                for (int i = 0; i < size; i++) {
-                    Course course = User.getSelectedSubjects().get(i).getCourses().get(rs.getInt(i + 1));
-                    User.getCurrentCourses().add(course);
+        if (!User.getSelectedSubjects().isEmpty()) {
+            Subject last = User.getSelectedSubjects().getLast();
+            for (Subject selectedSubject : User.getSelectedSubjects()) {
+                query.append("(SELECT \"nrc\" FROM \"Curso\" WHERE \"cod_asig\" = '").append(selectedSubject.getCode()).append("')\n");
+                if (!selectedSubject.equals(last)) {
+                    query.append("CROSS JOIN\n");
                 }
             }
+            query.append("OFFSET ").append(index).append(" ROWS FETCH NEXT 1 ROWS ONLY");
+
+            ResultSet rs;
+            try {
+                rs = conn.createStatement().executeQuery(String.valueOf(query));
+                if (rs.next()) {
+                    User.getCurrentCourses().clear();
+                    for (int i = 0; i < size; i++) {
+                        Course course = User.getSelectedSubjects().get(i).getCourses().get(rs.getInt(i + 1));
+                        User.getCurrentCourses().add(course);
+                    }
+                }
 
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
     }
 }

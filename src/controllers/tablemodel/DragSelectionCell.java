@@ -20,6 +20,7 @@ public class DragSelectionCell extends TableCell<HourRow, String> {
             setText(null);
         } else {
             setText(item);
+            setStyle("-fx-background-color: transparent");
         }
         if (empty || item.equals("")) {
             setTooltip(null);

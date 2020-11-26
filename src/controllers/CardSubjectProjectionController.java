@@ -35,11 +35,14 @@ public class CardSubjectProjectionController implements Initializable {
 
     private StackPane stackPane;
 
+    private ScheduleController sc;
+
     public CardSubjectProjectionController(Subject subject, JFXListView<AnchorPane> listViewSubjects,
-                                           StackPane stackPane) {
+                                           StackPane stackPane, ScheduleController sc) {
         this.subject = subject;
         this.listViewSubjects = listViewSubjects;
         this.stackPane = stackPane;
+        this.sc=sc;
     }
 
     @Override
@@ -63,12 +66,13 @@ public class CardSubjectProjectionController implements Initializable {
                 break;
             }
         }
-        CardActiveCourseController c = new CardActiveCourseController(newCourse, /*course,*/ listViewSubjects, stackPane);
+        CardActiveCourseController c = new CardActiveCourseController(newCourse, /*course,*/ listViewSubjects, stackPane,sc);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardActiveCourse.fxml"));
         loader.setController(c);
         try {
             listViewSubjects.getItems().add(loader.load());
+            sc.showAddSchedule();
         } catch (IOException e) {
             e.printStackTrace();
         }

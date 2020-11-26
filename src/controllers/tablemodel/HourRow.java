@@ -109,6 +109,7 @@ public class HourRow {
     }
 
     public void setFromIndex(int i, String value) {
+
         switch (i) {
             case 1:
                 setMonday(value);
@@ -129,5 +130,30 @@ public class HourRow {
                 setSaturday(value);
                 break;
         }
+    }
+
+    public String getFromIndex(int i) {
+        String val="";
+        switch (i) {
+            case 1:
+                val=getMonday();
+                break;
+            case 2:
+                val=getTuesday();
+                break;
+            case 3:
+                val=getWednesday();
+                break;
+            case 4:
+                val=getThursday();
+                break;
+            case 5:
+                val=getFriday();
+                break;
+            case 6:
+                val=getSaturday();
+                break;
+        }
+        return val;
     }
 }

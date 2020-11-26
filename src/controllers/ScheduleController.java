@@ -114,7 +114,6 @@ public class ScheduleController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         User.setProjection(DatabaseManager.getProjection(User.getCodeUser()));
-        System.out.println("hola");
         Tooltip.install(btnProjection, new Tooltip("Ver proyección"));
         Tooltip.install(btnSave, new Tooltip("Guardar horario"));
         Tooltip.install(btnCompare, new Tooltip("Comparar horarios"));
@@ -133,7 +132,7 @@ public class ScheduleController implements Initializable {
     void btnProjectionOnAction(ActionEvent event) {
         try {
             JFXDialogLayout contentProjection = new JFXDialogLayout();
-            ProjectionController c = new ProjectionController(listViewSubjects, stackPane);
+            ProjectionController c = new ProjectionController(listViewSubjects, stackPane,this);
             FXMLLoader parent = new FXMLLoader(getClass().getResource("/ui/components/projection.fxml"));
             parent.setController(c);
             contentProjection.setBody((Parent) parent.load());
@@ -192,6 +191,15 @@ public class ScheduleController implements Initializable {
     @FXML
     void btnLeftMouseExited(MouseEvent event) {
         btnLeft.setImage(leftOff);
+    }
+
+    @FXML
+    void btnLeftMouseClicked(MouseEvent mouseEvent) {
+
+    }
+
+    @FXML
+    void btnRightMouseClicked(MouseEvent mouseEvent) {
     }
 
     @FXML
@@ -283,7 +291,7 @@ public class ScheduleController implements Initializable {
 
     private void buildSubjectCard(Course course) {
 
-        CardActiveCourseController c = new CardActiveCourseController(course, listViewSubjects, stackPane);
+        CardActiveCourseController c = new CardActiveCourseController(course, listViewSubjects, stackPane,this);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardActiveCourse.fxml"));
         loader.setController(c);
@@ -318,6 +326,7 @@ public class ScheduleController implements Initializable {
                     }
                 }
                 buildSubjectCard(newCourse);
+                showAddSchedule();
             } else {
                 JFXDialogLayout layout = new JFXDialogLayout();
                 layout.setHeading(new Text("Advertencia"));
@@ -346,21 +355,40 @@ public class ScheduleController implements Initializable {
         });
     }
 
-    private void showSchedule() {
+    public void showAddSchedule() {
+        showDeleteSchedule();
         LinkedList<Course> currentCourses = User.getCurrentCourses();
         for (Course c : currentCourses) {
             LinkedList<Schedule> schedules = c.getSchedules();
             for (Schedule s : schedules) {
-                //int start = s.getStart();
-                //int start = s.getStart();
+                for (int[] index : s.getIndices()) {
+                    HourRow item = tableView.getItems().get(index[0]);
+                    String val=item.getFromIndex(index[1]);
+                    if(!val.isEmpty()) {
+                        item.setFromIndex(index[1], val+"\n"+c.getSubject().getCode());
+                    }else{
+                        item.setFromIndex(index[1], c.getSubject().getCode());
+                    }
+                }
             }
-
         }
-
     }
 
+    public void showDeleteSchedule() {
+        LinkedList<Course> currentCourses = User.getCurrentCourses();
+        for (Course c : currentCourses) {
+            LinkedList<Schedule> schedules = c.getSchedules();
+            for (Schedule s : schedules) {
+                for (int[] index : s.getIndices()) {
+                    HourRow item = tableView.getItems().get(index[0]);
+                    String val=item.getFromIndex(index[0]);
+                    item.setFromIndex(index[1],"");
+                }
+            }
+        }
+    }
 
-    private void savePDF(ActionEvent actionEvent) {
+    public void savePDF(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos de imagen (*.png)", "*.png"));
         File file = fileChooser.showSaveDialog(null);
@@ -376,6 +404,7 @@ public class ScheduleController implements Initializable {
             }
         }
     }
+
 }
 
 
