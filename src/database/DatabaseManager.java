@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -22,7 +23,7 @@ public class DatabaseManager {
 
     public static Connection getConnection() {
         if (conn == null) {
-            return getConnection("181.130.217.56", "horunv", "sa123456");
+            return getConnection("localhost", "horunv", "sa123456");
         } else {
             return conn;
         }
@@ -160,10 +161,10 @@ public class DatabaseManager {
                 Professor professor = null;
                 if (rs1.next()) {
                     if (!courses.isEmpty()) {
-                        for (int i = 0; i < courses.values().size(); i++) {
-                            if (courses.get(i).getProfessor().getId().equals(rs1.getString(1))) {
-                                professor = courses.get(i).getProfessor();
-                                System.out.println(professor.getId());
+                       for (int i = 0; i < courses.values().size(); i++) {
+                           Course c=(Course) courses.values().toArray()[i];
+                           if(c.getProfessor().getId().equals(rs1.getString(1))) {
+                                professor = c.getProfessor();
                                 break;
                             }
                         }

@@ -1,12 +1,29 @@
 package model;
 
+import java.util.LinkedList;
+
 public class Professor {
     private String id;
     private String fullname;
+    private LinkedList<Course> courses;
+    private boolean enable;
 
     public Professor(String id, String fullname) {
         this.id = id;
         this.fullname = fullname;
+        this.courses=new LinkedList<>();
+        this.enable=true;
+    }
+
+    public void addCourse(Course course){
+        if(!courses.contains(course)){
+            courses.add(course);
+            System.out.println();
+        }
+    }
+
+    public LinkedList<Course> getCourses() {
+        return courses;
     }
 
     public String getFullname() {
@@ -23,5 +40,13 @@ public class Professor {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 }

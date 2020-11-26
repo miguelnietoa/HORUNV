@@ -17,9 +17,47 @@ public class Schedule {
 
     }
 
+    public String getScheduleInfo() {
+        String val = "";
+        val = getStringFullDay() + " " + getIntegerHour(start)+":30 "+"-"+getIntegerHour(end)+":30";
+        return val;
+    }
+
+    public String getStringFullDay() {
+        String val = "";
+        switch (day) {
+
+            case 'L':
+                val = "Lunes";
+                break;
+
+            case 'M':
+                val = "Martes";
+                break;
+
+            case 'X':
+                val = "Miercoles";
+                break;
+
+            case 'J':
+                val = "Jueves";
+                break;
+
+            case 'V':
+                val = "Viernes";
+                break;
+
+            case 'S':
+                val = "Sabado";
+                break;
+
+        }
+        return val;
+    }
+
     public LinkedList<int[]> getIndices() {
-        int columna=0;
-        LinkedList<int[]> indices= new LinkedList<>();
+        int columna = 0;
+        LinkedList<int[]> indices = new LinkedList<>();
         switch (day) {
 
             case 'L':
@@ -47,24 +85,24 @@ public class Schedule {
                 break;
 
         }
-        int st=getIntegerHour(start);
-        int en=getIntegerHour(end);
-        for (int i = st; i <en ; i++) {
-            int[] par= {(i-6),columna};
+        int st = getIntegerHour(start);
+        int en = getIntegerHour(end);
+        for (int i = st; i < en; i++) {
+            int[] par = {(i - 6), columna};
             indices.add(par);
         }
         return indices;
     }
 
-    public int getIntegerHour(int hour){
-        String st= ""+hour;
+    public int getIntegerHour(int hour) {
+        String st = "" + hour;
         int i;
-        if(st.length()==4){
-            st=st.substring(0,2);
-        }else{
-            st=st.substring(0,1);
+        if (st.length() == 4) {
+            st = st.substring(0, 2);
+        } else {
+            st = st.substring(0, 1);
         }
-        i=Integer.parseInt(st);
+        i = Integer.parseInt(st);
         return i;
     }
 

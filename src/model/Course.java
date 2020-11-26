@@ -9,6 +9,7 @@ public class Course {
     private int totalStudents;
     private Professor professor;
     private LinkedList<Schedule> schedules;
+    private boolean enable;
 
     public Course(Subject subject, int nrc, char mode, int totalStudents, Professor professor) {
         this.subject = subject;
@@ -17,9 +18,17 @@ public class Course {
         this.totalStudents = totalStudents;
         this.professor = professor;
         this.subject.addProfessor(professor);
-
+        this.professor.addCourse(this);
+        enable=true;
     }
 
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
 
     public LinkedList<Schedule> getSchedules() {
         return schedules;
@@ -49,7 +58,4 @@ public class Course {
         return professor;
     }
 
-    public void setProfessor(Professor professor) {
-        this.professor = professor;
-    }
 }

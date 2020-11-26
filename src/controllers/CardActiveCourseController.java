@@ -69,9 +69,7 @@ public class CardActiveCourseController implements Initializable {
         lblSubjectName.setText(course.getSubject().getName());
         lblInfo.setText(course.getSubject().getCode() + " | " + course.getSubject().getCredits() + " créditos");
 
-        lblProfessor.setText(course.getProfessor().getFullname());
-        lblCapacity.setText("Capacidad: " + course.getTotalStudents());
-        lblNrc.setText("NRC: " + course.getNrc());
+        updateInfoCourse();
         btnFilter.setOnAction(this::btnFilterOnAction);
         btnRemove.setOnAction(this::btnRemoveOnAction);
     }
@@ -80,7 +78,7 @@ public class CardActiveCourseController implements Initializable {
         try {
             WindowFilterController wfc = new WindowFilterController(course.getSubject());
             JFXDialogLayout content = new JFXDialogLayout();
-            FXMLLoader parent = FXMLLoader.load(getClass().getResource("../ui/windowFilter.fxml"));
+            FXMLLoader parent = new FXMLLoader (getClass().getResource("../ui/windowFilter.fxml"));
             parent.setController(wfc);
             content.setBody( (Parent) parent.load());
             JFXDialog dialog = new JFXDialog(stackPane, content, JFXDialog.DialogTransition.RIGHT);
@@ -113,5 +111,12 @@ public class CardActiveCourseController implements Initializable {
 
     public void setCourse(Course course) {
         this.course = course;
+        updateInfoCourse();
+    }
+
+    public void updateInfoCourse(){
+        lblProfessor.setText(course.getProfessor().getFullname());
+        lblCapacity.setText("Capacidad: " + course.getTotalStudents());
+        lblNrc.setText("NRC: " + course.getNrc());
     }
 }

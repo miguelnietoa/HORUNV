@@ -135,7 +135,7 @@ public class ScheduleController implements Initializable {
     void btnProjectionOnAction(ActionEvent event) {
         try {
             JFXDialogLayout contentProjection = new JFXDialogLayout();
-            ProjectionController c = new ProjectionController(listViewSubjects, stackPane,this);
+            ProjectionController c = new ProjectionController(listViewSubjects, stackPane, this);
             FXMLLoader parent = new FXMLLoader(getClass().getResource("/ui/components/projection.fxml"));
             parent.setController(c);
             contentProjection.setBody((Parent) parent.load());
@@ -198,30 +198,12 @@ public class ScheduleController implements Initializable {
 
     @FXML
     void btnLeftMouseClicked(MouseEvent mouseEvent) {
-        int i = User.getActiveIndexSchedule();
-        int pos = Integer.parseInt(currentSchedule.getText().split("/")[0]);
-        if (pos>1){
-            i = i-1;
-            User.setActiveIndexSchedule(i);
-            this.showDeleteSchedule();
-            DatabaseManager.setSchedule(i);
-            this.showAddSchedule();
-            this.setCurrentScheduleText(pos-1,User.getCantGeneratedSchedules());
-        }
+        changeSchedule(-1);
     }
 
     @FXML
     void btnRightMouseClicked(MouseEvent mouseEvent) {
-        int i = User.getActiveIndexSchedule();
-        int pos = Integer.parseInt(currentSchedule.getText().split("/")[0]);
-        if (pos<User.getCantGeneratedSchedules()){
-            i = i+1;
-            User.setActiveIndexSchedule(i);
-            this.showDeleteSchedule();
-            DatabaseManager.setSchedule(i);
-            this.showAddSchedule();
-            this.setCurrentScheduleText(pos+1,User.getCantGeneratedSchedules());
-        }
+        changeSchedule(1);
     }
 
     @FXML
@@ -234,6 +216,23 @@ public class ScheduleController implements Initializable {
         btnRight.setImage(rightOff);
     }
 
+    private void changeSchedule(int validMov) {
+        int i = User.getActiveIndexSchedule();
+        int pos = Integer.parseInt(currentSchedule.getText().split("/")[0]);
+        if (pos > 1 && pos < User.getCantGeneratedSchedules()) {
+            i = i + validMov;
+            User.setActiveIndexSchedule(i);
+            this.showDeleteSchedule();
+            DatabaseManager.setSchedule(i);
+            this.showAddSchedule();
+            this.setCurrentScheduleText(pos + validMov, User.getCantGeneratedSchedules());
+            for (int j = 0; j < User.getCurrentCourses().size(); j++) {
+                AnchorPane item = listViewSubjects.getItems().get(j);
+                CardActiveCourseController c = (CardActiveCourseController) item.getUserData();
+                c.setCourse(User.getCurrentCourses().get(j));
+            }
+        }
+    }
 
     private <T> void columnCells(TableColumn<HourRow, T> column, int col) {
 
@@ -313,7 +312,7 @@ public class ScheduleController implements Initializable {
 
     private void buildSubjectCard(Course course) {
 
-        CardActiveCourseController c = new CardActiveCourseController(course, listViewSubjects, stackPane,this);
+        CardActiveCourseController c = new CardActiveCourseController(course, listViewSubjects, stackPane, this);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardActiveCourse.fxml"));
         loader.setController(c);
@@ -341,7 +340,7 @@ public class ScheduleController implements Initializable {
                 User.setActiveIndexSchedule(0);
                 DatabaseManager.setSchedule(0);
                 DatabaseManager.cantGeneratedSchedules();
-                this.setCurrentScheduleText(1,User.getCantGeneratedSchedules());
+                this.setCurrentScheduleText(1, User.getCantGeneratedSchedules());
                 Course newCourse = null;
                 for (Course course : User.getCurrentCourses()) {
                     if (course.getSubject().equals(subject)) {
@@ -387,10 +386,10 @@ public class ScheduleController implements Initializable {
             for (Schedule s : schedules) {
                 for (int[] index : s.getIndices()) {
                     HourRow item = tableView.getItems().get(index[0]);
-                    String val=item.getFromIndex(index[1]);
-                    if(!val.isEmpty()) {
-                        item.setFromIndex(index[1], val+"\n"+c.getSubject().getCode());
-                    }else{
+                    String val = item.getFromIndex(index[1]);
+                    if (!val.isEmpty()) {
+                        item.setFromIndex(index[1], val + "\n" + c.getSubject().getCode());
+                    } else {
                         item.setFromIndex(index[1], c.getSubject().getCode());
                     }
                 }
@@ -405,8 +404,8 @@ public class ScheduleController implements Initializable {
             for (Schedule s : schedules) {
                 for (int[] index : s.getIndices()) {
                     HourRow item = tableView.getItems().get(index[0]);
-                    String val=item.getFromIndex(index[0]);
-                    item.setFromIndex(index[1],"");
+                    String val = item.getFromIndex(index[0]);
+                    item.setFromIndex(index[1], "");
                 }
             }
         }
@@ -429,8 +428,8 @@ public class ScheduleController implements Initializable {
         }
     }
 
-    public void setCurrentScheduleText(int inicio, int fin){
-        this.currentSchedule.setText(inicio+"/"+fin);
+    public void setCurrentScheduleText(int inicio, int fin) {
+        this.currentSchedule.setText(inicio + "/" + fin);
     }
 
 }

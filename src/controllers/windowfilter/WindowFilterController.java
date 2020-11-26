@@ -8,6 +8,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
+import model.Course;
+import model.Professor;
 import model.Subject;
 import model.User;
 
@@ -25,9 +27,11 @@ public class WindowFilterController implements Initializable {
     private TreeItem<AnchorPane> root;
 
     private Subject subject;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         treeViewProfessors.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        lblNameCourse.setText(subject.getName()+"\n"+subject.getCode());
         buildSubjectCard();
     }
 
@@ -36,37 +40,35 @@ public class WindowFilterController implements Initializable {
     }
 
     private void buildSubjectCard() {
-
-        for (int i = 0; i < 10; i++) {
-            CardProfessorController c = new CardProfessorController("Luis Alejandro LLach Transito", true);
+        root = new TreeItem<>(new AnchorPane());
+        root.setExpanded(true);
+        for (Professor professor : subject.getProfessors()) {
+            CardProfessorController c = new CardProfessorController(professor);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardProfessor.fxml"));
             loader.setController(c);
             try {
-                if (i == 0) {
-                    root = new TreeItem<>(loader.load());
+                TreeItem<AnchorPane> treeItem = new TreeItem<>(loader.load());
+                root.getChildren().add(treeItem);
+                for (Course course : professor.getCourses()) {
+                    if (course.getSubject() == subject) {
+                        FXMLLoader loader1 = new FXMLLoader(getClass().getResource("/ui/components/cardCourse.fxml"));
+                        CardCourseController c1= new CardCourseController(course,c);
+                        loader1.setController(c1);
+                        try {
+                            AnchorPane course1 = loader1.load();
+                            treeItem.getChildren().add(new TreeItem<AnchorPane>(course1));
+                            c.addCourse(course1);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
-                    root.setExpanded(true);
-                } else {
-                    root.getChildren().add(new TreeItem<>(loader.load()));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
             treeViewProfessors.setRoot(root);
             treeViewProfessors.setShowRoot(false);
-
         }
-        for (int i = 0; i < 5; i++) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardCourse.fxml"));
-            try {
-                AnchorPane course = loader.load();
-                root.getChildren().get(0).getChildren().add(new TreeItem<>(course));
-                CardProfessorController c = (CardProfessorController) root.getChildren().get(0).getValue().getUserData();
-                c.addCourse(course);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
     }
 }

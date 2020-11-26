@@ -9,6 +9,9 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="121.0" prefWidth="269.0" styleClass="card-subject" stylesheets="@../styles/styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <userData>
+      <fx:reference source="controller"/>
+   </userData>
    <Button fx:id="btnRemove" layoutX="179.0" layoutY="45.0" mnemonicParsing="false" styleClass="rounded-button" stylesheets="@../styles/styles.css" AnchorPane.rightAnchor="58.0">
       <graphic>
          <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
