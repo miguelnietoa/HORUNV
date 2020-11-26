@@ -95,15 +95,7 @@ public class Schedule {
     }
 
     public int getIntegerHour(int hour) {
-        String st = "" + hour;
-        int i;
-        if (st.length() == 4) {
-            st = st.substring(0, 2);
-        } else {
-            st = st.substring(0, 1);
-        }
-        i = Integer.parseInt(st);
-        return i;
+        return hour/100;
     }
 
     public char getDay() {

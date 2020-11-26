@@ -218,14 +218,13 @@ public class ScheduleController implements Initializable {
 
     private void changeSchedule(int validMov) {
         int i = User.getActiveIndexSchedule();
-        int pos = Integer.parseInt(currentSchedule.getText().split("/")[0]);
-        if (pos > 1 && pos < User.getCantGeneratedSchedules()) {
-            i = i + validMov;
+        i = i + validMov;
+        if (i >= 0 && i < User.getCantGeneratedSchedules()) {
             User.setActiveIndexSchedule(i);
             this.showDeleteSchedule();
             DatabaseManager.setSchedule(i);
             this.showAddSchedule();
-            this.setCurrentScheduleText(pos + validMov, User.getCantGeneratedSchedules());
+            this.setCurrentScheduleText(i + 1, User.getCantGeneratedSchedules());
             for (int j = 0; j < User.getCurrentCourses().size(); j++) {
                 AnchorPane item = listViewSubjects.getItems().get(j);
                 CardActiveCourseController c = (CardActiveCourseController) item.getUserData();
