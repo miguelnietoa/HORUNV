@@ -59,6 +59,8 @@ public class CardSubjectProjectionController implements Initializable {
         User.addSelectedSubject(subject);
         User.setActiveIndexSchedule(0);
         DatabaseManager.setSchedule(0);
+        DatabaseManager.cantGeneratedSchedules();
+        sc.setCurrentScheduleText(1,User.getCantGeneratedSchedules());
         Course newCourse = null;
         for (Course course : User.getCurrentCourses()) {
             if (course.getSubject().equals(subject)) {

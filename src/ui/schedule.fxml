@@ -83,7 +83,7 @@
                               <Image url="@../assets/left-arrow.png" />
                            </image>
                         </ImageView>
-                        <Label alignment="CENTER" prefHeight="32.0" prefWidth="55.0" text="1/15" textFill="WHITE" />
+                        <Label fx:id="currentSchedule" alignment="CENTER" prefHeight="32.0" prefWidth="55.0" text="0/0" textFill="WHITE" />
                         <ImageView fx:id="btnRight" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#btnRightMouseClicked" onMouseEntered="#btnRightMouseEntered" onMouseExited="#btnRightMouseExited" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../assets/right-arrow.png" />

@@ -95,6 +95,12 @@ public class CardActiveCourseController implements Initializable {
         User.getSelectedSubjects().remove(course.getSubject());
         User.getCurrentCourses().clear();
         DatabaseManager.setSchedule(0);
+        DatabaseManager.cantGeneratedSchedules();
+        if (User.getSelectedSubjects().isEmpty()) {
+            sc.setCurrentScheduleText(0, User.getCantGeneratedSchedules());
+        }else{
+            sc.setCurrentScheduleText(1, User.getCantGeneratedSchedules());
+        }
         sc.showAddSchedule();
     }
 

@@ -111,6 +111,9 @@ public class ScheduleController implements Initializable {
     @FXML
     private ImageView imageAvatar;
 
+    @FXML
+    private Label currentSchedule;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         User.setProjection(DatabaseManager.getProjection(User.getCodeUser()));
@@ -195,11 +198,30 @@ public class ScheduleController implements Initializable {
 
     @FXML
     void btnLeftMouseClicked(MouseEvent mouseEvent) {
-
+        int i = User.getActiveIndexSchedule();
+        int pos = Integer.parseInt(currentSchedule.getText().split("/")[0]);
+        if (pos>1){
+            i = i-1;
+            User.setActiveIndexSchedule(i);
+            this.showDeleteSchedule();
+            DatabaseManager.setSchedule(i);
+            this.showAddSchedule();
+            this.setCurrentScheduleText(pos-1,User.getCantGeneratedSchedules());
+        }
     }
 
     @FXML
     void btnRightMouseClicked(MouseEvent mouseEvent) {
+        int i = User.getActiveIndexSchedule();
+        int pos = Integer.parseInt(currentSchedule.getText().split("/")[0]);
+        if (pos<User.getCantGeneratedSchedules()){
+            i = i+1;
+            User.setActiveIndexSchedule(i);
+            this.showDeleteSchedule();
+            DatabaseManager.setSchedule(i);
+            this.showAddSchedule();
+            this.setCurrentScheduleText(pos+1,User.getCantGeneratedSchedules());
+        }
     }
 
     @FXML
@@ -318,6 +340,8 @@ public class ScheduleController implements Initializable {
                 User.addSelectedSubject(subject);
                 User.setActiveIndexSchedule(0);
                 DatabaseManager.setSchedule(0);
+                DatabaseManager.cantGeneratedSchedules();
+                this.setCurrentScheduleText(1,User.getCantGeneratedSchedules());
                 Course newCourse = null;
                 for (Course course : User.getCurrentCourses()) {
                     if (course.getSubject().equals(subject)) {
@@ -403,6 +427,10 @@ public class ScheduleController implements Initializable {
                 ex.printStackTrace();
             }
         }
+    }
+
+    public void setCurrentScheduleText(int inicio, int fin){
+        this.currentSchedule.setText(inicio+"/"+fin);
     }
 
 }

@@ -22,7 +22,7 @@ public class DatabaseManager {
 
     public static Connection getConnection() {
         if (conn == null) {
-            return getConnection("localhost", "horunv", "sa123456");
+            return getConnection("181.130.217.56", "horunv", "sa123456");
         } else {
             return conn;
         }
@@ -234,5 +234,35 @@ public class DatabaseManager {
                 throwables.printStackTrace();
             }
         }
+
     }
+
+    public static void cantGeneratedSchedules() {
+        StringBuilder query = new StringBuilder("SELECT count(*) AS \"count\" FROM ");
+        int size = User.getSelectedSubjects().size();
+        if (!User.getSelectedSubjects().isEmpty()) {
+            Subject last = User.getSelectedSubjects().getLast();
+            for (Subject selectedSubject : User.getSelectedSubjects()) {
+                query.append("(SELECT \"nrc\" FROM \"Curso\" WHERE \"cod_asig\" = '").append(selectedSubject.getCode()).append("')\n");
+                if (!selectedSubject.equals(last)) {
+                    query.append("CROSS JOIN\n");
+                }
+            }
+            ResultSet rs;
+            try {
+                rs = conn.createStatement().executeQuery(String.valueOf(query));
+                if (rs.next()) {
+                    User.setCantGeneratedSchedules(rs.getInt("count"));
+                }
+
+
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }else{
+            User.setCantGeneratedSchedules(0);
+        }
+    }
+
+
 }
