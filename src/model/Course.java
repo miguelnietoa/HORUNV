@@ -16,6 +16,8 @@ public class Course {
         this.mode = mode;
         this.totalStudents = totalStudents;
         this.professor = professor;
+        this.subject.addProfessor(professor);
+
     }
 
 

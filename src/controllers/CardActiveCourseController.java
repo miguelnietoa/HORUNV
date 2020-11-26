@@ -3,6 +3,7 @@ package controllers;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXListView;
+import controllers.windowfilter.WindowFilterController;
 import database.DatabaseManager;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -77,9 +78,11 @@ public class CardActiveCourseController implements Initializable {
 
     void btnFilterOnAction(ActionEvent event) {
         try {
+            WindowFilterController wfc = new WindowFilterController(course.getSubject());
             JFXDialogLayout content = new JFXDialogLayout();
-            Parent parent = FXMLLoader.load(getClass().getResource("../ui/windowFilter.fxml"));
-            content.setBody(parent);
+            FXMLLoader parent = FXMLLoader.load(getClass().getResource("../ui/windowFilter.fxml"));
+            parent.setController(wfc);
+            content.setBody( (Parent) parent.load());
             JFXDialog dialog = new JFXDialog(stackPane, content, JFXDialog.DialogTransition.RIGHT);
             dialog.show();
         } catch (IOException e) {

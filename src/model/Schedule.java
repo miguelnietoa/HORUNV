@@ -23,27 +23,27 @@ public class Schedule {
         switch (day) {
 
             case 'L':
-                columna = 0;
-                break;
-
-            case 'M':
                 columna = 1;
                 break;
 
-            case 'X':
+            case 'M':
                 columna = 2;
                 break;
 
-            case 'J':
+            case 'X':
                 columna = 3;
                 break;
 
-            case 'V':
+            case 'J':
                 columna = 4;
                 break;
 
-            case 'S':
+            case 'V':
                 columna = 5;
+                break;
+
+            case 'S':
+                columna = 6;
                 break;
 
         }

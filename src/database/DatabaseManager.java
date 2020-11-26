@@ -159,12 +159,23 @@ public class DatabaseManager {
                 rs1 = psCourseProfessor.executeQuery();
                 Professor professor = null;
                 if (rs1.next()) {
-                    professor = new Professor(
-                            rs1.getString(1),
-                            rs1.getString(2) + " " +
-                                    (rs1.getString(3) == null ? "" : rs1.getString(3) + " ") +
-                                    rs1.getString(4) + " " + rs1.getString(5)
-                    );
+                    if (!courses.isEmpty()) {
+                        for (int i = 0; i < courses.values().size(); i++) {
+                            if (courses.get(i).getProfessor().getId().equals(rs1.getString(1))) {
+                                professor = courses.get(i).getProfessor();
+                                System.out.println(professor.getId());
+                                break;
+                            }
+                        }
+                    }
+                    if (professor==null) {
+                        professor = new Professor(
+                                rs1.getString(1),
+                                rs1.getString(2) + " " +
+                                        (rs1.getString(3) == null ? "" : rs1.getString(3) + " ") +
+                                        rs1.getString(4) + " " + rs1.getString(5)
+                        );
+                    }
                 } else {
                     System.err.println("Error: Course " + rs.getInt(1) + " does not have professors.");
                 }

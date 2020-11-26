@@ -8,6 +8,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
+import model.Subject;
+import model.User;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,14 +24,19 @@ public class WindowFilterController implements Initializable {
 
     private TreeItem<AnchorPane> root;
 
+    private Subject subject;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         treeViewProfessors.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         buildSubjectCard();
+    }
 
+    public WindowFilterController(Subject subject) {
+        this.subject = subject;
     }
 
     private void buildSubjectCard() {
+
         for (int i = 0; i < 10; i++) {
             CardProfessorController c = new CardProfessorController("Luis Alejandro LLach Transito", true);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardProfessor.fxml"));

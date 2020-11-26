@@ -8,12 +8,22 @@ public class Subject {
     private String name;
     private int credits;
     private HashMap<Integer, Course> courses;
-
+    private LinkedList<Professor> professors;
     public Subject(String code, String name, int credits) {
         this.code = code;
         this.name = name;
         this.credits = credits;
         this.courses = new HashMap<>();
+        this.professors = new LinkedList<>();
+    }
+    public void addProfessor(Professor professor){
+        if (!this.professors.contains(professor)) {
+            this.professors.add(professor);
+        }
+    }
+
+    public LinkedList<Professor> getProfessors() {
+        return professors;
     }
 
     public String getCode() {
