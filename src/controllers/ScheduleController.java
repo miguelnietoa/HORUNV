@@ -178,6 +178,19 @@ public class ScheduleController implements Initializable {
 
     @FXML
     void btnLogOutOnAction(ActionEvent event) {
+        // close and clear
+        User.setUsername(null);
+        User.setCodeUser(0);
+        User.setFullname(null);
+        User.setIdPlan(0);
+        User.setPeriod(null);
+        User.getProjection().clear();
+        User.getSelectedSubjects().clear();
+        User.getCurrentCourses().clear();
+        User.setActiveIndexSchedule(0);
+        User.setCantGeneratedSchedules(0);
+        User.getFilters().clear();
+        // show login
         Stage login = new Stage();
         Parent root;
         Stage schedule = (Stage) btnLogOut.getScene().getWindow();
