@@ -72,7 +72,7 @@ public class DatabaseManager {
                 "INSERT INTO \"PosibleHorario\" (\"cod_estu\",\"consecutivo\",\"nombre\") " +
                 "VALUES ( ? , ? , ? )");
             psCheckScheduleName = conn.prepareStatement(
-                "SELECT COUNT(*) FROM \"PosibleHorario\" WHERE \"nombre\" = ?");
+                "SELECT COUNT(*) FROM \"PosibleHorario\" WHERE \"cod_estu\" = ? AND \"nombre\" = ?");
             return conn;
         } catch (SQLException error) {
             System.out.println("Error en la conexión con la BD: " + error);
@@ -293,7 +293,8 @@ public class DatabaseManager {
 
     public static boolean thereIsSavedScheduleWithName(String name) {
         try {
-            psCheckScheduleName.setString(1, name);
+            psCheckScheduleName.setInt(1, User.getCodeUser());
+            psCheckScheduleName.setString(2, name);
             ResultSet rs = psCheckScheduleName.executeQuery();
             rs.next();
             return rs.getInt(1) != 0;
