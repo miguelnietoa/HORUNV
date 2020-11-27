@@ -384,22 +384,36 @@ public class ScheduleController implements Initializable {
             if (User.getCantGeneratedSchedules() == 0 && User.getSelectedSubjects().size() > 0) {
                 return;
             }
+
             if (!User.getSelectedSubjects().contains(subject)) {
                 User.addSelectedSubject(subject);
+                int activeIndexOlder = User.getActiveIndexSchedule();
                 User.setActiveIndexSchedule(0);
-                showDeleteSchedule();
-                DatabaseManager.setSchedule(0);
+                int cantGeneratedOlder = User.getCantGeneratedSchedules();
                 DatabaseManager.cantGeneratedSchedules();
-                this.setCurrentScheduleText(1, User.getCantGeneratedSchedules());
-                Course newCourse = null;
-                for (Course course : User.getCurrentCourses()) {
-                    if (course.getSubject().equals(subject)) {
-                        newCourse = course;
-                        break;
+                if (User.getCantGeneratedSchedules() != 0) {
+                    showDeleteSchedule();
+                    DatabaseManager.setSchedule(0);
+                    DatabaseManager.cantGeneratedSchedules();
+                    this.setCurrentScheduleText(1, User.getCantGeneratedSchedules());
+                    Course newCourse = null;
+                    for (Course course : User.getCurrentCourses()) {
+                        if (course.getSubject().equals(subject)) {
+                            newCourse = course;
+                            break;
+                        }
                     }
+                    buildSubjectCard(newCourse);
+                    showAddSchedule();
+                } else {
+                    showMessage("No hay posibles horarios que cumplan con los filtros, no puedes añadir esta materia.\n" +
+                            "Intenta eliminar algunos filtros.");
+                    User.setCantGeneratedSchedules(cantGeneratedOlder);
+                    User.setActiveIndexSchedule(activeIndexOlder);
+                    User.getSelectedSubjects().remove(subject);
                 }
-                buildSubjectCard(newCourse);
-                showAddSchedule();
+
+
             } else {
                 JFXDialogLayout layout = new JFXDialogLayout();
                 layout.setHeading(new Text("Advertencia"));
