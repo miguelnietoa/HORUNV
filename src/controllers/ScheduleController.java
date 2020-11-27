@@ -29,6 +29,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -158,8 +159,7 @@ public class ScheduleController implements Initializable {
 
     @FXML
     void btnSaveOnAction(ActionEvent event) {
-        DatabaseManager.addSavedSchedule();
-
+        showNameSaveSchedule();
     }
 
     @FXML
@@ -381,6 +381,9 @@ public class ScheduleController implements Initializable {
         autoCompletePopup.setSelectionHandler(event -> {
             String codeSubject = event.getObject().split("\\(")[1].substring(0, 7);
             Subject subject = User.getProjection().get(codeSubject);
+            if (User.getCantGeneratedSchedules() == 0 && User.getSelectedSubjects().size() > 0) {
+                return;
+            }
             if (!User.getSelectedSubjects().contains(subject)) {
                 User.addSelectedSubject(subject);
                 User.setActiveIndexSchedule(0);
@@ -526,6 +529,35 @@ public class ScheduleController implements Initializable {
         layout.setActions(button);
         dialog.setContent(layout);
         dialog.show();
+    }
+
+    public void showNameSaveSchedule() {
+        if (User.getCantGeneratedSchedules() > 0) {
+            JFXDialogLayout layout = new JFXDialogLayout();
+            JFXTextField jtf = new JFXTextField();
+            Label error = new Label("");
+            VBox vBox = new VBox();
+            vBox.getChildren().addAll(jtf, error);
+            layout.setHeading(new Text("Digite el nombre del horario"));
+            layout.setBody(vBox);
+            JFXButton button = new JFXButton("Guardar");
+            JFXDialog dialog = new JFXDialog(stackPane, layout, JFXDialog.DialogTransition.BOTTOM);
+            button.setOnAction(event1 -> {
+                if (!jtf.getText().trim().isEmpty()) {
+                    DatabaseManager.addSavedSchedule(jtf.getText());
+                    dialog.close();
+                } else {
+                    error.setText("Debe digitar un nombre válido");
+                }
+            });
+            button.setStyle("-fx-background-color: #FF533D");
+            layout.setActions(button);
+            dialog.setContent(layout);
+            dialog.show();
+        } else {
+
+            showMessage("No puede guardar horarios  vacios");
+        }
     }
 }
 

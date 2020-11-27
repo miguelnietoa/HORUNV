@@ -19,6 +19,7 @@ public class DatabaseManager {
     private static PreparedStatement psScheduleCourse;
     private static PreparedStatement psSavedSchedule;
     private static PreparedStatement psGetMaxConse;
+    private static PreparedStatement psSavedScheduleCourses;
 
     private DatabaseManager() {
     }
@@ -66,6 +67,8 @@ public class DatabaseManager {
             psGetMaxConse = conn.prepareStatement(
                     "SELECT MAX(\"consecutivo\") AS \"max\" FROM \"PosibleHorario\" WHERE \"cod_estu\" = ?"
             );
+            psSavedScheduleCourses = conn.prepareStatement("INSERT INTO \"PosibleHorario\" (\"cod_estu\",\"consecutivo\",\"nombre\") " +
+                    "VALUES ( ? , ? , ? )");
             return conn;
         } catch (SQLException error) {
             System.out.println("Error en la conexión con la BD: " + error);
@@ -242,6 +245,8 @@ public class DatabaseManager {
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
+        }else{
+            User.getCurrentCourses().clear();
         }
     }
 
@@ -251,14 +256,20 @@ public class DatabaseManager {
         if (query != null) {
             query = query.replaceFirst("\\*", "count(*) AS \"count\"");
             ResultSet rs;
-            try {
-                rs = conn.createStatement().executeQuery(query);
-                if (rs.next()) {
-                    User.setCantGeneratedSchedules(rs.getInt("count"));
+            if (!User.getSelectedSubjects().isEmpty()) {
+                try {
+                    rs = conn.createStatement().executeQuery(query);
+                    if (rs.next()) {
+                        User.setCantGeneratedSchedules(rs.getInt("count"));
+                    }
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
                 }
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            }else{
+                User.setCantGeneratedSchedules(0);
             }
+        }else{
+            User.setCantGeneratedSchedules(0);
         }
     }
 
@@ -276,22 +287,24 @@ public class DatabaseManager {
         return r;
     }
 
-    public static void addSavedSchedule() {
+    public static void addSavedSchedule(String name) {
         int con = getConsecutivo() + 1;
-        String query = "INSERT INTO \"PosibleHorario\" (\"cod_estu\",\"consecutivo\",\"nombre\") " +
-                "VALUES (" + User.getCodeUser() + "," + con + ",'Horario1')";
-        try {
-            conn.createStatement().execute(query);
-            for (Course course : User.getCurrentCourses()) {
-                psSavedSchedule.setInt(1, User.getCodeUser());
-                psSavedSchedule.setInt(2, con);
-                psSavedSchedule.setInt(3, course.getNrc());
-                psSavedSchedule.executeQuery();
+        if (User.getCurrentCourses().size() > 0) {
+            try {
+                psSavedScheduleCourses.setInt(1, User.getCodeUser());
+                psSavedScheduleCourses.setInt(2, con);
+                psSavedScheduleCourses.setString(3, name);
+                psSavedScheduleCourses.executeQuery();
+                for (Course course : User.getCurrentCourses()) {
+                    psSavedSchedule.setInt(1, User.getCodeUser());
+                    psSavedSchedule.setInt(2, con);
+                    psSavedSchedule.setInt(3, course.getNrc());
+                    psSavedSchedule.executeQuery();
+                }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
-
     }
 
     private static String getQuerySchedule(int index) {
@@ -312,8 +325,6 @@ public class DatabaseManager {
             }
         }
         //System.out.println(filterQuery);
-
-
         StringBuilder query = null;
         int size = User.getSelectedSubjects().size();
         if (!User.getSelectedSubjects().isEmpty()) {

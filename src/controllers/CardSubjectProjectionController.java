@@ -77,7 +77,6 @@ public class CardSubjectProjectionController implements Initializable {
                 }
             }
             CardActiveCourseController c = new CardActiveCourseController(newCourse, /*course,*/ listViewSubjects, stackPane, sc);
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardActiveCourse.fxml"));
             loader.setController(c);
             try {
