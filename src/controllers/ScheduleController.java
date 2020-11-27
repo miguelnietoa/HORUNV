@@ -39,6 +39,7 @@ import model.Subject;
 import model.User;
 
 import javax.imageio.ImageIO;
+import javax.xml.crypto.Data;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -157,7 +158,8 @@ public class ScheduleController implements Initializable {
 
     @FXML
     void btnSaveOnAction(ActionEvent event) {
-        System.out.println("ali");
+        DatabaseManager.addSavedSchedule();
+
     }
 
     @FXML

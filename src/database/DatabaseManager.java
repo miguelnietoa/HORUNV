@@ -17,13 +17,17 @@ public class DatabaseManager {
     private static PreparedStatement psLinkCourses;
     private static PreparedStatement psCourseProfessor;
     private static PreparedStatement psScheduleCourse;
+    private static PreparedStatement psSavedSchedule;
+    private static PreparedStatement psGetMaxConse;
 
     private DatabaseManager() {
     }
 
     public static Connection getConnection() {
         if (conn == null) {
-            return getConnection("localhost", "horunv", "sa123456");
+            //Ip ImiServer: 181.130.217.56
+            //return getConnection("localhost", "horunv", "sa123456");
+            return getConnection("181.130.217.56", "horunv", "sa123456");
         } else {
             return conn;
         }
@@ -56,6 +60,12 @@ public class DatabaseManager {
                     "SELECT * FROM \"Horario\" WHERE \"nrc_curso\" = ?"
             );
 
+            psSavedSchedule = conn.prepareStatement(
+                    "INSERT INTO \"PosibleHorarioTieneCurso\" (\"cod_estu\", \"consecutivo\", \"nrc_curso\") VALUES (?, ?, ?);"
+            );
+            psGetMaxConse = conn.prepareStatement(
+                    "SELECT MAX(\"consecutivo\") AS \"max\" FROM \"PosibleHorario\" WHERE \"cod_estu\" = ?"
+            );
             return conn;
         } catch (SQLException error) {
             System.out.println("Error en la conexión con la BD: " + error);
@@ -250,6 +260,38 @@ public class DatabaseManager {
                 throwables.printStackTrace();
             }
         }
+    }
+
+    private static int getConsecutivo() {
+        int r = 0;
+        try {
+            psGetMaxConse.setInt(1,User.getCodeUser());
+            ResultSet rs = psGetMaxConse.executeQuery();
+            if (rs.next()) {
+                r = rs.getInt("max");
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return r;
+    }
+
+    public static void addSavedSchedule() {
+        int con = getConsecutivo()+1;
+        String query = "INSERT INTO \"PosibleHorario\" (\"cod_estu\",\"consecutivo\",\"nombre\") " +
+                "VALUES ("+User.getCodeUser()+","+con+",'Horario1')";
+        try {
+            conn.createStatement().execute(query);
+            for (Course course : User.getCurrentCourses()) {
+                psSavedSchedule.setInt(1,User.getCodeUser());
+                psSavedSchedule.setInt(2, con);
+                psSavedSchedule.setInt(3,course.getNrc());
+                psSavedSchedule.execute();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
     }
 
     private static String getQuerySchedule(int index) {
