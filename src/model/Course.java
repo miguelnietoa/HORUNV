@@ -19,7 +19,7 @@ public class Course {
         this.professor = professor;
         this.subject.addProfessor(professor);
         this.professor.addCourse(this);
-        enable=true;
+        enable = true;
     }
 
     public boolean isEnable() {

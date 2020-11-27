@@ -23,7 +23,7 @@ public class DatabaseManager {
 
     public static Connection getConnection() {
         if (conn == null) {
-            return getConnection("localhost", "horunv", "sa123456");
+            return getConnection("181.130.217.56", "horunv", "sa123456");
         } else {
             return conn;
         }
@@ -149,7 +149,6 @@ public class DatabaseManager {
     private static HashMap<Integer, Course> linkCourses(Subject subject) {
         ResultSet rs;
         try {
-
             psLinkCourses.setString(1, subject.getCode());
 
             rs = psLinkCourses.executeQuery();
@@ -161,15 +160,15 @@ public class DatabaseManager {
                 Professor professor = null;
                 if (rs1.next()) {
                     if (!courses.isEmpty()) {
-                       for (int i = 0; i < courses.values().size(); i++) {
-                           Course c=(Course) courses.values().toArray()[i];
-                           if(c.getProfessor().getId().equals(rs1.getString(1))) {
+                        for (int i = 0; i < courses.values().size(); i++) {
+                            Course c = (Course) courses.values().toArray()[i];
+                            if (c.getProfessor().getId().equals(rs1.getString(1))) {
                                 professor = c.getProfessor();
                                 break;
                             }
                         }
                     }
-                    if (professor==null) {
+                    if (professor == null) {
                         professor = new Professor(
                                 rs1.getString(1),
                                 rs1.getString(2) + " " +
@@ -222,11 +221,24 @@ public class DatabaseManager {
         int size = User.getSelectedSubjects().size();
         if (!User.getSelectedSubjects().isEmpty()) {
             Subject last = User.getSelectedSubjects().getLast();
+            String filter = "WHERE ";
+            int k = 0;
             for (Subject selectedSubject : User.getSelectedSubjects()) {
-                query.append("(SELECT \"nrc\" FROM \"Curso\" WHERE \"cod_asig\" = '").append(selectedSubject.getCode()).append("')\n");
+                query.append("(SELECT \"nrc\" A" + k + " FROM \"Curso\" WHERE \"cod_asig\" = '").append(selectedSubject.getCode()).append("')\n");
                 if (!selectedSubject.equals(last)) {
                     query.append("CROSS JOIN\n");
                 }
+                for (int j = 0; j < selectedSubject.getCourses().values().size(); j++) {
+                    Course c = (Course) selectedSubject.getCourses().values().toArray()[j];
+                    if (!c.isEnable()) {
+                        filter = filter+"A"+k+" != "+c.getNrc()+" AND ";
+                    }
+                }
+                k++;
+            }
+            if(!filter.equals("WHERE ")){
+                filter = filter.substring(0, filter.length() - 5);
+                query.append(filter+"\n");
             }
             query.append("OFFSET ").append(index).append(" ROWS FETCH NEXT 1 ROWS ONLY");
 
@@ -254,17 +266,31 @@ public class DatabaseManager {
         int size = User.getSelectedSubjects().size();
         if (!User.getSelectedSubjects().isEmpty()) {
             Subject last = User.getSelectedSubjects().getLast();
+            String filter = "WHERE ";
+            int k = 0;
             for (Subject selectedSubject : User.getSelectedSubjects()) {
-                query.append("(SELECT \"nrc\" FROM \"Curso\" WHERE \"cod_asig\" = '").append(selectedSubject.getCode()).append("')\n");
+                query.append("(SELECT \"nrc\" A" + k + " FROM \"Curso\" WHERE \"cod_asig\" = '").append(selectedSubject.getCode()).append("')\n");
                 if (!selectedSubject.equals(last)) {
                     query.append("CROSS JOIN\n");
                 }
+                for (int j = 0; j < selectedSubject.getCourses().values().size(); j++) {
+                    Course c = (Course) selectedSubject.getCourses().values().toArray()[j];
+                    if (!c.isEnable()) {
+                        filter = filter+"A"+k+" != "+c.getNrc()+" AND ";
+                    }
+                }
+                k++;
+            }
+            if(!filter.equals("WHERE ")){
+                filter = filter.substring(0, filter.length() - 5);
+                query.append(filter);
             }
             ResultSet rs;
             try {
                 rs = conn.createStatement().executeQuery(String.valueOf(query));
                 if (rs.next()) {
                     User.setCantGeneratedSchedules(rs.getInt("count"));
+
                 }
 
 

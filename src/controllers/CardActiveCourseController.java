@@ -76,7 +76,7 @@ public class CardActiveCourseController implements Initializable {
 
     void btnFilterOnAction(ActionEvent event) {
         try {
-            WindowFilterController wfc = new WindowFilterController(course.getSubject());
+            WindowFilterController wfc = new WindowFilterController(course.getSubject(), sc);
             JFXDialogLayout content = new JFXDialogLayout();
             FXMLLoader parent = new FXMLLoader (getClass().getResource("../ui/windowFilter.fxml"));
             parent.setController(wfc);
@@ -89,6 +89,7 @@ public class CardActiveCourseController implements Initializable {
     }
 
     void btnRemoveOnAction(ActionEvent event) {
+        course.getSubject().updateCourses();
         User.getSelectedSubjects().remove(course.getSubject());
         Platform.runLater(() -> this.listViewSubjects.getItems().remove(btnRemove.getParent()));
         User.setActiveIndexSchedule(0);
@@ -98,7 +99,7 @@ public class CardActiveCourseController implements Initializable {
         DatabaseManager.setSchedule(0);
         DatabaseManager.cantGeneratedSchedules();
         if (User.getSelectedSubjects().isEmpty()) {
-            sc.setCurrentScheduleText(0, User.getCantGeneratedSchedules());
+            sc.setCurrentScheduleText(0, 0);
         }else{
             sc.setCurrentScheduleText(1, User.getCantGeneratedSchedules());
         }

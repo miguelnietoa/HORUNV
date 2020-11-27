@@ -9,6 +9,7 @@ public class Subject {
     private int credits;
     private HashMap<Integer, Course> courses;
     private LinkedList<Professor> professors;
+
     public Subject(String code, String name, int credits) {
         this.code = code;
         this.name = name;
@@ -16,7 +17,18 @@ public class Subject {
         this.courses = new HashMap<>();
         this.professors = new LinkedList<>();
     }
-    public void addProfessor(Professor professor){
+
+    public void updateCourses() {
+        if (!courses.isEmpty()) {
+            for (int i = 0; i < courses.values().size(); i++) {
+                Course c = (Course) courses.values().toArray()[i];
+                c.setEnable(true);
+                c.getProfessor().setEnable(true);
+            }
+        }
+    }
+
+    public void addProfessor(Professor professor) {
         if (!this.professors.contains(professor)) {
             this.professors.add(professor);
         }

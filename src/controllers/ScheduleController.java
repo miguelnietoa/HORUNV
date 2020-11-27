@@ -225,11 +225,14 @@ public class ScheduleController implements Initializable {
             DatabaseManager.setSchedule(i);
             this.showAddSchedule();
             this.setCurrentScheduleText(i + 1, User.getCantGeneratedSchedules());
-            for (int j = 0; j < User.getCurrentCourses().size(); j++) {
-                AnchorPane item = listViewSubjects.getItems().get(j);
-                CardActiveCourseController c = (CardActiveCourseController) item.getUserData();
-                c.setCourse(User.getCurrentCourses().get(j));
-            }
+            setCurrentCourseInfo();
+        }
+    }
+    public void setCurrentCourseInfo(){
+        for (int j = 0; j < User.getCurrentCourses().size(); j++) {
+            AnchorPane item = listViewSubjects.getItems().get(j);
+            CardActiveCourseController c = (CardActiveCourseController) item.getUserData();
+            c.setCourse(User.getCurrentCourses().get(j));
         }
     }
 
@@ -397,6 +400,9 @@ public class ScheduleController implements Initializable {
     }
 
     public void showDeleteSchedule() {
+        for (int i = 0; i < tableView.getColumns().size(); i++) {
+            columnCells(tableView.getColumns().get(i),i);
+        }
         LinkedList<Course> currentCourses = User.getCurrentCourses();
         for (Course c : currentCourses) {
             LinkedList<Schedule> schedules = c.getSchedules();
@@ -431,6 +437,18 @@ public class ScheduleController implements Initializable {
         this.currentSchedule.setText(inicio + "/" + fin);
     }
 
+    public void showMessage(String message){
+        JFXDialogLayout layout = new JFXDialogLayout();
+        layout.setHeading(new Text("Advertencia"));
+        layout.setBody(new Text(message));
+        JFXButton button = new JFXButton("Okay");
+        JFXDialog dialog = new JFXDialog(stackPane, layout, JFXDialog.DialogTransition.BOTTOM);
+        button.setOnAction(event1 -> dialog.close());
+        button.setStyle("-fx-background-color: #FF533D");
+        layout.setActions(button);
+        dialog.setContent(layout);
+        dialog.show();
+    }
 }
 
 

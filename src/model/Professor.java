@@ -11,14 +11,13 @@ public class Professor {
     public Professor(String id, String fullname) {
         this.id = id;
         this.fullname = fullname;
-        this.courses=new LinkedList<>();
-        this.enable=true;
+        this.courses = new LinkedList<>();
+        this.enable = true;
     }
 
-    public void addCourse(Course course){
-        if(!courses.contains(course)){
+    public void addCourse(Course course) {
+        if (!courses.contains(course)) {
             courses.add(course);
-            System.out.println();
         }
     }
 

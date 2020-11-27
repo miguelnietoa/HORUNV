@@ -1,6 +1,7 @@
 package controllers.windowfilter;
 
 import com.jfoenix.controls.JFXTreeView;
+import controllers.ScheduleController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -8,10 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
-import model.Course;
-import model.Professor;
-import model.Subject;
-import model.User;
+import model.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,6 +26,8 @@ public class WindowFilterController implements Initializable {
 
     private Subject subject;
 
+    ScheduleController sc;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         treeViewProfessors.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -35,15 +35,16 @@ public class WindowFilterController implements Initializable {
         buildSubjectCard();
     }
 
-    public WindowFilterController(Subject subject) {
+    public WindowFilterController(Subject subject, ScheduleController sc) {
         this.subject = subject;
+        this.sc = sc;
     }
 
     private void buildSubjectCard() {
         root = new TreeItem<>(new AnchorPane());
         root.setExpanded(true);
         for (Professor professor : subject.getProfessors()) {
-            CardProfessorController c = new CardProfessorController(professor);
+            CardProfessorController c = new CardProfessorController(professor,sc,subject);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardProfessor.fxml"));
             loader.setController(c);
             try {
@@ -52,7 +53,7 @@ public class WindowFilterController implements Initializable {
                 for (Course course : professor.getCourses()) {
                     if (course.getSubject() == subject) {
                         FXMLLoader loader1 = new FXMLLoader(getClass().getResource("/ui/components/cardCourse.fxml"));
-                        CardCourseController c1= new CardCourseController(course,c);
+                        CardCourseController c1= new CardCourseController(course,c,sc);
                         loader1.setController(c1);
                         try {
                             AnchorPane course1 = loader1.load();
