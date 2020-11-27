@@ -42,7 +42,7 @@ public class CardSubjectProjectionController implements Initializable {
         this.subject = subject;
         this.listViewSubjects = listViewSubjects;
         this.stackPane = stackPane;
-        this.sc=sc;
+        this.sc = sc;
     }
 
     @Override
@@ -55,13 +55,15 @@ public class CardSubjectProjectionController implements Initializable {
     }
 
     void btnAddOnAction(ActionEvent event) {
+        if (User.getCantGeneratedSchedules() == 0 && User.getSelectedSubjects().size() > 0)
+            return;
         btnAdd.setVisible(false);
         User.addSelectedSubject(subject);
         User.setActiveIndexSchedule(0);
         sc.showDeleteSchedule();
         DatabaseManager.setSchedule(0);
         DatabaseManager.cantGeneratedSchedules();
-        sc.setCurrentScheduleText(1,User.getCantGeneratedSchedules());
+        sc.setCurrentScheduleText(1, User.getCantGeneratedSchedules());
         Course newCourse = null;
         for (Course course : User.getCurrentCourses()) {
             if (course.getSubject().equals(subject)) {
@@ -69,7 +71,7 @@ public class CardSubjectProjectionController implements Initializable {
                 break;
             }
         }
-        CardActiveCourseController c = new CardActiveCourseController(newCourse, /*course,*/ listViewSubjects, stackPane,sc);
+        CardActiveCourseController c = new CardActiveCourseController(newCourse, /*course,*/ listViewSubjects, stackPane, sc);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardActiveCourse.fxml"));
         loader.setController(c);

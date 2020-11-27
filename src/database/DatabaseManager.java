@@ -23,7 +23,7 @@ public class DatabaseManager {
 
     public static Connection getConnection() {
         if (conn == null) {
-            return getConnection("181.130.217.56", "horunv", "sa123456");
+            return getConnection("localhost", "horunv", "sa123456");
         } else {
             return conn;
         }
