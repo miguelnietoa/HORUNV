@@ -21,6 +21,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -356,7 +357,7 @@ public class ScheduleController implements Initializable {
 
     }
 
-    private void buildSubjectCard(Course course) {
+    public void buildSubjectCard(Course course) {
 
         CardActiveCourseController c = new CardActiveCourseController(course, listViewSubjects, stackPane, this);
 
@@ -382,6 +383,8 @@ public class ScheduleController implements Initializable {
             String codeSubject = event.getObject().split("\\(")[1].substring(0, 7);
             Subject subject = User.getProjection().get(codeSubject);
             if (User.getCantGeneratedSchedules() == 0 && User.getSelectedSubjects().size() > 0) {
+                showMessage("No hay posibles horarios que cumplan con los filtros, no puedes añadir esta materia.\n" +
+                        "Intenta eliminar algunos filtros.");
                 return;
             }
 
@@ -415,16 +418,7 @@ public class ScheduleController implements Initializable {
 
 
             } else {
-                JFXDialogLayout layout = new JFXDialogLayout();
-                layout.setHeading(new Text("Advertencia"));
-                layout.setBody(new Text("Esta asignatura ya ha sido añadida."));
-                JFXButton button = new JFXButton("Okay");
-                JFXDialog dialog = new JFXDialog(stackPane, layout, JFXDialog.DialogTransition.BOTTOM);
-                button.setOnAction(event1 -> dialog.close());
-                button.setStyle("-fx-background-color: #FF533D");
-                layout.setActions(button);
-                dialog.setContent(layout);
-                dialog.show();
+                showMessage("Esta asignatura ya ha sido añadida.");
             }
             textFieldSearch.setText("");
         });
@@ -557,11 +551,14 @@ public class ScheduleController implements Initializable {
             JFXButton button = new JFXButton("Guardar");
             JFXDialog dialog = new JFXDialog(stackPane, layout, JFXDialog.DialogTransition.BOTTOM);
             button.setOnAction(event1 -> {
-                if (!jtf.getText().trim().isEmpty()) {
-                    DatabaseManager.addSavedSchedule(jtf.getText());
-                    dialog.close();
-                } else {
+                String nameSchedule = jtf.getText().trim();
+                if (nameSchedule.isEmpty()) {
                     error.setText("Debe digitar un nombre válido");
+                } else if (DatabaseManager.thereIsSavedScheduleWithName(nameSchedule)) {
+                    error.setText("Ya existe un horario con este nombre.");
+                } else {
+                    DatabaseManager.addSavedSchedule(nameSchedule);
+                    dialog.close();
                 }
             });
             button.setStyle("-fx-background-color: #FF533D");
@@ -569,8 +566,7 @@ public class ScheduleController implements Initializable {
             dialog.setContent(layout);
             dialog.show();
         } else {
-
-            showMessage("No puede guardar horarios  vacios");
+            showMessage("No pueden guardar horarios vacios");
         }
     }
 }

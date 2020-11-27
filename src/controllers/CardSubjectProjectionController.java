@@ -55,8 +55,11 @@ public class CardSubjectProjectionController implements Initializable {
     }
 
     void btnAddOnAction(ActionEvent event) {
-        if (User.getCantGeneratedSchedules() == 0 && User.getSelectedSubjects().size() > 0)
+        if (User.getCantGeneratedSchedules() == 0 && User.getSelectedSubjects().size() > 0) {
+            sc.showMessage("No hay posibles horarios que cumplan con los filtros, no puedes añadir esta materia.\n" +
+                    "Intenta eliminar algunos filtros.");
             return;
+        }
 
         User.addSelectedSubject(subject);
         int activeIndexOlder = User.getActiveIndexSchedule();
@@ -76,15 +79,8 @@ public class CardSubjectProjectionController implements Initializable {
                     break;
                 }
             }
-            CardActiveCourseController c = new CardActiveCourseController(newCourse, /*course,*/ listViewSubjects, stackPane, sc);
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardActiveCourse.fxml"));
-            loader.setController(c);
-            try {
-                listViewSubjects.getItems().add(loader.load());
-                sc.showAddSchedule();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            sc.buildSubjectCard(newCourse);
+            sc.showAddSchedule();
         }else{
             sc.showMessage("No hay posibles horarios que cumplan con los filtros, no puedes añadir esta materia.\n" +
                     "Intenta eliminar algunos filtros.");

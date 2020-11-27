@@ -20,6 +20,7 @@ public class DatabaseManager {
     private static PreparedStatement psSavedSchedule;
     private static PreparedStatement psGetMaxConse;
     private static PreparedStatement psSavedScheduleCourses;
+    private static PreparedStatement psCheckScheduleName;
 
     private DatabaseManager() {
     }
@@ -47,28 +48,31 @@ public class DatabaseManager {
 
             psLinkCourses = conn.prepareStatement(
                     "SELECT \"nrc\", \"cupos_totales\", \"modalidad\"  " +
-                            "FROM \"Curso\"" +
-                            " WHERE \"cod_asig\" = ?"
+                    "FROM \"Curso\"" +
+                    " WHERE \"cod_asig\" = ?"
             );
             psCourseProfessor = conn.prepareStatement(
-                    "SELECT * FROM \"Docente\" " +
-                            "WHERE \"codigo\" IN " +
-                            "(SELECT \"cod_doc\" " +
-                            "FROM \"DocenteDictaCurso\" " +
-                            "WHERE \"nrc_curso\" = ?)"
+                "SELECT * FROM \"Docente\" " +
+                "WHERE \"codigo\" IN " +
+                "(SELECT \"cod_doc\" " +
+                "FROM \"DocenteDictaCurso\" " +
+                "WHERE \"nrc_curso\" = ?)"
             );
             psScheduleCourse = conn.prepareStatement(
-                    "SELECT * FROM \"Horario\" WHERE \"nrc_curso\" = ?"
+                "SELECT * FROM \"Horario\" WHERE \"nrc_curso\" = ?"
             );
 
             psSavedSchedule = conn.prepareStatement(
-                    "INSERT INTO \"PosibleHorarioTieneCurso\" (\"cod_estu\", \"consecutivo\", \"nrc_curso\") VALUES (?, ?, ?)"
+                "INSERT INTO \"PosibleHorarioTieneCurso\" (\"cod_estu\", \"consecutivo\", \"nrc_curso\") VALUES (?, ?, ?)"
             );
             psGetMaxConse = conn.prepareStatement(
-                    "SELECT MAX(\"consecutivo\") AS \"max\" FROM \"PosibleHorario\" WHERE \"cod_estu\" = ?"
+                "SELECT MAX(\"consecutivo\") AS \"max\" FROM \"PosibleHorario\" WHERE \"cod_estu\" = ?"
             );
-            psSavedScheduleCourses = conn.prepareStatement("INSERT INTO \"PosibleHorario\" (\"cod_estu\",\"consecutivo\",\"nombre\") " +
-                    "VALUES ( ? , ? , ? )");
+            psSavedScheduleCourses = conn.prepareStatement(
+                "INSERT INTO \"PosibleHorario\" (\"cod_estu\",\"consecutivo\",\"nombre\") " +
+                "VALUES ( ? , ? , ? )");
+            psCheckScheduleName = conn.prepareStatement(
+                "SELECT COUNT(*) FROM \"PosibleHorario\" WHERE \"nombre\" = ?");
             return conn;
         } catch (SQLException error) {
             System.out.println("Error en la conexión con la BD: " + error);
@@ -273,7 +277,7 @@ public class DatabaseManager {
         }
     }
 
-    private static int getConsecutivo() {
+    private static int getConsecutive() {
         int r = 0;
         try {
             psGetMaxConse.setInt(1, User.getCodeUser());
@@ -287,8 +291,20 @@ public class DatabaseManager {
         return r;
     }
 
+    public static boolean thereIsSavedScheduleWithName(String name) {
+        try {
+            psCheckScheduleName.setString(1, name);
+            ResultSet rs = psCheckScheduleName.executeQuery();
+            rs.next();
+            return rs.getInt(1) != 0;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
+
     public static void addSavedSchedule(String name) {
-        int con = getConsecutivo() + 1;
+        int con = getConsecutive() + 1;
         if (User.getCurrentCourses().size() > 0) {
             try {
                 psSavedScheduleCourses.setInt(1, User.getCodeUser());
