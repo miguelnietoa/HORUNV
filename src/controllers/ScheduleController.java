@@ -236,7 +236,7 @@ public class ScheduleController implements Initializable {
         }
     }
 
-    private <T> void columnCells(TableColumn<HourRow, T> column, int col) {
+    private <T> void columnCells(TableColumn<HourRow, T> column) {
 
         Callback<TableColumn<HourRow, T>, TableCell<HourRow, T>> existingCellFactory
                 = column.getCellFactory();
@@ -269,7 +269,7 @@ public class ScheduleController implements Initializable {
         }
 
         tableView.getSelectionModel().getSelectedCells().addListener((ListChangeListener<? super TablePosition>) c -> {
-
+            LinkedList<Object[]> filters = new LinkedList<>();
             for (TablePosition pos : c.getList()) {
                 int row = pos.getRow();
                 int col = pos.getColumn();
@@ -284,7 +284,7 @@ public class ScheduleController implements Initializable {
                     });
                     break;
                 } else {
-                    columnCells(tableView.getColumns().get(col), col);
+                    columnCells(tableView.getColumns().get(col));
                 }
 
                 item.setFromIndex(col, "");
@@ -294,7 +294,39 @@ public class ScheduleController implements Initializable {
 
                 // tableView.getItems().set(row,item);
 
+                int start = (row + 6) * 100 + 30;
+                int end = start + 100;
+                String day = null;
+                switch (col) {
+                    case 1:
+                        day = "L";
+                        break;
+                    case 2:
+                        day = "M";
+                        break;
+                    case 3:
+                        day = "X";
+                        break;
+                    case 4:
+                        day = "J";
+                        break;
+                    case 5:
+                        day = "V";
+                        break;
+                    case 6:
+                        day = "S";
+                        break;
+                }
+                filters.add(new Object[]{start, end, day});
             }
+            User.setFilters(filters);
+            User.setActiveIndexSchedule(0);
+            showDeleteSchedule();
+            DatabaseManager.setSchedule(0);
+            DatabaseManager.cantGeneratedSchedules();
+            int a = User.getCantGeneratedSchedules();
+            this.setCurrentScheduleText(User.getCantGeneratedSchedules() == 0 ? 0 : 1, User.getCantGeneratedSchedules());
+            showAddSchedule();
         });
 
         final Callback<TableColumn<HourRow, String>, TableCell<HourRow, String>> cellFactory = new DragSelectionCellFactory();
@@ -340,6 +372,7 @@ public class ScheduleController implements Initializable {
             if (!User.getSelectedSubjects().contains(subject)) {
                 User.addSelectedSubject(subject);
                 User.setActiveIndexSchedule(0);
+                showDeleteSchedule();
                 DatabaseManager.setSchedule(0);
                 DatabaseManager.cantGeneratedSchedules();
                 this.setCurrentScheduleText(1, User.getCantGeneratedSchedules());
@@ -381,7 +414,7 @@ public class ScheduleController implements Initializable {
     }
 
     public void showAddSchedule() {
-        showDeleteSchedule();
+        //showDeleteSchedule();
         LinkedList<Course> currentCourses = User.getCurrentCourses();
         for (Course c : currentCourses) {
             LinkedList<Schedule> schedules = c.getSchedules();
@@ -401,7 +434,7 @@ public class ScheduleController implements Initializable {
 
     public void showDeleteSchedule() {
         for (int i = 0; i < tableView.getColumns().size(); i++) {
-            columnCells(tableView.getColumns().get(i),i);
+            columnCells(tableView.getColumns().get(i));
         }
         LinkedList<Course> currentCourses = User.getCurrentCourses();
         for (Course c : currentCourses) {
@@ -409,7 +442,6 @@ public class ScheduleController implements Initializable {
             for (Schedule s : schedules) {
                 for (int[] index : s.getIndices()) {
                     HourRow item = tableView.getItems().get(index[0]);
-                    String val = item.getFromIndex(index[0]);
                     item.setFromIndex(index[1], "");
                 }
             }
@@ -433,8 +465,8 @@ public class ScheduleController implements Initializable {
         }
     }
 
-    public void setCurrentScheduleText(int inicio, int fin) {
-        this.currentSchedule.setText(inicio + "/" + fin);
+    public void setCurrentScheduleText(int start, int total) {
+        this.currentSchedule.setText(start + "/" + total);
     }
 
     public void showMessage(String message){

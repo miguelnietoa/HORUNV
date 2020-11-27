@@ -58,6 +58,7 @@ public class CardSubjectProjectionController implements Initializable {
         btnAdd.setVisible(false);
         User.addSelectedSubject(subject);
         User.setActiveIndexSchedule(0);
+        sc.showDeleteSchedule();
         DatabaseManager.setSchedule(0);
         DatabaseManager.cantGeneratedSchedules();
         sc.setCurrentScheduleText(1,User.getCantGeneratedSchedules());

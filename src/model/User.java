@@ -15,6 +15,7 @@ public class User {
     private static LinkedList<Course> currentCourses = new LinkedList<>();
     private static int activeIndexSchedule = 0;
     private static int cantGeneratedSchedules;
+    private static LinkedList<Object[]> filters = new LinkedList<>();
 
 
     private User() {
@@ -110,5 +111,13 @@ public class User {
 
     public static void setCurrentCourses(LinkedList<Course> currentCourses) {
         User.currentCourses = currentCourses;
+    }
+
+    public static LinkedList<Object[]> getFilters() {
+        return filters;
+    }
+
+    public static void setFilters(LinkedList<Object[]> filters) {
+        User.filters = filters;
     }
 }

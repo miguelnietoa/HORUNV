@@ -217,6 +217,61 @@ public class DatabaseManager {
      * @param index
      */
     public static void setSchedule(int index) {
+        ResultSet rs;
+        try {
+            rs = conn.createStatement().executeQuery(getQuerySchedule(index));
+            if (rs.next()) {
+                User.getCurrentCourses().clear();
+                for (int i = 0; i < User.getSelectedSubjects().size(); i++) {
+                    Course course = User.getSelectedSubjects().get(i).getCourses().get(rs.getInt(i + 1));
+                    User.getCurrentCourses().add(course);
+                }
+            }
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+
+    public static void cantGeneratedSchedules() {
+        String query = getQuerySchedule(User.getActiveIndexSchedule());
+        query = query.replaceFirst("\\*", "count(*) AS \"count\"");
+        ResultSet rs;
+        try {
+            rs = conn.createStatement().executeQuery(query);
+            if (rs.next()) {
+                User.setCantGeneratedSchedules(rs.getInt("count"));
+            }
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+    }
+
+    private static String getQuerySchedule(int index) {
+        // Filters by selection
+        String filterQuery = "";
+        if (!User.getFilters().isEmpty()) {
+            filterQuery = "AND \"nrc\" NOT IN (SELECT \"nrc_curso\" FROM \"Horario\" WHERE ";
+            boolean first = true;
+            for (Object[] filter : User.getFilters()) {
+                int start = (int) filter[0];
+                int end = (int) filter[1];
+                String day = (String) filter[2];
+                if (!first) {
+                    filterQuery += "OR ";
+                }
+                filterQuery += "(\"hora_inicio\" <= " + start + " AND \"hora_fin\" >= " + end + " AND \"dia\" = '" + day + "') ";
+                first = false;
+            }
+        }
+        //System.out.println(filterQuery);
+
+
         StringBuilder query = new StringBuilder("SELECT * FROM ");
         int size = User.getSelectedSubjects().size();
         if (!User.getSelectedSubjects().isEmpty()) {
@@ -224,83 +279,27 @@ public class DatabaseManager {
             String filter = "WHERE ";
             int k = 0;
             for (Subject selectedSubject : User.getSelectedSubjects()) {
-                query.append("(SELECT \"nrc\" A" + k + " FROM \"Curso\" WHERE \"cod_asig\" = '").append(selectedSubject.getCode()).append("')\n");
+                query.append("(SELECT \"nrc\" A" + k + " FROM \"Curso\" WHERE \"cod_asig\" = '")
+                        .append(selectedSubject.getCode()).append("' " + filterQuery + (!filterQuery.equals("") ? ")" : "") + ")\n");
                 if (!selectedSubject.equals(last)) {
                     query.append("CROSS JOIN\n");
                 }
                 for (int j = 0; j < selectedSubject.getCourses().values().size(); j++) {
                     Course c = (Course) selectedSubject.getCourses().values().toArray()[j];
                     if (!c.isEnable()) {
-                        filter = filter+"A"+k+" != "+c.getNrc()+" AND ";
+                        filter = filter + "A" + k + " != " + c.getNrc() + " AND ";
                     }
                 }
                 k++;
             }
-            if(!filter.equals("WHERE ")){
+            if (!filter.equals("WHERE ")) {
                 filter = filter.substring(0, filter.length() - 5);
-                query.append(filter+"\n");
+                query.append(filter + "\n");
             }
             query.append("OFFSET ").append(index).append(" ROWS FETCH NEXT 1 ROWS ONLY");
 
-            ResultSet rs;
-            try {
-                rs = conn.createStatement().executeQuery(String.valueOf(query));
-                if (rs.next()) {
-                    User.getCurrentCourses().clear();
-                    for (int i = 0; i < size; i++) {
-                        Course course = User.getSelectedSubjects().get(i).getCourses().get(rs.getInt(i + 1));
-                        User.getCurrentCourses().add(course);
-                    }
-                }
-
-
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
         }
-
+        return String.valueOf(query);
     }
-
-    public static void cantGeneratedSchedules() {
-        StringBuilder query = new StringBuilder("SELECT count(*) AS \"count\" FROM ");
-        int size = User.getSelectedSubjects().size();
-        if (!User.getSelectedSubjects().isEmpty()) {
-            Subject last = User.getSelectedSubjects().getLast();
-            String filter = "WHERE ";
-            int k = 0;
-            for (Subject selectedSubject : User.getSelectedSubjects()) {
-                query.append("(SELECT \"nrc\" A" + k + " FROM \"Curso\" WHERE \"cod_asig\" = '").append(selectedSubject.getCode()).append("')\n");
-                if (!selectedSubject.equals(last)) {
-                    query.append("CROSS JOIN\n");
-                }
-                for (int j = 0; j < selectedSubject.getCourses().values().size(); j++) {
-                    Course c = (Course) selectedSubject.getCourses().values().toArray()[j];
-                    if (!c.isEnable()) {
-                        filter = filter+"A"+k+" != "+c.getNrc()+" AND ";
-                    }
-                }
-                k++;
-            }
-            if(!filter.equals("WHERE ")){
-                filter = filter.substring(0, filter.length() - 5);
-                query.append(filter);
-            }
-            ResultSet rs;
-            try {
-                rs = conn.createStatement().executeQuery(String.valueOf(query));
-                if (rs.next()) {
-                    User.setCantGeneratedSchedules(rs.getInt("count"));
-
-                }
-
-
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        }else{
-            User.setCantGeneratedSchedules(0);
-        }
-    }
-
 
 }
