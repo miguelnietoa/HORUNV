@@ -218,38 +218,38 @@ public class DatabaseManager {
      */
     public static void setSchedule(int index) {
         ResultSet rs;
-        try {
-            rs = conn.createStatement().executeQuery(getQuerySchedule(index));
-            User.getCurrentCourses().clear();
-            if (rs.next()) {
-                for (int i = 0; i < User.getSelectedSubjects().size(); i++) {
-                    Course course = User.getSelectedSubjects().get(i).getCourses().get(rs.getInt(i + 1));
-                    User.getCurrentCourses().add(course);
+        String query = getQuerySchedule(index);
+        if (query != null) {
+            try {
+                rs = conn.createStatement().executeQuery(query);
+                User.getCurrentCourses().clear();
+                if (rs.next()) {
+                    for (int i = 0; i < User.getSelectedSubjects().size(); i++) {
+                        Course course = User.getSelectedSubjects().get(i).getCourses().get(rs.getInt(i + 1));
+                        User.getCurrentCourses().add(course);
+                    }
                 }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
             }
-
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
     }
 
 
     public static void cantGeneratedSchedules() {
         String query = getQuerySchedule(User.getActiveIndexSchedule());
-        query = query.replaceFirst("\\*", "count(*) AS \"count\"");
-        ResultSet rs;
-        try {
-            rs = conn.createStatement().executeQuery(query);
-            if (rs.next()) {
-                User.setCantGeneratedSchedules(rs.getInt("count"));
+        if (query != null) {
+            query = query.replaceFirst("\\*", "count(*) AS \"count\"");
+            ResultSet rs;
+            try {
+                rs = conn.createStatement().executeQuery(query);
+                if (rs.next()) {
+                    User.setCantGeneratedSchedules(rs.getInt("count"));
+                }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
             }
-
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
-
     }
 
     private static String getQuerySchedule(int index) {
@@ -272,9 +272,10 @@ public class DatabaseManager {
         //System.out.println(filterQuery);
 
 
-        StringBuilder query = new StringBuilder("SELECT * FROM ");
+        StringBuilder query = null;
         int size = User.getSelectedSubjects().size();
         if (!User.getSelectedSubjects().isEmpty()) {
+            query = new StringBuilder("SELECT * FROM ");
             Subject last = User.getSelectedSubjects().getLast();
             String filter = "WHERE ";
             int k = 0;
@@ -299,7 +300,9 @@ public class DatabaseManager {
             query.append("OFFSET ").append(index).append(" ROWS FETCH NEXT 1 ROWS ONLY");
 
         }
-        return String.valueOf(query);
+        if (query != null) {
+            return String.valueOf(query);
+        }
+        return null;
     }
-
 }

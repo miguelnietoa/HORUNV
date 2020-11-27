@@ -1,5 +1,12 @@
 package controllers;
 
+
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
 import com.jfoenix.controls.*;
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import controllers.tablemodel.DragSelectionCellFactory;
@@ -28,14 +35,15 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import model.Course;
 import model.Schedule;
-import model.User;
 import model.Subject;
+import model.User;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.image.RenderedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
@@ -120,7 +128,7 @@ public class ScheduleController implements Initializable {
         Tooltip.install(btnProjection, new Tooltip("Ver proyección"));
         Tooltip.install(btnSave, new Tooltip("Guardar horario"));
         Tooltip.install(btnCompare, new Tooltip("Comparar horarios"));
-        Tooltip.install(btnPdf, new Tooltip("Descargar Imagen"));
+        Tooltip.install(btnPdf, new Tooltip("Descargar PDF"));
         buildAutoCompleteTextField();
         buildTableView();
         lblFullname.setText(User.getFullname());
@@ -228,7 +236,8 @@ public class ScheduleController implements Initializable {
             setCurrentCourseInfo();
         }
     }
-    public void setCurrentCourseInfo(){
+
+    public void setCurrentCourseInfo() {
         for (int j = 0; j < User.getCurrentCourses().size(); j++) {
             AnchorPane item = listViewSubjects.getItems().get(j);
             CardActiveCourseController c = (CardActiveCourseController) item.getUserData();
@@ -327,6 +336,7 @@ public class ScheduleController implements Initializable {
             int a = User.getCantGeneratedSchedules();
             this.setCurrentScheduleText(User.getCantGeneratedSchedules() == 0 ? 0 : 1, User.getCantGeneratedSchedules());
             showAddSchedule();
+            setCurrentCourseInfo();
         });
 
         final Callback<TableColumn<HourRow, String>, TableCell<HourRow, String>> cellFactory = new DragSelectionCellFactory();
@@ -450,18 +460,52 @@ public class ScheduleController implements Initializable {
 
     public void savePDF(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos de imagen (*.png)", "*.png"));
-        File file = fileChooser.showSaveDialog(null);
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos pdf (*.pdf)", "*.pdf"));
+        File f = fileChooser.showSaveDialog(null);
 
-        if (file != null) {
-            try {
-                WritableImage writableImage = new WritableImage((int) tableView.getWidth(), (int) tableView.getHeight());
-                tableView.snapshot(null, writableImage);
-                RenderedImage renderedImage = SwingFXUtils.fromFXImage(writableImage, null);
-                ImageIO.write(renderedImage, "png", file);
-            } catch (IOException ex) {
-                ex.printStackTrace();
+        if (f != null) {
+            String dest = f.getAbsolutePath();
+            final String imagepath = "./tempfiles/temp.png";
+            File tempImage = new File(imagepath);
+            System.out.println(dest);
+            if (tempImage != null) {
+                try {
+                    WritableImage writableImage = new WritableImage((int) tableView.getWidth(), (int) tableView.getHeight());
+                    tableView.snapshot(null, writableImage);
+                    RenderedImage renderedImage = SwingFXUtils.fromFXImage(writableImage, null);
+                    ImageIO.write(renderedImage, "png", tempImage);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
+
+            PdfWriter writer = null;
+            try {
+                writer = new PdfWriter(dest);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            PdfDocument pdf = new PdfDocument(writer);
+            Document document = new Document(pdf);
+
+            ImageData data = null;
+            try {
+                data = ImageDataFactory.create(imagepath);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            com.itextpdf.layout.element.Image image = new com.itextpdf.layout.element.Image(data);
+            document.add(image);
+
+            for (Course c : User.getCurrentCourses()) {
+                Paragraph p = new Paragraph(
+                        c.getSubject().getName() + " - " + c.getSubject().getCode() + ":\n  " +
+                                c.getNrc() + " | " + c.getProfessor().getFullname() + "\n"
+                );
+                document.add(p);
+            }
+            document.close();
         }
     }
 
@@ -469,7 +513,7 @@ public class ScheduleController implements Initializable {
         this.currentSchedule.setText(start + "/" + total);
     }
 
-    public void showMessage(String message){
+    public void showMessage(String message) {
         JFXDialogLayout layout = new JFXDialogLayout();
         layout.setHeading(new Text("Advertencia"));
         layout.setBody(new Text(message));
