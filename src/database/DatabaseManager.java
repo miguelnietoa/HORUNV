@@ -61,7 +61,7 @@ public class DatabaseManager {
             );
 
             psSavedSchedule = conn.prepareStatement(
-                    "INSERT INTO \"PosibleHorarioTieneCurso\" (\"cod_estu\", \"consecutivo\", \"nrc_curso\") VALUES (?, ?, ?);"
+                    "INSERT INTO \"PosibleHorarioTieneCurso\" (\"cod_estu\", \"consecutivo\", \"nrc_curso\") VALUES (?, ?, ?)"
             );
             psGetMaxConse = conn.prepareStatement(
                     "SELECT MAX(\"consecutivo\") AS \"max\" FROM \"PosibleHorario\" WHERE \"cod_estu\" = ?"
@@ -265,7 +265,7 @@ public class DatabaseManager {
     private static int getConsecutivo() {
         int r = 0;
         try {
-            psGetMaxConse.setInt(1,User.getCodeUser());
+            psGetMaxConse.setInt(1, User.getCodeUser());
             ResultSet rs = psGetMaxConse.executeQuery();
             if (rs.next()) {
                 r = rs.getInt("max");
@@ -277,16 +277,16 @@ public class DatabaseManager {
     }
 
     public static void addSavedSchedule() {
-        int con = getConsecutivo()+1;
+        int con = getConsecutivo() + 1;
         String query = "INSERT INTO \"PosibleHorario\" (\"cod_estu\",\"consecutivo\",\"nombre\") " +
-                "VALUES ("+User.getCodeUser()+","+con+",'Horario1')";
+                "VALUES (" + User.getCodeUser() + "," + con + ",'Horario1')";
         try {
             conn.createStatement().execute(query);
             for (Course course : User.getCurrentCourses()) {
-                psSavedSchedule.setInt(1,User.getCodeUser());
+                psSavedSchedule.setInt(1, User.getCodeUser());
                 psSavedSchedule.setInt(2, con);
-                psSavedSchedule.setInt(3,course.getNrc());
-                psSavedSchedule.execute();
+                psSavedSchedule.setInt(3, course.getNrc());
+                psSavedSchedule.executeQuery();
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
