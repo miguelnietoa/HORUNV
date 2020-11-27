@@ -220,8 +220,8 @@ public class DatabaseManager {
         ResultSet rs;
         try {
             rs = conn.createStatement().executeQuery(getQuerySchedule(index));
+            User.getCurrentCourses().clear();
             if (rs.next()) {
-                User.getCurrentCourses().clear();
                 for (int i = 0; i < User.getSelectedSubjects().size(); i++) {
                     Course course = User.getSelectedSubjects().get(i).getCourses().get(rs.getInt(i + 1));
                     User.getCurrentCourses().add(course);
