@@ -21,7 +21,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -41,7 +40,6 @@ import model.Subject;
 import model.User;
 
 import javax.imageio.ImageIO;
-import javax.xml.crypto.Data;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -166,10 +164,13 @@ public class ScheduleController implements Initializable {
     @FXML
     void btnNotificationsOnAction(ActionEvent event) {
         try {
-            JFXDialogLayout content = new JFXDialogLayout();
-            Parent parent = FXMLLoader.load(getClass().getResource("/ui/components/cardNotifications.fxml"));
-            content.setBody(parent);
-            JFXDialog dialog = new JFXDialog(stackPane, content, JFXDialog.DialogTransition.BOTTOM);
+            JFXDialogLayout contentProjection = new JFXDialogLayout();
+            CardNotificationsController c = new CardNotificationsController(this);
+            FXMLLoader parent = new FXMLLoader(getClass().getResource("/ui/components/cardNotifications.fxml"));
+            parent.setController(c);
+            contentProjection.setBody((Parent) parent.load());
+            contentProjection.setHeading(new Text("Notificaciones"));
+            JFXDialog dialog = new JFXDialog(stackPane, contentProjection, JFXDialog.DialogTransition.BOTTOM);
             dialog.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -582,6 +583,8 @@ public class ScheduleController implements Initializable {
             showMessage("No pueden guardar horarios vacios");
         }
     }
+
+
 }
 
 

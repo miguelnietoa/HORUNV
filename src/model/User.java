@@ -1,5 +1,7 @@
 package model;
 
+import database.DatabaseManager;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -16,7 +18,7 @@ public class User {
     private static int activeIndexSchedule = 0;
     private static int cantGeneratedSchedules;
     private static LinkedList<Object[]> filters = new LinkedList<>();
-
+    private static LinkedList<PossibleSchedule> pSchedules = new LinkedList<>();
 
     private User() {
     }
@@ -119,5 +121,14 @@ public class User {
 
     public static void setFilters(LinkedList<Object[]> filters) {
         User.filters = filters;
+    }
+
+    public static LinkedList<PossibleSchedule> getPossibleSchedules() {
+
+        return User.pSchedules;
+    }
+
+    public static void setPossibleSchedules(LinkedList<PossibleSchedule> pSchedules) {
+        User.pSchedules = pSchedules;
     }
 }

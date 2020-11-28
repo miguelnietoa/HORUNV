@@ -21,7 +21,7 @@ public class DatabaseManager {
     private static PreparedStatement psGetMaxConse;
     private static PreparedStatement psSavedScheduleCourses;
     private static PreparedStatement psCheckScheduleName;
-
+    private static PreparedStatement psGetSavedSchedule;
     private DatabaseManager() {
     }
 
@@ -73,6 +73,9 @@ public class DatabaseManager {
                 "VALUES ( ? , ? , ? )");
             psCheckScheduleName = conn.prepareStatement(
                 "SELECT COUNT(*) FROM \"PosibleHorario\" WHERE \"cod_estu\" = ? AND \"nombre\" = ?");
+            psSavedSchedule = conn.prepareStatement(
+                    "SELECT * FROM \"PosibleHorario\" WHERE \"cod_estu\" = ?"
+            );
             return conn;
         } catch (SQLException error) {
             System.out.println("Error en la conexión con la BD: " + error);
@@ -110,12 +113,11 @@ public class DatabaseManager {
 
     public static void getInfoUser(int codeUser) {
         ResultSet rs;
+        String query = "SELECT \"nombre1\", \"nombre2\", \"apellido1\", \"apellido2\", \"sexo\", " +
+                "\"id_plan_estudio\", \"periodo_inscrito\" " +
+                "FROM \"Estudiante\" WHERE \"codigo\" = ?";
         try {
-            PreparedStatement ps = conn.prepareStatement(
-                    "SELECT \"nombre1\", \"nombre2\", \"apellido1\", \"apellido2\", \"sexo\", " +
-                            "\"id_plan_estudio\", \"periodo_inscrito\" " +
-                            "FROM \"Estudiante\" WHERE \"codigo\" = ?"
-            );
+            PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, codeUser);
             rs = ps.executeQuery();
             rs.next();
@@ -374,5 +376,46 @@ public class DatabaseManager {
             return String.valueOf(query);
         }
         return null;
+    }
+
+    public static void getPossibleSchedule(){
+        User.setPossibleSchedules(new LinkedList<>());
+        ResultSet rs;
+        try {
+            psSavedSchedule.setInt(1,User.getCodeUser());
+            rs = psSavedSchedule.executeQuery();
+            while (rs.next()){
+                User.getPossibleSchedules().add(new PossibleSchedule(rs.getInt(1),rs.getInt(2),rs.getString(3)));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+    }
+    public static int getInfoUserByUsername(String username){
+        ResultSet rs;
+        try {
+            PreparedStatement ps = conn.prepareStatement(
+                    "SELECT \"cod_estu\" FROM \"Credencial\" WHERE \"usuario\" = ?");
+            ps.setString(1, username);
+            rs = ps.executeQuery();
+            if (rs.next()){
+                return rs.getInt(1);
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+    public static void sendShareNotification(int codigo){
+        String query = "INSERT INTO \"Solicitud\" (\"cod_estu_solicita\",\"cod_estu_comparte\",\"fechahora\",\"consecutivo\") " +
+                "VALUES ("+User.getCodeUser()+","+codigo+",LOCALTIMESTAMP,NULL)";
+        try {
+            conn.createStatement().executeQuery(query);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 }

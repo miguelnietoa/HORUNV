@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="542.0" prefWidth="446.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label layoutX="8.0" layoutY="179.0" prefHeight="27.0" prefWidth="341.0" style="-fx-font-weight: bold;" text="Solucitudes de horario recibidas">
@@ -17,18 +16,17 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <JFXListView layoutX="21.0" layoutY="220.0" prefHeight="152.0" prefWidth="390.0" />
+      <JFXListView fx:id="listNotifications" layoutX="21.0" layoutY="220.0" prefHeight="152.0" prefWidth="390.0" />
       <Label layoutX="8.0" layoutY="14.0" style="-fx-font-weight: bold;" text="Envío de solicitudes de horario">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <JFXComboBox layoutX="14.0" layoutY="62.0" prefHeight="25.0" prefWidth="91.0" promptText="Nombre" />
-      <JFXButton layoutX="329.0" layoutY="58.0" prefHeight="36.0" prefWidth="91.0" style="-fx-background-color: #F85F26;" text="Enviar" />
-      <Label alignment="BOTTOM_LEFT" layoutX="21.0" layoutY="391.0" prefHeight="25.0" prefWidth="202.0" text="Elige el horario a compartir:" />
-      <JFXComboBox layoutX="227.0" layoutY="391.0" prefHeight="25.0" prefWidth="184.0" />
-      <JFXButton layoutX="21.0" layoutY="439.0" prefHeight="34.0" prefWidth="119.0" style="-fx-background-color: #F85F26;" text="Compartir" />
+      <JFXComboBox fx:id="comboBoxType" focusColor="#313065" labelFloat="true" layoutX="14.0" layoutY="62.0" onAction="#selectFromComboBox" prefHeight="25.0" prefWidth="126.0" promptText="Tipo de Busqueda" />
+      <JFXButton fx:id="btnSend" layoutX="341.0" layoutY="57.0" onAction="#btnSendAction" prefHeight="36.0" prefWidth="91.0" style="-fx-background-color: #F85F26;" text="Enviar" />
+      <JFXComboBox fx:id="comboBoxScheduleSelect" labelFloat="true" layoutX="21.0" layoutY="399.0" prefHeight="34.0" prefWidth="260.0" promptText="Elige el horario a compartir" />
+      <JFXButton fx:id="btnShare" layoutX="290.0" layoutY="399.0" prefHeight="34.0" prefWidth="119.0" style="-fx-background-color: #F85F26;" text="Compartir" />
       <Separator layoutY="162.0" prefHeight="17.0" prefWidth="446.0" />
-      <JFXTextField layoutX="127.0" layoutY="63.0" prefHeight="25.0" prefWidth="177.0" text="Miguel Angel Nieto Arias" />
+      <JFXTextField fx:id="txtInData" editable="false" focusColor="#a84040" layoutX="158.0" layoutY="63.0" onKeyTyped="#numberContrains" prefHeight="25.0" prefWidth="177.0" promptText="Seleccione tipo de busqueda" />
    </children>
 </AnchorPane>
