@@ -68,29 +68,53 @@ public class CardNotificationsController {
     @FXML
     void selectFromComboBox(ActionEvent event) {
         this.selectedOption = comboBoxType.getSelectionModel().getSelectedIndex();
-        System.out.println(this.selectedOption);
         this.txtInData.setEditable(true);
-        this.txtInData.setPromptText("Escriba el " + comboBoxType.getValue());
+        this.txtInData.setPromptText("Escriba el " + comboBoxType.getValue().toLowerCase());
     }
 
     @FXML
     void btnSendAction(ActionEvent event) {
         Platform.runLater(() -> {
             String data = this.txtInData.getText().trim();
-            if (!data.isEmpty()){
-                int codigo;
-                if (selectedOption == 0){
-                    codigo = Integer.parseInt(data);
-                }else{
-                    codigo = DatabaseManager.getInfoUserByUsername(data);
+            /*if (!data.isEmpty()){
+                int userCode;
+                if (selectedOption == 0){ // Usercode
+                    try {
+                        userCode = Integer.parseInt(data);
+                    } catch (Exception e) {
+                        sc.showMessage("¡Digite un valor válido!");
+                        return;
+                    }
+                }else{ // Usercode
+                    userCode = DatabaseManager.getInfoUserByUsername(data);
                 }
-                if (codigo != -1) {
-                    DatabaseManager.sendShareNotification(codigo);
-                }else{
+                if (userCode == -1 || !DatabaseManager.sendShareNotification(userCode)) {
                     sc.showMessage("El usuario suministrado no existe!");
                 }
             }else{
-                sc.showMessage("Digite un valor valido!");
+                sc.showMessage("¡Digite un valor válido!");
+            }*/
+            if (data.isEmpty()) {
+                sc.showMessage("Advertencia", "¡Digite un valor válido!");
+            } else {
+                int userCode;
+                if (selectedOption == 0) { // Usercode selected
+                    try {
+                        userCode = Integer.parseInt(data);
+                    } catch (Exception e) {
+                        sc.showMessage("Advertencia", "¡Digite un valor válido!");
+                        return;
+                    }
+                } else { // Username selected
+                    userCode = DatabaseManager.getInfoUserByUsername(data);
+                }
+                if (userCode == User.getCodeUser()) {
+                    sc.showMessage("Advertencia", "¡No puedes enviar solicitudes a ti mismo!");
+                } else if (userCode == -1 || !DatabaseManager.sendShareNotification(userCode)) {
+                    sc.showMessage("Advertencia", "¡El estudiante suministrado no existe!");
+                } else {
+                    sc.showMessage("¡Grandioso!", "Solucitud de horario enviada correctamente.");
+                }
             }
         });
     }
@@ -102,7 +126,7 @@ public class CardNotificationsController {
 
     private void loadInfoToComboBox() {
         Platform.runLater(() -> {
-            comboBoxType.getItems().add("Codigo");
+            comboBoxType.getItems().add("Código");
             comboBoxType.getItems().add("Usuario");
             DatabaseManager.getPossibleSchedule();
             if (!User.getPossibleSchedules().isEmpty()) {

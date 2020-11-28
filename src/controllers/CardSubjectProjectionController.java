@@ -56,7 +56,7 @@ public class CardSubjectProjectionController implements Initializable {
 
     void btnAddOnAction(ActionEvent event) {
         if (User.getCantGeneratedSchedules() == 0 && User.getSelectedSubjects().size() > 0) {
-            sc.showMessage("No hay posibles horarios que cumplan con los filtros, no puedes añadir esta materia.\n" +
+            sc.showMessage("Advertencia", "No hay posibles horarios que cumplan con los filtros, no puedes añadir esta materia.\n" +
                     "Intenta eliminar algunos filtros.");
             return;
         }
@@ -82,7 +82,7 @@ public class CardSubjectProjectionController implements Initializable {
             sc.buildSubjectCard(newCourse);
             sc.showAddSchedule();
         }else{
-            sc.showMessage("No hay posibles horarios que cumplan con los filtros, no puedes añadir esta materia.\n" +
+            sc.showMessage("Advertencia", "No hay posibles horarios que cumplan con los filtros, no puedes añadir esta materia.\n" +
                     "Intenta eliminar algunos filtros.");
             User.setCantGeneratedSchedules(cantGeneratedOlder);
             User.setActiveIndexSchedule(activeIndexOlder);

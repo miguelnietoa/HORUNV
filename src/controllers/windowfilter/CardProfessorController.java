@@ -110,7 +110,7 @@ public class CardProfessorController implements Initializable {
             }
             sc.setCurrentCourseInfo();
         }else{
-            sc.showMessage("No puedes bloquear a todos los profesores!");
+            sc.showMessage("Advertencia", "No puedes bloquear a todos los profesores!");
             toggleButtonEnable.setSelected(true);
             updateProfessorState();
         }
