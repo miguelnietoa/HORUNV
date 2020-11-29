@@ -56,6 +56,7 @@ public class ScheduleController implements Initializable {
     private final Image leftOff = new Image("/assets/left-arrow.png");
     private final Image rightOn = new Image("/assets/right-arrow-hover.png");
     private final Image rightOff = new Image("/assets/right-arrow.png");
+    private boolean column0 = false;
 
     @FXML
     private StackPane stackPane;
@@ -312,11 +313,11 @@ public class ScheduleController implements Initializable {
                 tableView.setFixedCellSize((newVal.doubleValue() / 15)));
 
         for (int i = 6; i < 20; i++) {
-            //tableView.getItems().add(new HourRow(i + ":30 - " + (i + 1) + ":30", "", "", "", "", "", ""));
             tableView.getItems().add(new HourRow(i + ":30 - " + (i + 1) + ":30", "", "", "", "", "", ""));
         }
 
         tableView.getSelectionModel().getSelectedCells().addListener((ListChangeListener<? super TablePosition>) c -> {
+
             LinkedList<Object[]> filters = new LinkedList<>();
             for (TablePosition pos : c.getList()) {
                 int row = pos.getRow();
@@ -325,13 +326,13 @@ public class ScheduleController implements Initializable {
                 HourRow item = tableView.getItems().get(row);
 
                 if (col == 0) {
-
+                    column0 = true;
                     Platform.runLater(() -> {
-
                         tableView.getSelectionModel().clearSelection(row, hourID);
                     });
                     break;
                 } else {
+                    column0 = false;
                     columnCells(tableView.getColumns().get(col));
                 }
 
@@ -367,19 +368,41 @@ public class ScheduleController implements Initializable {
                 }
                 filters.add(new Object[]{start, end, day});
             }
+
             User.setFilters(filters);
             User.setActiveIndexSchedule(0);
             showDeleteSchedule();
             DatabaseManager.setSchedule(0);
             DatabaseManager.cantGeneratedSchedules();
             int a = User.getCantGeneratedSchedules();
+            if (a == 0 && !column0 && !User.getSelectedSubjects().isEmpty()) {
+                boolean sw = false;
+                for (Subject selectedSubject : User.getSelectedSubjects()) {
+                    if (!selectedSubject.getPrerequisites().isEmpty()) {
+                        sw = true;
+                    }
+                }
+                if (sw) {
+                    Platform.runLater(() -> {
+                        showMessage("Advertencia ", "El bloqueo de horas elimina una materia que" +
+                                " es prerrequisito para tu siguiente semestre.\nIntenta eliminar algunos filtros.");
+                    });
+
+                } else {
+                    Platform.runLater(() -> {
+                        showMessage("Advertencia ", "El bloqueo de horas no genera ningún horario." +
+                                "\nIntenta eliminar algunos filtros.");
+                    });
+                }
+            }
+
             this.setCurrentScheduleText(User.getCantGeneratedSchedules() == 0 ? 0 : 1, User.getCantGeneratedSchedules());
             showAddSchedule();
             setCurrentCourseInfo();
         });
 
         final Callback<TableColumn<HourRow, String>, TableCell<HourRow, String>> cellFactory = new DragSelectionCellFactory();
-        // hourID.setCellFactory(cellFactory);
+
         mondayID.setCellFactory(cellFactory);
         tuesdayID.setCellFactory(cellFactory);
         wednesdayID.setCellFactory(cellFactory);

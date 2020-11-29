@@ -10,7 +10,7 @@ public class Subject {
     private String name;
     private int credits;
     private int semester;
-    private LinkedList<String> prerequsites;
+    private LinkedList<String> prerequisites;
     private HashMap<Integer, Course> courses;
     private LinkedList<Professor> professors;
 
@@ -19,7 +19,7 @@ public class Subject {
         this.name = name;
         this.credits = credits;
         this.semester = DatabaseManager.getSemester(this.code);
-        this.prerequsites = DatabaseManager.getprerequisite(semester+1,this.code);
+        this.prerequisites = DatabaseManager.getprerequisite(semester+1,this.code);
         this.courses = new HashMap<>();
         this.professors = new LinkedList<>();
     }
@@ -76,7 +76,7 @@ public class Subject {
         return courses;
     }
 
-    public LinkedList<String> getPrerequsites() {
-        return prerequsites;
+    public LinkedList<String> getPrerequisites() {
+        return prerequisites;
     }
 }

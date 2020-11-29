@@ -91,11 +91,11 @@ public class CardActiveCourseController implements Initializable {
     }
 
     void btnRemoveOnAction(ActionEvent event) {
-        if (course.getSubject().getPrerequsites().isEmpty()) {
+        if (course.getSubject().getPrerequisites().isEmpty()) {
             this.delete();
         }else{
             String message = "Ten en cuenta que esta asignatura es prerrequisito de: \n";
-            for (String prerequsite : course.getSubject().getPrerequsites()) {
+            for (String prerequsite : course.getSubject().getPrerequisites()) {
                 message=message+"- "+prerequsite+"\n";
             }
             message=message+"Para tu proximo semestre.";

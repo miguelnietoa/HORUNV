@@ -110,11 +110,11 @@ public class CardProfessorController implements Initializable {
             }
             sc.setCurrentCourseInfo();
         }else{
-            if (subject.getPrerequsites().isEmpty()) {
+            if (subject.getPrerequisites().isEmpty()) {
                 sc.showMessage("Advertencia", "No puedes bloquear a todos los profesores!");
             }else{
                 String message = "No puedes bloquear a todos los profesores y ademas esta materia es prerrequisito de: \n";;
-                for (String prerequsite : subject.getPrerequsites()) {
+                for (String prerequsite : subject.getPrerequisites()) {
                     message=message+"- "+prerequsite+"\n";
                 }
                 message=message+"Para tu proximo semestre.";
