@@ -387,7 +387,6 @@ public class ScheduleController implements Initializable {
                         showMessage("Advertencia ", "El bloqueo de horas elimina una materia que" +
                                 " es prerrequisito para tu siguiente semestre.\nIntenta eliminar algunos filtros.");
                     });
-
                 } else {
                     Platform.runLater(() -> {
                         showMessage("Advertencia ", "El bloqueo de horas no genera ningún horario." +
