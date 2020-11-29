@@ -188,6 +188,8 @@ public class ScheduleController implements Initializable {
         User.getProjection().clear();
         User.getSelectedSubjects().clear();
         User.getCurrentCourses().clear();
+        User.getRequests().clear();
+        User.getPossibleSchedules().clear();
         User.setActiveIndexSchedule(0);
         User.setCantGeneratedSchedules(0);
         User.getFilters().clear();
@@ -278,7 +280,6 @@ public class ScheduleController implements Initializable {
             TableHeaderRow header = (TableHeaderRow) tableView.lookup("TableHeaderRow");
             header.reorderingProperty().addListener((observable, oldValue, newValue) -> header.setReordering(false));
         });
-
         hourID.setCellValueFactory(new PropertyValueFactory<>("hour"));
         mondayID.setCellValueFactory(new PropertyValueFactory<>("monday"));
         tuesdayID.setCellValueFactory(new PropertyValueFactory<>("tuesday"));
@@ -372,9 +373,7 @@ public class ScheduleController implements Initializable {
     }
 
     public void buildSubjectCard(Course course) {
-
         CardActiveCourseController c = new CardActiveCourseController(course, listViewSubjects, stackPane, this);
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardActiveCourse.fxml"));
         loader.setController(c);
         try {

@@ -6,7 +6,9 @@ import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
 
 import java.awt.*;
+import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
 
@@ -16,8 +18,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import model.Course;
 import model.PossibleSchedule;
+import model.Request;
 import model.User;
 
 public class CardNotificationsController {
@@ -28,7 +35,7 @@ public class CardNotificationsController {
     private URL location;
 
     @FXML
-    private JFXListView<?> listNotifications;
+    private JFXListView<AnchorPane> listNotifications;
 
     @FXML
     private JFXComboBox<String> comboBoxType;
@@ -57,12 +64,6 @@ public class CardNotificationsController {
         assert comboBoxScheduleSelect != null : "fx:id=\"comboBoxScheduleSelect\" was not injected: check your FXML file 'cardNotifications.fxml'.";
         assert btnShare != null : "fx:id=\"btnShare\" was not injected: check your FXML file 'cardNotifications.fxml'.";
         assert txtInData != null : "fx:id=\"txtInData\" was not injected: check your FXML file 'cardNotifications.fxml'.";
-
-    }
-
-    @FXML
-    void numberContrains(KeyEvent event) {
-
     }
 
     @FXML
@@ -76,24 +77,6 @@ public class CardNotificationsController {
     void btnSendAction(ActionEvent event) {
         Platform.runLater(() -> {
             String data = this.txtInData.getText().trim();
-            /*if (!data.isEmpty()){
-                int userCode;
-                if (selectedOption == 0){ // Usercode
-                    try {
-                        userCode = Integer.parseInt(data);
-                    } catch (Exception e) {
-                        sc.showMessage("¡Digite un valor válido!");
-                        return;
-                    }
-                }else{ // Usercode
-                    userCode = DatabaseManager.getInfoUserByUsername(data);
-                }
-                if (userCode == -1 || !DatabaseManager.sendShareNotification(userCode)) {
-                    sc.showMessage("El usuario suministrado no existe!");
-                }
-            }else{
-                sc.showMessage("¡Digite un valor válido!");
-            }*/
             if (data.isEmpty()) {
                 sc.showMessage("Advertencia", "¡Digite un valor válido!");
             } else {
@@ -119,9 +102,30 @@ public class CardNotificationsController {
         });
     }
 
+    @FXML
+    void btnShareAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    void listNotificationsAction(MouseEvent event) {
+
+    }
+
     public CardNotificationsController(ScheduleController sc) {
         this.sc = sc;
         loadInfoToComboBox();
+        addRequestsToList();
+    }
+
+    private void addRequestsToList(){
+        DatabaseManager.addRequests();
+        Platform.runLater(() -> {
+            for (Request request : User.getRequests()) {
+                request.setFullNameStudent(DatabaseManager.getNameStudent(request.getCodeStudentRequested()));
+                buildRequestCard(request);
+            }
+        });
     }
 
     private void loadInfoToComboBox() {
@@ -135,5 +139,15 @@ public class CardNotificationsController {
                 }
             }
         });
+    }
+    public void buildRequestCard(Request request) {
+        CardRequestController c = new CardRequestController(request);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardRequest.fxml"));
+        loader.setController(c);
+        try {
+            listNotifications.getItems().add(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
