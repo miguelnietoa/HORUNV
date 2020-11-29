@@ -58,7 +58,7 @@
                         </ImageView>
                      </graphic>
                   </JFXButton>
-                  <JFXButton fx:id="btnCompare" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" layoutX="65.0" layoutY="5.0" prefHeight="40.0" prefWidth="40.0" ripplerFill="#00bf13" style="-fx-background-color: white;" styleClass="rounded-button" stylesheets="@styles/styles.css" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="64.0" AnchorPane.topAnchor="6.0">
+                  <JFXButton fx:id="btnCompare" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" layoutX="65.0" layoutY="5.0" onAction="#btnCompareOnAction" prefHeight="40.0" prefWidth="40.0" ripplerFill="#00bf13" style="-fx-background-color: white;" styleClass="rounded-button" stylesheets="@styles/styles.css" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="64.0" AnchorPane.topAnchor="6.0">
                      <graphic>
                         <ImageView fx:id="btnProjection1211" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                            <image>

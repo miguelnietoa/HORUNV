@@ -162,6 +162,27 @@ public class ScheduleController implements Initializable {
     }
 
     @FXML
+    void btnCompareOnAction(ActionEvent event) {
+        Stage compareSchedules = new Stage();
+        Parent root;
+        Stage schedule = (Stage) btnCompare.getScene().getWindow();
+        try {
+            root = FXMLLoader.load(getClass().getResource("../ui/storeSchedules.fxml"));
+            compareSchedules.setTitle("HORUNV - Almacén de Horarios");
+            Scene scene = new Scene(root, schedule.getWidth(), schedule.getHeight());
+            scene.getStylesheets().add(getClass().getResource("/ui/styles/application.css").toExternalForm());
+            compareSchedules.setScene(scene);
+            compareSchedules.sizeToScene();
+            compareSchedules.show();
+            compareSchedules.setMinWidth(schedule.getWidth());
+            compareSchedules.setMinHeight(schedule.getHeight());
+            schedule.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     void btnNotificationsOnAction(ActionEvent event) {
         try {
             JFXDialogLayout contentProjection = new JFXDialogLayout();
