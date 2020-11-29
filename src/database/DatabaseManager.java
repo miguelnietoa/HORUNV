@@ -1,5 +1,6 @@
 package database;
 
+import controllers.ScheduleController;
 import model.*;
 import oracle.jdbc.pool.OracleDataSource;
 
@@ -444,10 +445,6 @@ public class DatabaseManager {
         }
     }
 
-    public static void shareSchedule(Request request) {
-        String query = "SELECT * FROM \"Solicitud\" WHERE \"fechahora\" = TIMESTAMP '2020-11-28 18:52:41.40200000'";
-    }
-
     public static String getNameStudent(int codeUser) {
         ResultSet rs;
         try {
@@ -468,5 +465,32 @@ public class DatabaseManager {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void deleteRequest(Request request){
+        String query = "DELETE FROM \"Solicitud\" " +
+                "WHERE \"cod_estu_solicita\" = "+request.getCodeStudentRequested()+" " +
+                "AND \"cod_estu_comparte\" = "+request.getCodeStudentHost()+" " +
+                "AND \"fechahora\" = TIMESTAMP '"+request.getDateHour()+"'";
+        try {
+            conn.createStatement().executeQuery(query);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public static boolean updateConsecutivo(PossibleSchedule schedule, Request request){
+        String query = "UPDATE \"Solicitud\" SET \"consecutivo\" = "+schedule.getConsecutivo()+
+                " WHERE \"cod_estu_solicita\" = "+request.getCodeStudentRequested()+" " +
+                "AND \"cod_estu_comparte\" = "+request.getCodeStudentHost()+" " +
+                "AND \"fechahora\" = TIMESTAMP '"+request.getDateHour()+"'";
+        try {
+            conn.createStatement().executeQuery(query);
+            return true;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+
+        }
+        return false;
     }
 }

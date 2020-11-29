@@ -54,16 +54,11 @@ public class CardNotificationsController {
 
     private ScheduleController sc;
     private int selectedOption;
-
-
+    private Request selectedRequest = null;
+    private PossibleSchedule possible = null;
     @FXML
     void initialize() {
-        assert listNotifications != null : "fx:id=\"listNotifications\" was not injected: check your FXML file 'cardNotifications.fxml'.";
-        assert comboBoxType != null : "fx:id=\"comboBoxType\" was not injected: check your FXML file 'cardNotifications.fxml'.";
-        assert btnSend != null : "fx:id=\"btnSend\" was not injected: check your FXML file 'cardNotifications.fxml'.";
-        assert comboBoxScheduleSelect != null : "fx:id=\"comboBoxScheduleSelect\" was not injected: check your FXML file 'cardNotifications.fxml'.";
-        assert btnShare != null : "fx:id=\"btnShare\" was not injected: check your FXML file 'cardNotifications.fxml'.";
-        assert txtInData != null : "fx:id=\"txtInData\" was not injected: check your FXML file 'cardNotifications.fxml'.";
+        this.comboBoxScheduleSelect.setOnAction(this::selectFromSchedulesComboBox);
     }
 
     @FXML
@@ -71,6 +66,15 @@ public class CardNotificationsController {
         this.selectedOption = comboBoxType.getSelectionModel().getSelectedIndex();
         this.txtInData.setEditable(true);
         this.txtInData.setPromptText("Escriba el " + comboBoxType.getValue().toLowerCase());
+    }
+
+    void selectFromSchedulesComboBox(ActionEvent event){
+        int index = comboBoxScheduleSelect.getSelectionModel().getSelectedIndex();
+        if (index != -1) {
+            this.possible = User.getPossibleSchedules().get(index);
+        }else{
+            this.possible = null;
+        }
     }
 
     @FXML
@@ -104,12 +108,34 @@ public class CardNotificationsController {
 
     @FXML
     void btnShareAction(ActionEvent event) {
-
+        if (possible != null){
+            if (this.selectedRequest!= null){
+                boolean sw = DatabaseManager.updateConsecutivo(possible,selectedRequest);
+                if (sw){
+                    sc.showMessage("Alerta","Horario compartido exitosamente!");
+                    Platform.runLater(() -> {
+                        this.listNotifications.getItems().remove(listNotifications.getItems().get(User.getRequests().indexOf(selectedRequest)));
+                        User.getRequests().remove(selectedRequest);
+                    });
+                }else{
+                    sc.showMessage("Alerta","Error al compartir tu  horario.\nIntentalo nuevamente!");
+                }
+            }else{
+                sc.showMessage("Advertencia","Debe seleccionar una solicitud a contestar!");
+            }
+        } else{
+            sc.showMessage("Advertencia","Debe seleccionar un horario para compartir!");
+        }
     }
 
     @FXML
     void listNotificationsAction(MouseEvent event) {
-
+        int index = this.listNotifications.getSelectionModel().getSelectedIndex();
+        if (index != -1) {
+            this.selectedRequest = User.getRequests().get(index);
+        }else{
+            this.selectedRequest = null;
+        }
     }
 
     public CardNotificationsController(ScheduleController sc) {
@@ -141,7 +167,7 @@ public class CardNotificationsController {
         });
     }
     public void buildRequestCard(Request request) {
-        CardRequestController c = new CardRequestController(request);
+        CardRequestController c = new CardRequestController(request,this.listNotifications);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardRequest.fxml"));
         loader.setController(c);
         try {
