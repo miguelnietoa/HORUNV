@@ -1,8 +1,10 @@
 package database;
 
+import controllers.ScheduleController;
 import model.*;
 import oracle.jdbc.pool.OracleDataSource;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,6 +24,7 @@ public class DatabaseManager {
     private static PreparedStatement psSavedScheduleCourses;
     private static PreparedStatement psCheckScheduleName;
     private static PreparedStatement psGetSavedSchedule;
+    private static PreparedStatement psGetInfoStudent;
 
     private DatabaseManager() {
     }
@@ -29,8 +32,8 @@ public class DatabaseManager {
     public static Connection getConnection() {
         if (conn == null) {
             //Ip ImiServer: 181.130.217.56
-            return getConnection("localhost", "horunv", "sa123456");
-            //return getConnection("181.130.217.56", "horunv", "sa123456");
+            //return getConnection("localhost", "horunv", "sa123456");
+            return getConnection("181.130.217.56", "horunv", "sa123456");
         } else {
             return conn;
         }
@@ -46,7 +49,8 @@ public class DatabaseManager {
             ds.setUser(user);
             ds.setPassword(pass);
             conn = ds.getConnection();
-
+            String query = "ALTER SESSION SET nls_date_format = 'DD-MM-YYYY HH24:MI:SS'";
+            conn.createStatement().executeQuery(query);
             psLinkCourses = conn.prepareStatement(
                     "SELECT \"nrc\", \"cupos_totales\", \"modalidad\"  " +
                             "FROM \"Curso\"" +
@@ -74,8 +78,15 @@ public class DatabaseManager {
                             "VALUES ( ? , ? , ? )");
             psCheckScheduleName = conn.prepareStatement(
                     "SELECT COUNT(*) FROM \"PosibleHorario\" WHERE \"cod_estu\" = ? AND \"nombre\" = ?");
-            psSavedSchedule = conn.prepareStatement(
+
+            psGetSavedSchedule = conn.prepareStatement(
                     "SELECT * FROM \"PosibleHorario\" WHERE \"cod_estu\" = ?"
+            );
+
+            psGetInfoStudent = conn.prepareStatement(
+                    "SELECT \"nombre1\", \"nombre2\", \"apellido1\", \"apellido2\", \"sexo\", " +
+                            "\"id_plan_estudio\", \"periodo_inscrito\" " +
+                            "FROM \"Estudiante\" WHERE \"codigo\" = ?"
             );
             return conn;
         } catch (SQLException error) {
@@ -114,13 +125,9 @@ public class DatabaseManager {
 
     public static void getInfoUser(int codeUser) {
         ResultSet rs;
-        String query = "SELECT \"nombre1\", \"nombre2\", \"apellido1\", \"apellido2\", \"sexo\", " +
-                "\"id_plan_estudio\", \"periodo_inscrito\" " +
-                "FROM \"Estudiante\" WHERE \"codigo\" = ?";
         try {
-            PreparedStatement ps = conn.prepareStatement(query);
-            ps.setInt(1, codeUser);
-            rs = ps.executeQuery();
+            psGetInfoStudent.setInt(1, codeUser);
+            rs = psGetInfoStudent.executeQuery();
             rs.next();
             StringBuilder fullname = new StringBuilder();
             for (int i = 1; i <= 4; i++) {
@@ -309,6 +316,7 @@ public class DatabaseManager {
 
     public static void addSavedSchedule(String name) {
         int con = getConsecutive() + 1;
+        System.out.println(con);
         if (User.getCurrentCourses().size() > 0) {
             try {
                 psSavedScheduleCourses.setInt(1, User.getCodeUser());
@@ -380,18 +388,17 @@ public class DatabaseManager {
     }
 
     public static void getPossibleSchedule() {
-        User.setPossibleSchedules(new LinkedList<>());
+        User.getPossibleSchedules().clear();
         ResultSet rs;
         try {
-            psSavedSchedule.setInt(1, User.getCodeUser());
-            rs = psSavedSchedule.executeQuery();
+            psGetSavedSchedule.setInt(1, User.getCodeUser());
+            rs = psGetSavedSchedule.executeQuery();
             while (rs.next()) {
                 User.getPossibleSchedules().add(new PossibleSchedule(rs.getInt(1), rs.getInt(2), rs.getString(3)));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
     }
 
     public static int getInfoUserByUsername(String username) {
@@ -422,5 +429,68 @@ public class DatabaseManager {
             //throwables.printStackTrace();
             return false;
         }
+    }
+
+    public static void addRequests() {
+        ResultSet rs;
+        String query = "SELECT * FROM \"Solicitud\" WHERE \"consecutivo\" IS NULL AND \"cod_estu_comparte\" = " + User.getCodeUser();
+        User.getRequests().clear();
+        try {
+            rs = conn.createStatement().executeQuery(query);
+            while (rs.next()) {
+                User.getRequests().add(new Request(rs.getInt(1), rs.getInt(2), rs.getTimestamp(3)));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public static String getNameStudent(int codeUser) {
+        ResultSet rs;
+        try {
+            psGetInfoStudent.setInt(1, codeUser);
+            rs = psGetInfoStudent.executeQuery();
+            rs.next();
+            StringBuilder fullname = new StringBuilder();
+            for (int i = 1; i <= 4; i++) {
+                if (rs.getString(i) == null)
+                    continue;
+                fullname.append(rs.getString(i));
+                if (i != 4) {
+                    fullname.append(" ");
+                }
+            }
+            return fullname.toString();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void deleteRequest(Request request){
+        String query = "DELETE FROM \"Solicitud\" " +
+                "WHERE \"cod_estu_solicita\" = "+request.getCodeStudentRequested()+" " +
+                "AND \"cod_estu_comparte\" = "+request.getCodeStudentHost()+" " +
+                "AND \"fechahora\" = TIMESTAMP '"+request.getDateHour()+"'";
+        try {
+            conn.createStatement().executeQuery(query);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public static boolean updateConsecutivo(PossibleSchedule schedule, Request request){
+        String query = "UPDATE \"Solicitud\" SET \"consecutivo\" = "+schedule.getConsecutivo()+
+                " WHERE \"cod_estu_solicita\" = "+request.getCodeStudentRequested()+" " +
+                "AND \"cod_estu_comparte\" = "+request.getCodeStudentHost()+" " +
+                "AND \"fechahora\" = TIMESTAMP '"+request.getDateHour()+"'";
+        try {
+            conn.createStatement().executeQuery(query);
+            return true;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+
+        }
+        return false;
     }
 }

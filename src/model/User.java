@@ -19,7 +19,7 @@ public class User {
     private static int cantGeneratedSchedules;
     private static LinkedList<Object[]> filters = new LinkedList<>();
     private static LinkedList<PossibleSchedule> pSchedules = new LinkedList<>();
-
+    private static LinkedList<Request> requests = new LinkedList<>();
     private User() {
     }
 
@@ -126,6 +126,14 @@ public class User {
     public static LinkedList<PossibleSchedule> getPossibleSchedules() {
 
         return User.pSchedules;
+    }
+
+    public static LinkedList<PossibleSchedule> getpSchedules() {
+        return pSchedules;
+    }
+
+    public static LinkedList<Request> getRequests() {
+        return requests;
     }
 
     public static void setPossibleSchedules(LinkedList<PossibleSchedule> pSchedules) {

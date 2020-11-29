@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="cardRequestAnchorPane" prefHeight="44.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="lblName" layoutX="14.0" layoutY="8.0" prefHeight="17.0" prefWidth="258.0" stylesheets="@../styles/application.css" text="Nombre Estudiante" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="48.0" />
+      <Label fx:id="lblDate" layoutX="22.0" layoutY="26.0" prefHeight="17.0" prefWidth="248.0" text="Fecha" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="48.0" />
+      <JFXButton fx:id="btnDeleteRequest" contentDisplay="GRAPHIC_ONLY" layoutX="276.0" layoutY="7.0" prefHeight="30.0" prefWidth="30.0" styleClass="rounded-button" stylesheets="@../styles/styles.css" AnchorPane.rightAnchor="14.0">
+         <graphic>
+            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../assets/negative.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+   </children>
+</AnchorPane>
