@@ -1,15 +1,12 @@
 package database;
 
-import controllers.ScheduleController;
 import model.*;
 import oracle.jdbc.pool.OracleDataSource;
 
-import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -394,11 +391,75 @@ public class DatabaseManager {
             psGetSavedSchedule.setInt(1, User.getCodeUser());
             rs = psGetSavedSchedule.executeQuery();
             while (rs.next()) {
-                User.getPossibleSchedules().add(new PossibleSchedule(rs.getInt(1), rs.getInt(2), rs.getString(3)));
+                PossibleSchedule pSchedule = new PossibleSchedule(rs.getInt(1), rs.getInt(2), rs.getString(3));
+                pSchedule.setCourses(getCoursesFromPossibleSchedule(pSchedule, User.getProjection()));
+                User.getPossibleSchedules().add(pSchedule);
+
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+    private static LinkedList<Course> getCoursesFromPossibleSchedule(PossibleSchedule pSchedule,
+                                                                     HashMap<String, Subject> projection) {
+        try {
+            String queryForCourses = "SELECT \"nrc_curso\" FROM \"PosibleHorarioTieneCurso\" " +
+                    "WHERE \"cod_estu\" = " + pSchedule.getCodigoEstudiante() +
+                    " AND \"consecutivo\" = "+ pSchedule.getConsecutivo();
+            ResultSet rsNrcs = conn.createStatement().executeQuery(queryForCourses);
+            LinkedList<Course> courses = new LinkedList<>();
+            while (rsNrcs.next()) {
+                int nrc = rsNrcs.getInt(1);
+                Course course = projection.values().stream()
+                        .filter(subject -> subject.getCourses().get(nrc) != null)
+                        .map(subject -> subject.getCourses().get(nrc)).findAny().orElse(null);
+                if (course == null)
+                    System.err.println("ERROR: Course not found");
+                courses.add(course);
+            }
+            return courses;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String getUsernameFromCode(int userCode) {
+        ResultSet rs = null;
+        try {
+            rs = conn.createStatement().executeQuery(
+                "SELECT \"usuario\" FROM \"Credencial\" WHERE \"cod_estu\" = " + userCode
+            );
+            if (rs.next())
+                return rs.getString(1);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static void getSchedulesSharedWithMe() {
+        try {
+            PreparedStatement ps = conn.prepareStatement("WITH temp(codcomp, consec) AS\n" +
+                    "    (SELECT \"cod_estu_comparte\", \"consecutivo\"\n" +
+                    "    FROM \"Solicitud\" \n" +
+                    "    WHERE \"cod_estu_solicita\" = ? AND \"consecutivo\" IS NOT NULL)\n" +
+                    "SELECT \"PosibleHorario\".* FROM temp \n" +
+                    "INNER JOIN \"PosibleHorario\" \n" +
+                    "ON \"PosibleHorario\".\"cod_estu\" = codcomp AND \"PosibleHorario\".\"consecutivo\" = consec");
+            ps.setInt(1, User.getCodeUser());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                PossibleSchedule pSchedule = new PossibleSchedule(rs.getInt(1), rs.getInt(2), rs.getString(3));
+                pSchedule.setCourses(getCoursesFromPossibleSchedule(pSchedule, getProjection(rs.getInt(1))));
+                User.getSchedulesSharedWithMe().add(pSchedule);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
     }
 
     public static int getInfoUserByUsername(String username) {
@@ -467,11 +528,11 @@ public class DatabaseManager {
         return null;
     }
 
-    public static void deleteRequest(Request request){
+    public static void deleteRequest(Request request) {
         String query = "DELETE FROM \"Solicitud\" " +
-                "WHERE \"cod_estu_solicita\" = "+request.getCodeStudentRequested()+" " +
-                "AND \"cod_estu_comparte\" = "+request.getCodeStudentHost()+" " +
-                "AND \"fechahora\" = TIMESTAMP '"+request.getDateHour()+"'";
+                "WHERE \"cod_estu_solicita\" = " + request.getCodeStudentRequested() + " " +
+                "AND \"cod_estu_comparte\" = " + request.getCodeStudentHost() + " " +
+                "AND \"fechahora\" = TIMESTAMP '" + request.getDateHour() + "'";
         try {
             conn.createStatement().executeQuery(query);
         } catch (SQLException throwables) {
@@ -479,11 +540,11 @@ public class DatabaseManager {
         }
     }
 
-    public static boolean updateConsecutivo(PossibleSchedule schedule, Request request){
-        String query = "UPDATE \"Solicitud\" SET \"consecutivo\" = "+schedule.getConsecutivo()+
-                " WHERE \"cod_estu_solicita\" = "+request.getCodeStudentRequested()+" " +
-                "AND \"cod_estu_comparte\" = "+request.getCodeStudentHost()+" " +
-                "AND \"fechahora\" = TIMESTAMP '"+request.getDateHour()+"'";
+    public static boolean updateConsecutivo(PossibleSchedule schedule, Request request) {
+        String query = "UPDATE \"Solicitud\" SET \"consecutivo\" = " + schedule.getConsecutivo() +
+                " WHERE \"cod_estu_solicita\" = " + request.getCodeStudentRequested() + " " +
+                "AND \"cod_estu_comparte\" = " + request.getCodeStudentHost() + " " +
+                "AND \"fechahora\" = TIMESTAMP '" + request.getDateHour() + "'";
         try {
             conn.createStatement().executeQuery(query);
             return true;

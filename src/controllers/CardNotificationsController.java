@@ -108,6 +108,7 @@ public class CardNotificationsController {
 
     @FXML
     void btnShareAction(ActionEvent event) {
+        // TODO: check duplicate schedules to the same person
         if (possible != null){
             if (this.selectedRequest!= null){
                 boolean sw = DatabaseManager.updateConsecutivo(possible,selectedRequest);

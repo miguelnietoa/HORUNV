@@ -34,7 +34,7 @@
             </Label>
             <AnchorPane layoutX="695.0" layoutY="101.0" prefHeight="104.0" prefWidth="285.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="110.0">
                <children>
-                  <JFXComboBox fx:id="cbSchedule1" prefHeight="34.0" prefWidth="320.0" promptText="El precioso" style="-fx-font-size: 11pt;" visibleRowCount="3" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <JFXComboBox fx:id="cbSchedule1" onAction="#cbSchedule1OnAction" prefHeight="34.0" prefWidth="320.0" promptText="Seleccione horario" style="-fx-font-size: 11pt;" visibleRowCount="3" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -46,7 +46,7 @@
             </AnchorPane>
             <AnchorPane layoutX="695.0" layoutY="244.0" prefHeight="104.0" prefWidth="285.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="270.0">
                <children>
-                  <JFXComboBox fx:id="cbSchedule2" prefHeight="34.0" prefWidth="320.0" promptText="El precioso" style="-fx-font-size: 11pt;" visibleRowCount="3" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <JFXComboBox fx:id="cbSchedule2" onAction="#cbSchedule2OnAction" prefHeight="34.0" prefWidth="320.0" promptText="Seleccione horario" style="-fx-font-size: 11pt;" visibleRowCount="3" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>

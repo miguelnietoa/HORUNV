@@ -4,16 +4,22 @@ import com.jfoenix.controls.JFXComboBox;
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import controllers.tablemodel.HourRow;
 import database.DatabaseManager;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import model.PossibleSchedule;
+import model.User;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CompareSchedulesController implements Initializable {
 
@@ -68,7 +74,31 @@ public class CompareSchedulesController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         buildTableView();
-        //DatabaseManager.getPossibleSchedule();
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                DatabaseManager.getPossibleSchedule();
+                DatabaseManager.getSchedulesSharedWithMe();
+
+                List<String> mySchedules = User.getPossibleSchedules().stream().map(pSchedule -> pSchedule.getNombre())
+                        .collect(Collectors.toList());
+                List<String> schedulesSharedWithMe = User.getSchedulesSharedWithMe().stream()
+                        .map(pSchedule -> pSchedule.getNombre() + " (" + DatabaseManager.getUsernameFromCode(pSchedule.getCodigoEstudiante()) +")")
+                        .collect(Collectors.toList());
+
+                List<String> merged = Stream.concat(mySchedules.stream(), schedulesSharedWithMe.stream())
+                        .collect(Collectors.toList());
+                Platform.runLater(() -> {
+                    cbSchedule1.getItems().add("Ninguno");
+                    cbSchedule1.getItems().addAll(merged);
+                    cbSchedule2.getItems().add("Ninguno");
+                    cbSchedule2.getItems().setAll(merged);
+                });
+            }
+        }.start();
+        // todo: add shared schedules
+        // todo: asign to comboBoxSchedule2
     }
 
     private void buildTableView() {
@@ -95,4 +125,14 @@ public class CompareSchedulesController implements Initializable {
             tableView.getItems().add(new HourRow(i + ":30 - " + (i + 1) + ":30", "", "", "", "", "", ""));
 
     }
+
+    public void cbSchedule1OnAction(ActionEvent event) {
+        System.out.println("selected" + cbSchedule1.getValue() + "in pos: " + cbSchedule1.getSelectionModel().getSelectedIndex());
+
+    }
+
+    public void cbSchedule2OnAction(ActionEvent event) {
+        System.out.println("selected" + cbSchedule2.getValue());
+    }
+
 }
