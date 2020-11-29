@@ -93,7 +93,7 @@ public class CompareSchedulesController implements Initializable {
                     cbSchedule1.getItems().add("Ninguno");
                     cbSchedule1.getItems().addAll(merged);
                     cbSchedule2.getItems().add("Ninguno");
-                    cbSchedule2.getItems().setAll(merged);
+                    cbSchedule2.getItems().addAll(merged);
                 });
             }
         }.start();

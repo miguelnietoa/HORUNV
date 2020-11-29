@@ -554,4 +554,40 @@ public class DatabaseManager {
         }
         return false;
     }
+
+    public static int getSemester(String asignatura){
+        String query = "SELECT \"semestre\" FROM \"PlanEstudioTieneAsignaturas\" WHERE \"id_pe\" = "+User.getIdPlan()+" AND \"cod_asig\" = '"+asignatura+"'";
+        try {
+            ResultSet rs = conn.createStatement().executeQuery(query);
+            if (rs.next()){
+               return  rs.getInt(1);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return -1;
+    }
+
+    public static LinkedList<String> getprerequisite(int semester, String codeSubject){
+        LinkedList<String> prerequisites = new LinkedList<>();
+        try {
+            PreparedStatement ps = conn.prepareStatement(
+                    "SELECT \"nombre\" FROM \"Asignatura\" WHERE \"codigo\" IN (\n" +
+                            "    SELECT \"cod_asig\" FROM \"Prerrequisito\" WHERE \"cod_asig_prerreq\" = ? AND \"cod_asig\" IN (\n" +
+                            "        SELECT \"cod_asig\" FROM \"PlanEstudioTieneAsignaturas\" WHERE \"id_pe\"= ? AND \"semestre\"= ?\n" +
+                            "    )\n" +
+                            ")"
+            );
+            ps.setString(1,codeSubject);
+            ps.setInt(2, User.getIdPlan());
+            ps.setInt(3, semester);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                prerequisites.add(rs.getString(1));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return prerequisites;
+    }
 }

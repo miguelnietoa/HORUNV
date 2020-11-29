@@ -1,5 +1,7 @@
 package model;
 
+import database.DatabaseManager;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -7,6 +9,8 @@ public class Subject {
     private String code;
     private String name;
     private int credits;
+    private int semester;
+    private LinkedList<String> prerequsites;
     private HashMap<Integer, Course> courses;
     private LinkedList<Professor> professors;
 
@@ -14,6 +18,8 @@ public class Subject {
         this.code = code;
         this.name = name;
         this.credits = credits;
+        this.semester = DatabaseManager.getSemester(this.code);
+        this.prerequsites = DatabaseManager.getprerequisite(semester+1,this.code);
         this.courses = new HashMap<>();
         this.professors = new LinkedList<>();
     }
@@ -68,5 +74,9 @@ public class Subject {
 
     public HashMap<Integer, Course> getCourses() {
         return courses;
+    }
+
+    public LinkedList<String> getPrerequsites() {
+        return prerequsites;
     }
 }

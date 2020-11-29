@@ -1,5 +1,6 @@
 package controllers;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXListView;
@@ -15,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import model.Course;
 import model.User;
 import model.Subject;
@@ -89,6 +91,19 @@ public class CardActiveCourseController implements Initializable {
     }
 
     void btnRemoveOnAction(ActionEvent event) {
+        if (course.getSubject().getPrerequsites().isEmpty()) {
+            this.delete();
+        }else{
+            String message = "Ten en cuenta que esta asignatura es prerrequisito de: \n";
+            for (String prerequsite : course.getSubject().getPrerequsites()) {
+                message=message+"- "+prerequsite+"\n";
+            }
+            message=message+"Para tu proximo semestre.";
+            message("¿Desea eliminar esta asignatura?",message);
+        }
+    }
+
+    private void delete(){
         course.getSubject().updateCourses();
         User.getSelectedSubjects().remove(course.getSubject());
         Platform.runLater(() -> this.listViewSubjects.getItems().remove(btnRemove.getParent()));
@@ -98,9 +113,9 @@ public class CardActiveCourseController implements Initializable {
         User.getCurrentCourses().clear();
         DatabaseManager.setSchedule(0);
         DatabaseManager.cantGeneratedSchedules();
-        if (User.getCantGeneratedSchedules()==0) {
+        if (User.getCantGeneratedSchedules() == 0) {
             sc.setCurrentScheduleText(0, 0);
-        }else{
+        } else {
             sc.setCurrentScheduleText(1, User.getCantGeneratedSchedules());
         }
         sc.showAddSchedule();
@@ -119,5 +134,24 @@ public class CardActiveCourseController implements Initializable {
         lblProfessor.setText(course.getProfessor().getFullname());
         lblCapacity.setText("Capacidad: " + course.getTotalStudents());
         lblNrc.setText("NRC: " + course.getNrc());
+    }
+
+    private void message(String title, String message){
+        JFXDialogLayout layout = new JFXDialogLayout();
+        layout.setHeading(new Text(title));
+        layout.setBody(new Text(message));
+        JFXButton buttonS = new JFXButton("Eliminar");
+        JFXButton buttonN = new JFXButton("Cancelar");
+        JFXDialog dialog = new JFXDialog(stackPane, layout, JFXDialog.DialogTransition.BOTTOM);
+        buttonN.setOnAction(event1 -> dialog.close());
+        buttonS.setOnAction(event -> {
+            this.delete();
+            dialog.close();
+        });
+        buttonS.setStyle("-fx-background-color: red; -fx-text-fill: white");
+        buttonN.setStyle("-fx-background-color: gray; -fx-text-fill: white");
+        layout.setActions(buttonS,buttonN);
+        dialog.setContent(layout);
+        dialog.show();
     }
 }
