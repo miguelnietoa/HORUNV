@@ -23,9 +23,9 @@
          </font>
       </Label>
       <JFXComboBox fx:id="comboBoxType" focusColor="#313065" labelFloat="true" layoutX="14.0" layoutY="62.0" onAction="#selectFromComboBox" prefHeight="25.0" prefWidth="126.0" promptText="Tipo de Busqueda" />
-      <JFXButton fx:id="btnSend" layoutX="341.0" layoutY="57.0" onAction="#btnSendAction" prefHeight="36.0" prefWidth="91.0" style="-fx-background-color: #F85F26;" text="Enviar" />
+      <JFXButton fx:id="btnSend" buttonType="RAISED" layoutX="341.0" layoutY="57.0" onAction="#btnSendAction" prefHeight="36.0" prefWidth="91.0" style="-fx-background-color: #F85F26;" text="Enviar" textFill="WHITE" />
       <JFXComboBox fx:id="comboBoxScheduleSelect" labelFloat="true" layoutX="21.0" layoutY="399.0" prefHeight="34.0" prefWidth="260.0" promptText="Elige el horario a compartir" />
-      <JFXButton fx:id="btnShare" layoutX="290.0" layoutY="399.0" onAction="#btnShareAction" prefHeight="34.0" prefWidth="119.0" style="-fx-background-color: #F85F26;" text="Compartir" />
+      <JFXButton fx:id="btnShare" buttonType="RAISED" layoutX="290.0" layoutY="399.0" onAction="#btnShareAction" prefHeight="34.0" prefWidth="119.0" style="-fx-background-color: #F85F26;" text="Compartir" textFill="WHITE" />
       <Separator layoutY="162.0" prefHeight="17.0" prefWidth="446.0" />
       <JFXTextField fx:id="txtInData" editable="false" focusColor="#a84040" layoutX="158.0" layoutY="63.0" prefHeight="25.0" prefWidth="177.0" promptText="Seleccione tipo de busqueda" />
    </children>

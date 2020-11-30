@@ -193,33 +193,37 @@ public class CompareSchedulesController implements Initializable {
         return schedule;
     }
 
-    private void updateInfo(JFXComboBox<String> cb, Label lblName, Label lblOwner, Label lblCredits) {
-        int index = cb.getSelectionModel().getSelectedIndex();
+    private void updateInfo(JFXComboBox<String> cb, Label lblName, Label lblOwner, Label lblCredits, JFXComboBox<String> cb2) {
         PossibleSchedule schedule = getSelectedSchedule(cb);
-        if (schedule == null) {
-            lblName.setText("Nombre: ");
-            lblOwner.setText("Dueño: ");
-            lblCredits.setText("Créditos utilizados: ");
-        } else {
-            lblName.setText("Nombre: " + schedule.getNombre());
-            lblOwner.setText("Dueño: " + DatabaseManager.getNameStudent(schedule.getCodigoEstudiante()));
-            lblCredits.setText("Créditos utilizados: " + schedule.calcTotalCredits());
-        }
-        showDeleteSchedule();
-        if (getSelectedSchedule(cbSchedule1)!=null) {
-            showAddSchedule(getSelectedSchedule(cbSchedule1),"-1");
-        }
-        if (getSelectedSchedule(cbSchedule2)!=null){
-            showAddSchedule(getSelectedSchedule(cbSchedule2),"-2");
+        if(getSelectedSchedule(cb2)!=null && getSelectedSchedule(cb2).equals(schedule)){
+            showMessage("Advertencia","No puedes comparar el mismo horario.");
+            Platform.runLater(() -> cb.getSelectionModel().selectFirst());
+        }else{
+            if (schedule == null) {
+                lblName.setText("Nombre: ");
+                lblOwner.setText("Dueño: ");
+                lblCredits.setText("Créditos utilizados: ");
+            } else {
+                lblName.setText("Nombre: " + schedule.getNombre());
+                lblOwner.setText("Dueño: " + DatabaseManager.getNameStudent(schedule.getCodigoEstudiante()));
+                lblCredits.setText("Créditos utilizados: " + schedule.calcTotalCredits());
+            }
+            showDeleteSchedule();
+            if (getSelectedSchedule(cbSchedule1)!=null) {
+                showAddSchedule(getSelectedSchedule(cbSchedule1),"-1");
+            }
+            if (getSelectedSchedule(cbSchedule2)!=null){
+                showAddSchedule(getSelectedSchedule(cbSchedule2),"-2");
+            }
         }
     }
 
     public void cbSchedule1OnAction(ActionEvent event) {
-        updateInfo(cbSchedule1, lblNameSchedule1, lblOwnerSchedule1, lblCreditsSchedule1);
+        updateInfo(cbSchedule1, lblNameSchedule1, lblOwnerSchedule1, lblCreditsSchedule1,cbSchedule2);
     }
 
     public void cbSchedule2OnAction(ActionEvent event) {
-        updateInfo(cbSchedule2, lblNameSchedule2, lblOwnerSchedule2, lblCreditsSchedule2);
+        updateInfo(cbSchedule2, lblNameSchedule2, lblOwnerSchedule2, lblCreditsSchedule2,cbSchedule1);
     }
 
     public void showAddSchedule(PossibleSchedule schedule, String fromComboBox) {

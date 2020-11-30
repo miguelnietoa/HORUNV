@@ -100,6 +100,7 @@ public class CardNotificationsController {
                 } else if (userCode == -1 || !DatabaseManager.sendShareNotification(userCode)) {
                     sc.showMessage("Advertencia", "¡El estudiante suministrado no existe!");
                 } else {
+                    this.txtInData.setText("");
                     sc.showMessage("¡Grandioso!", "Solucitud de horario enviada correctamente.");
                 }
             }
@@ -108,18 +109,21 @@ public class CardNotificationsController {
 
     @FXML
     void btnShareAction(ActionEvent event) {
-        // TODO: check duplicate schedules to the same person
         if (possible != null){
             if (this.selectedRequest!= null){
-                boolean sw = DatabaseManager.updateConsecutivo(possible,selectedRequest);
-                if (sw){
-                    sc.showMessage("Alerta","Horario compartido exitosamente!");
-                    Platform.runLater(() -> {
-                        this.listNotifications.getItems().remove(listNotifications.getItems().get(User.getRequests().indexOf(selectedRequest)));
-                        User.getRequests().remove(selectedRequest);
-                    });
+                if (DatabaseManager.isShared(possible,selectedRequest)){
+                    sc.showMessage("Alerta","El horario seleccionado ya ha sido compartido con esta persona");
                 }else{
-                    sc.showMessage("Alerta","Error al compartir tu  horario.\nIntentalo nuevamente!");
+                    boolean sw = DatabaseManager.updateConsecutivo(possible,selectedRequest);
+                    if (sw){
+                        sc.showMessage("Alerta","Horario compartido exitosamente!");
+                        Platform.runLater(() -> {
+                            this.listNotifications.getItems().remove(listNotifications.getItems().get(User.getRequests().indexOf(selectedRequest)));
+                            User.getRequests().remove(selectedRequest);
+                        });
+                    }else{
+                        sc.showMessage("Alerta","Error al compartir tu  horario.\nIntentalo nuevamente!");
+                    }
                 }
             }else{
                 sc.showMessage("Advertencia","Debe seleccionar una solicitud a contestar!");

@@ -537,6 +537,22 @@ public class DatabaseManager {
         }
     }
 
+    public static boolean isShared(PossibleSchedule schedule, Request request){
+        String query = "SELECT * " +
+                "FROM \"Solicitud\" " +
+                "WHERE \"cod_estu_solicita\" = "+request.getCodeStudentRequested()+" " +
+                "AND \"cod_estu_comparte\" = "+User.getCodeUser()+" " +
+                "AND \"consecutivo\" = "+schedule.getConsecutivo();
+
+        try {
+            ResultSet rs = conn.createStatement().executeQuery(query);
+            return rs.next();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return true;
+    }
+
     public static boolean updateConsecutivo(PossibleSchedule schedule, Request request) {
         String query = "UPDATE \"Solicitud\" SET \"consecutivo\" = " + schedule.getConsecutivo() +
                 " WHERE \"cod_estu_solicita\" = " + request.getCodeStudentRequested() + " " +
