@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane prefHeight="600.0" prefWidth="980.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CompareSchedulesController">
+<StackPane fx:id="stackPane" prefHeight="600.0" prefWidth="980.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CompareSchedulesController">
    <children>
       <AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;">
          <children>
@@ -27,7 +30,7 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Label layoutX="680.0" layoutY="67.0" prefHeight="34.0" prefWidth="300.0" style="-fx-font-weight: bold; -fx-font-size: 11pt;" text="Horarios seleccionados" textFill="#056571" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="67.0">
+            <Label layoutX="680.0" layoutY="40.0" prefHeight="34.0" prefWidth="300.0" style="-fx-font-weight: bold; -fx-font-size: 11pt;" text="Horarios seleccionados" textFill="#056571" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
                <padding>
                   <Insets left="10.0" />
                </padding>
@@ -56,6 +59,26 @@
                   <Label fx:id="lblCreditsSchedule2" layoutY="84.0" prefHeight="20.0" prefWidth="311.0" style="-fx-font-size: 10pt;" text="Créditos utilizados: " AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                </children>
             </AnchorPane>
+            <Label layoutX="691.0" layoutY="91.0" style="-fx-font-size: 13;" text="Horario 1" textFill="#056571" AnchorPane.rightAnchor="235.0" />
+            <Label layoutX="691.0" layoutY="251.0" style="-fx-font-size: 13;" text="Horario 2" textFill="#056571" AnchorPane.rightAnchor="235.0" />
+            <JFXButton fx:id="btnInfo2" contentDisplay="GRAPHIC_ONLY" layoutX="755.0" layoutY="251.0" onAction="#btnInfo2OnAction" styleClass="rounded-button" stylesheets="@styles/styles.css" AnchorPane.rightAnchor="205.0">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/Information.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </JFXButton>
+            <JFXButton fx:id="btnInfo1" contentDisplay="GRAPHIC_ONLY" layoutX="753.0" layoutY="90.0" onAction="#btnInfo1OnAction" styleClass="rounded-button" stylesheets="@styles/styles.css" AnchorPane.rightAnchor="205.0">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/Information.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </JFXButton>
          </children>
       </AnchorPane>
    </children>

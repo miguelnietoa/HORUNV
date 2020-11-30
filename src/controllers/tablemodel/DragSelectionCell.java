@@ -6,11 +6,19 @@ import javafx.scene.control.Tooltip;
 public class DragSelectionCell extends TableCell<HourRow, String> {
 
     public DragSelectionCell() {
+
         setOnDragDetected(event -> {
-            startFullDrag();
-            getTableColumn().getTableView().getSelectionModel().select(getIndex(), getTableColumn());
+            if (getTableColumn().getTableView().getSelectionModel() != null) {
+                startFullDrag();
+                getTableColumn().getTableView().getSelectionModel().select(getIndex(), getTableColumn());
+            }
         });
-        setOnMouseDragEntered(event -> getTableColumn().getTableView().getSelectionModel().select(getIndex(), getTableColumn()));
+        setOnMouseDragEntered(event -> {
+            if (getTableColumn().getTableView().getSelectionModel() != null){
+                getTableColumn().getTableView().getSelectionModel().select(getIndex(), getTableColumn());
+            }
+        });
+
     }
 
     @Override

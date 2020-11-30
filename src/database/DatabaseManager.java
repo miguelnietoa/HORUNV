@@ -3,10 +3,8 @@ package database;
 import model.*;
 import oracle.jdbc.pool.OracleDataSource;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.StringReader;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -313,7 +311,6 @@ public class DatabaseManager {
 
     public static void addSavedSchedule(String name) {
         int con = getConsecutive() + 1;
-        System.out.println(con);
         if (User.getCurrentCourses().size() > 0) {
             try {
                 psSavedScheduleCourses.setInt(1, User.getCodeUser());
@@ -349,7 +346,6 @@ public class DatabaseManager {
                 first = false;
             }
         }
-        //System.out.println(filterQuery);
         StringBuilder query = null;
         int size = User.getSelectedSubjects().size();
         if (!User.getSelectedSubjects().isEmpty()) {
@@ -406,7 +402,7 @@ public class DatabaseManager {
         try {
             String queryForCourses = "SELECT \"nrc_curso\" FROM \"PosibleHorarioTieneCurso\" " +
                     "WHERE \"cod_estu\" = " + pSchedule.getCodigoEstudiante() +
-                    " AND \"consecutivo\" = "+ pSchedule.getConsecutivo();
+                    " AND \"consecutivo\" = " + pSchedule.getConsecutivo();
             ResultSet rsNrcs = conn.createStatement().executeQuery(queryForCourses);
             LinkedList<Course> courses = new LinkedList<>();
             while (rsNrcs.next()) {
@@ -429,7 +425,7 @@ public class DatabaseManager {
         ResultSet rs = null;
         try {
             rs = conn.createStatement().executeQuery(
-                "SELECT \"usuario\" FROM \"Credencial\" WHERE \"cod_estu\" = " + userCode
+                    "SELECT \"usuario\" FROM \"Credencial\" WHERE \"cod_estu\" = " + userCode
             );
             if (rs.next())
                 return rs.getString(1);
@@ -441,6 +437,7 @@ public class DatabaseManager {
     }
 
     public static void getSchedulesSharedWithMe() {
+        User.getSchedulesSharedWithMe().clear();
         try {
             PreparedStatement ps = conn.prepareStatement("WITH temp(codcomp, consec) AS\n" +
                     "    (SELECT \"cod_estu_comparte\", \"consecutivo\"\n" +
@@ -555,12 +552,12 @@ public class DatabaseManager {
         return false;
     }
 
-    public static int getSemester(String asignatura){
-        String query = "SELECT \"semestre\" FROM \"PlanEstudioTieneAsignaturas\" WHERE \"id_pe\" = "+User.getIdPlan()+" AND \"cod_asig\" = '"+asignatura+"'";
+    public static int getSemester(String asignatura) {
+        String query = "SELECT \"semestre\" FROM \"PlanEstudioTieneAsignaturas\" WHERE \"id_pe\" = " + User.getIdPlan() + " AND \"cod_asig\" = '" + asignatura + "'";
         try {
             ResultSet rs = conn.createStatement().executeQuery(query);
-            if (rs.next()){
-               return  rs.getInt(1);
+            if (rs.next()) {
+                return rs.getInt(1);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -568,7 +565,7 @@ public class DatabaseManager {
         return -1;
     }
 
-    public static LinkedList<String> getprerequisite(int semester, String codeSubject){
+    public static LinkedList<String> getprerequisite(int semester, String codeSubject) {
         LinkedList<String> prerequisites = new LinkedList<>();
         try {
             PreparedStatement ps = conn.prepareStatement(
@@ -578,16 +575,60 @@ public class DatabaseManager {
                             "    )\n" +
                             ")"
             );
-            ps.setString(1,codeSubject);
+            ps.setString(1, codeSubject);
             ps.setInt(2, User.getIdPlan());
             ps.setInt(3, semester);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 prerequisites.add(rs.getString(1));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         return prerequisites;
+    }
+
+    public static LinkedList<String> getStudentDuplicatedSchedule(PossibleSchedule schedule) {
+        LinkedList<String> list = new LinkedList<>();
+        String query = "select \"nombre1\",\"nombre2\",\"apellido1\",\"apellido2\" \n" +
+                "from  \"Estudiante\"\n" +
+                "where \"codigo\" In(\n" +
+                "(select \"cod_estu\"\n" +
+                "from\n" +
+                "(select \"cod_estu\",\"cont2\",count(\"cod_estu\") as \"cont3\"\n" +
+                "        from (Select \"cod_estu\" as \"cod1\",\"consecutivo\" as \"con1\", count(\"consecutivo\")as \"cont1\"\n" +
+                "        from \"PosibleHorarioTieneCurso\"\n" +
+                "        where \"cod_estu\"!="+User.getCodeUser()+" group by \"consecutivo\", \"cod_estu\" ) cross join\n" +
+                "        (Select \"cod_estu\",\"nrc_curso\"as \"nrc1\",\"consecutivo\" as \"con2\"\n" +
+                "        from \"PosibleHorarioTieneCurso\"\n" +
+                "        where \"cod_estu\"!="+User.getCodeUser()+")cross join\n" +
+                "        (Select count(\"cod_estu\") as \"cont2\"\n" +
+                "        from \"PosibleHorarioTieneCurso\"\n" +
+                "        where \"cod_estu\"="+User.getCodeUser()+" and  \"consecutivo\"="+schedule.getConsecutivo()+")\n" +
+                "        cross join\n" +
+                "        (Select \"nrc_curso\"\n" +
+                "        from \"PosibleHorarioTieneCurso\"\n" +
+                "        where \"cod_estu\"="+User.getCodeUser()+" and  \"consecutivo\"="+schedule.getConsecutivo()+")\n" +
+                "where \"nrc_curso\"=\"nrc1\" and \"con1\"=\"con2\"and \"cod_estu\"=\"cod1\" and \"cont1\"=\"cont2\"\n" +
+                "group by \"cod_estu\",\"cont2\")\n" +
+                "where \"cont2\"<=\"cont3\"))";
+        try {
+            ResultSet rs = conn.createStatement().executeQuery(query);
+            while (rs.next()){
+                StringBuilder fullname = new StringBuilder();
+                for (int i = 1; i <= 4; i++) {
+                    if (rs.getString(i) == null)
+                        continue;
+                    fullname.append(rs.getString(i));
+                    if (i != 4) {
+                        fullname.append(" ");
+                    }
+                }
+                list.add(fullname.toString());
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return list;
     }
 }

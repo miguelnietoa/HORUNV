@@ -12,3 +12,5 @@
 - [Schedule icon](src/assets/schedule.png) from [unDraw](https://undraw.co/search)
 - [Filled circle](src/assets/filled_circle.png) made by [Freepik](https://www.flaticon.es/autores/freepik "Freepik") from [www.flaticon.es](https://www.flaticon.es/ "Flaticon")
 - [Unfilled circle](src/assets/unfilled_circle.png) made by [Freepik](https://www.flaticon.es/autores/freepik "Freepik") from [www.flaticon.es](https://www.flaticon.es/ "Flaticon")
+- [Information](src/assets/Information.png) made by [Freepik](https://www.flaticon.com/authors/freepik "Freepik") from [](https://www.flaticon.com/ "Flaticon")
+- [Plus circle](src/assets/plus.png) made by [Freepik](https://www.flaticon.es/autores/freepik "Freepik") from [www.flaticon.es](https://www.flaticon.es/ "Flaticon")

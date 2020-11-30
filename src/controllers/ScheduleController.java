@@ -340,12 +340,6 @@ public class ScheduleController implements Initializable {
                 }
 
                 item.setFromIndex(col, "");
-                //System.out.println(tableView.getSelectionModel().getSelectedCells().get(0));
-                //System.out.println("x=" + row + "y=" + col);
-                //String dispLastName = (String) pos.getTableColumn().getCellObservableValue(item).getValue();
-
-                // tableView.getItems().set(row,item);
-
                 int start = (row + 6) * 100 + 30;
                 int end = start + 100;
                 String day = null;
