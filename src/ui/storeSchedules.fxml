@@ -12,7 +12,7 @@
    <children>
       <AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;">
          <children>
-            <Label alignment="CENTER" layoutX="340.0" layoutY="8.0" prefHeight="30.0" prefWidth="299.0" style="-fx-font-weight: bold; -fx-font-size: 12pt;" text="Almacén de Horarios" textFill="#056571" AnchorPane.leftAnchor="340.0" AnchorPane.rightAnchor="340.0" AnchorPane.topAnchor="0.0" />
+            <Label alignment="CENTER" layoutX="195.0" layoutY="-1.0" prefHeight="30.0" prefWidth="299.0" style="-fx-font-weight: bold; -fx-font-size: 12pt;" text="Almacén de Horarios" textFill="#056571" AnchorPane.leftAnchor="195.0" AnchorPane.rightAnchor="485.0" AnchorPane.topAnchor="0.0" />
             <TableView fx:id="tableView" layoutX="64.0" layoutY="36.0" prefHeight="554.0" prefWidth="670.0" styleClass="my-table" stylesheets="@styles/styles.css" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="30.0">
                <columns>
                   <TableColumn fx:id="hourID" editable="false" prefWidth="75.0" sortable="false" text="Hora" />

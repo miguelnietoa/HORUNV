@@ -32,6 +32,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import model.Course;
@@ -165,19 +166,21 @@ public class ScheduleController implements Initializable {
     @FXML
     void btnCompareOnAction(ActionEvent event) {
         Stage compareSchedules = new Stage();
+        compareSchedules.initModality(Modality.APPLICATION_MODAL);
         Parent root;
         Stage schedule = (Stage) btnCompare.getScene().getWindow();
+        double w = schedule.getWidth();
+        double h = schedule.getHeight();
         try {
             root = FXMLLoader.load(getClass().getResource("../ui/storeSchedules.fxml"));
             compareSchedules.setTitle("HORUNV - Almacén de Horarios");
-            Scene scene = new Scene(root, schedule.getWidth(), schedule.getHeight());
+            Scene scene = new Scene(root, w, h);
             scene.getStylesheets().add(getClass().getResource("/ui/styles/application.css").toExternalForm());
             compareSchedules.setScene(scene);
             compareSchedules.sizeToScene();
-            compareSchedules.show();
-            compareSchedules.setMinWidth(schedule.getWidth());
-            compareSchedules.setMinHeight(schedule.getHeight());
-            schedule.close();
+            compareSchedules.showAndWait();
+            compareSchedules.setMinWidth(w);
+            compareSchedules.setMinHeight(h);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -286,7 +289,7 @@ public class ScheduleController implements Initializable {
         }
     }
 
-    private <T> void columnCells(TableColumn<HourRow, T> column) {
+    public static <T> void columnCells(TableColumn<HourRow, T> column) {
 
         Callback<TableColumn<HourRow, T>, TableCell<HourRow, T>> existingCellFactory
                 = column.getCellFactory();
@@ -493,7 +496,6 @@ public class ScheduleController implements Initializable {
     }
 
     public void showAddSchedule() {
-        //showDeleteSchedule();
         LinkedList<Course> currentCourses = User.getCurrentCourses();
         for (Course c : currentCourses) {
             LinkedList<Schedule> schedules = c.getSchedules();

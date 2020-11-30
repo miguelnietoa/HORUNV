@@ -12,10 +12,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import model.Course;
 import model.PossibleSchedule;
+import model.Schedule;
 import model.User;
 
 import java.net.URL;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -97,8 +100,6 @@ public class CompareSchedulesController implements Initializable {
                 });
             }
         }.start();
-        // todo: add shared schedules
-        // todo: asign to comboBoxSchedule2
     }
 
     private void buildTableView() {
@@ -126,13 +127,72 @@ public class CompareSchedulesController implements Initializable {
 
     }
 
-    public void cbSchedule1OnAction(ActionEvent event) {
-        System.out.println("selected" + cbSchedule1.getValue() + "in pos: " + cbSchedule1.getSelectionModel().getSelectedIndex());
+    private PossibleSchedule getSelectedSchedule(JFXComboBox<String> comboBox) {
+        int index = comboBox.getSelectionModel().getSelectedIndex();
+        int sizePossible = User.getPossibleSchedules().size();
+        int sizeShared = User.getSchedulesSharedWithMe().size();
+        PossibleSchedule schedule = null;
+        if (index != 0 && index != -1) {
+            if (index <= sizePossible) {
+                schedule = User.getPossibleSchedules().get(index - 1);
+            } else if (index - sizePossible <= sizeShared) {
+                schedule = User.getSchedulesSharedWithMe().get(index - sizePossible - 1);
+            }
+        }
+        return schedule;
+    }
 
+    private void updateInfo(JFXComboBox<String> cb, Label lblName, Label lblOwner, Label lblCredits) {
+        int index = cb.getSelectionModel().getSelectedIndex();
+        PossibleSchedule schedule = getSelectedSchedule(cb);
+        if (schedule == null) {
+            lblName.setText("Nombre: ");
+            lblOwner.setText("Dueño: ");
+            lblCredits.setText("Créditos utilizados: ");
+        } else {
+            lblName.setText("Nombre: " + schedule.getNombre());
+            lblOwner.setText("Dueño: " + DatabaseManager.getNameStudent(schedule.getCodigoEstudiante()));
+            lblCredits.setText("Créditos utilizados: " + schedule.calcTotalCredits());
+        }
+        //showAddSchedule();
+    }
+
+    public void cbSchedule1OnAction(ActionEvent event) {
+        updateInfo(cbSchedule1, lblNameSchedule1, lblOwnerSchedule1, lblCreditsSchedule1);
     }
 
     public void cbSchedule2OnAction(ActionEvent event) {
-        System.out.println("selected" + cbSchedule2.getValue());
+        updateInfo(cbSchedule2, lblNameSchedule2, lblOwnerSchedule2, lblCreditsSchedule2);
+    }
+
+    public void showAddSchedule(PossibleSchedule schedule, boolean fromFirstComboBox) {
+        for (Course c : schedule.getCourses()) {
+            for (Schedule s : c.getSchedules()) {
+                for (int[] index : s.getIndices()) {
+                    HourRow item = tableView.getItems().get(index[0]);
+                    String val = item.getFromIndex(index[1]);
+                    if (!val.isEmpty()) {
+                        item.setFromIndex(index[1], val + "\n" + c.getSubject().getCode());
+                    } else {
+                        item.setFromIndex(index[1], c.getSubject().getCode());
+                    }
+                }
+            }
+        }
+    }
+
+    public void showDeleteSchedule(PossibleSchedule schedule) {
+        for (int i = 0; i < tableView.getColumns().size(); i++) {
+            ScheduleController.columnCells(tableView.getColumns().get(i));
+        }
+        for (Course c : schedule.getCourses()) {
+            for (Schedule s : c.getSchedules()) {
+                for (int[] index : s.getIndices()) {
+                    HourRow item = tableView.getItems().get(index[0]);
+                    item.setFromIndex(index[1], "");
+                }
+            }
+        }
     }
 
 }

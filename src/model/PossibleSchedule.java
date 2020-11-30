@@ -12,6 +12,7 @@ public class PossibleSchedule {
         this.codigoEstudiante = codigoEstudiante;
         this.consecutivo = consecutivo;
         this.nombre = nombre;
+        courses = new LinkedList<>();
     }
 
     public int getCodigoEstudiante() {
@@ -32,5 +33,16 @@ public class PossibleSchedule {
 
     public void setCourses(LinkedList<Course> courses) {
         this.courses = courses;
+    }
+
+    public int calcTotalCredits() {
+        if (courses.size() == 0) {
+            return 0;
+        } else {
+            return courses.stream().map(course -> course.getSubject().getCredits())
+                    .reduce(Integer::sum).orElse(0);
+        }
+
+
     }
 }
