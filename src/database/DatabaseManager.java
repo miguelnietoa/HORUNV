@@ -1,6 +1,8 @@
 package database;
 
 import model.*;
+import oracle.jdbc.OracleCallableStatement;
+import oracle.jdbc.OracleTypes;
 import oracle.jdbc.pool.OracleDataSource;
 
 import java.io.StringReader;
@@ -28,7 +30,7 @@ public class DatabaseManager {
         if (conn == null) {
             //Ip ImiServer: 181.130.217.56
             //return getConnection("localhost", "horunv", "sa123456");
-            return getConnection("181.130.217.56", "horunv", "sa123456");
+            return getConnection("localhost", "horunv", "sa123456");
         } else {
             return conn;
         }
@@ -606,42 +608,18 @@ public class DatabaseManager {
 
     public static LinkedList<String> getStudentDuplicatedSchedule(PossibleSchedule schedule) {
         LinkedList<String> list = new LinkedList<>();
-        String query = "select \"nombre1\",\"nombre2\",\"apellido1\",\"apellido2\" \n" +
-                "from  \"Estudiante\"\n" +
-                "where \"codigo\" In(\n" +
-                "(select \"cod_estu\"\n" +
-                "from\n" +
-                "(select \"cod_estu\",\"cont2\",count(\"cod_estu\") as \"cont3\"\n" +
-                "        from (Select \"cod_estu\" as \"cod1\",\"consecutivo\" as \"con1\", count(\"consecutivo\")as \"cont1\"\n" +
-                "        from \"PosibleHorarioTieneCurso\"\n" +
-                "        where \"cod_estu\"!="+User.getCodeUser()+" group by \"consecutivo\", \"cod_estu\" ) cross join\n" +
-                "        (Select \"cod_estu\",\"nrc_curso\"as \"nrc1\",\"consecutivo\" as \"con2\"\n" +
-                "        from \"PosibleHorarioTieneCurso\"\n" +
-                "        where \"cod_estu\"!="+User.getCodeUser()+")cross join\n" +
-                "        (Select count(\"cod_estu\") as \"cont2\"\n" +
-                "        from \"PosibleHorarioTieneCurso\"\n" +
-                "        where \"cod_estu\"="+User.getCodeUser()+" and  \"consecutivo\"="+schedule.getConsecutivo()+")\n" +
-                "        cross join\n" +
-                "        (Select \"nrc_curso\"\n" +
-                "        from \"PosibleHorarioTieneCurso\"\n" +
-                "        where \"cod_estu\"="+User.getCodeUser()+" and  \"consecutivo\"="+schedule.getConsecutivo()+")\n" +
-                "where \"nrc_curso\"=\"nrc1\" and \"con1\"=\"con2\"and \"cod_estu\"=\"cod1\" and \"cont1\"=\"cont2\"\n" +
-                "group by \"cod_estu\",\"cont2\")\n" +
-                "where \"cont2\"<=\"cont3\"))";
         try {
-            ResultSet rs = conn.createStatement().executeQuery(query);
-            while (rs.next()){
-                StringBuilder fullname = new StringBuilder();
-                for (int i = 1; i <= 4; i++) {
-                    if (rs.getString(i) == null)
-                        continue;
-                    fullname.append(rs.getString(i));
-                    if (i != 4) {
-                        fullname.append(" ");
-                    }
-                }
-                list.add(fullname.toString());
+            CallableStatement cs = conn.prepareCall("{? = call duplicatedSchedules(?, ?)}");
+            cs.setInt(2, schedule.getCodigoEstudiante());
+            cs.setInt(3, schedule.getConsecutivo());
+
+            cs.registerOutParameter(1, OracleTypes.CURSOR);
+            cs.execute();
+            ResultSet rs = ((OracleCallableStatement) cs).getCursor(1);
+            while (rs.next()) {
+                list.add(rs.getString(1));
             }
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
