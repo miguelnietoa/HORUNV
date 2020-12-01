@@ -93,6 +93,8 @@ public class CompareSchedulesController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         buildTableView();
+        cbSchedule1.setDisable(true);
+        cbSchedule2.setDisable(true);
         new Thread() {
             @Override
             public void run() {
@@ -113,6 +115,8 @@ public class CompareSchedulesController implements Initializable {
                     cbSchedule1.getItems().addAll(merged);
                     cbSchedule2.getItems().add("Ninguno");
                     cbSchedule2.getItems().addAll(merged);
+                    cbSchedule1.setDisable(false);
+                    cbSchedule2.setDisable(false);
                 });
             }
         }.start();

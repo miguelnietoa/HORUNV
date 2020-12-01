@@ -4,17 +4,15 @@ import com.jfoenix.controls.JFXListView;
 import database.DatabaseManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import model.Course;
-import model.User;
 import model.Subject;
+import model.User;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 

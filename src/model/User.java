@@ -1,7 +1,5 @@
 package model;
 
-import database.DatabaseManager;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 

@@ -1,12 +1,12 @@
 package database;
 
 import model.*;
-import oracle.jdbc.OracleCallableStatement;
-import oracle.jdbc.OracleTypes;
 import oracle.jdbc.pool.OracleDataSource;
 
-import java.io.StringReader;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -28,8 +28,6 @@ public class DatabaseManager {
 
     public static Connection getConnection() {
         if (conn == null) {
-            //Ip ImiServer: 181.130.217.56
-            //return getConnection("localhost", "horunv", "sa123456");
             return getConnection("localhost", "horunv", "sa123456");
         } else {
             return conn;
@@ -486,7 +484,6 @@ public class DatabaseManager {
             conn.createStatement().executeQuery(query);
             return true;
         } catch (SQLException throwables) {
-            //throwables.printStackTrace();
             return false;
         }
     }
@@ -539,12 +536,12 @@ public class DatabaseManager {
         }
     }
 
-    public static boolean isShared(PossibleSchedule schedule, Request request){
+    public static boolean isShared(PossibleSchedule schedule, Request request) {
         String query = "SELECT * " +
                 "FROM \"Solicitud\" " +
-                "WHERE \"cod_estu_solicita\" = "+request.getCodeStudentRequested()+" " +
-                "AND \"cod_estu_comparte\" = "+User.getCodeUser()+" " +
-                "AND \"consecutivo\" = "+schedule.getConsecutivo();
+                "WHERE \"cod_estu_solicita\" = " + request.getCodeStudentRequested() + " " +
+                "AND \"cod_estu_comparte\" = " + User.getCodeUser() + " " +
+                "AND \"consecutivo\" = " + schedule.getConsecutivo();
 
         try {
             ResultSet rs = conn.createStatement().executeQuery(query);
@@ -608,21 +605,40 @@ public class DatabaseManager {
 
     public static LinkedList<String> getStudentDuplicatedSchedule(PossibleSchedule schedule) {
         LinkedList<String> list = new LinkedList<>();
+        int cod = schedule.getCodigoEstudiante();
+        int con = schedule.getConsecutivo();
+        String query = "SELECT \"nombre1\"||' '||\"nombre2\"||' '||\"apellido1\"||' '||\"apellido2\"" +
+                "FROM \"Estudiante\"" +
+                "WHERE \"codigo\"In(SELECT \"cod_estu\"" +
+                "FROM (SELECT \"cod1\",\"cod_estu\",\"con1\",\"cont2\", count(\"con1\") as \"cont3\"" +
+                "       FROM (SELECT \"cod_estu\" as \"cod1\",\"consecutivo\" as \"con1\", count(\"consecutivo\")as \"cont1\"" +
+                "        FROM \"PosibleHorarioTieneCurso\"" +
+                "        WHERE \"cod_estu\"!=" + cod + " group by \"consecutivo\", \"cod_estu\" ) CROSS JOIN" +
+                "        (SELECT \"cod_estu\",\"nrc_curso\"as \"nrc1\",\"consecutivo\" as \"con2\"" +
+                "        FROM \"PosibleHorarioTieneCurso\"" +
+                "        WHERE \"cod_estu\"!=" + cod + ")CROSS JOIN" +
+                "        (SELECT count(\"cod_estu\") as \"cont2\"" +
+                "        FROM \"PosibleHorarioTieneCurso\"" +
+                "        WHERE \"cod_estu\"=" + cod + " and  \"consecutivo\"=" + con + ")" +
+                "        CROSS JOIN" +
+                "        (SELECT \"nrc_curso\"" +
+                "        FROM \"PosibleHorarioTieneCurso\"" +
+                "        WHERE \"cod_estu\"=" + cod + " and  \"consecutivo\"=" + con + ")" +
+                "WHERE \"nrc_curso\"=\"nrc1\" and \"con1\"=\"con2\"and \"cod_estu\"=\"cod1\" and \"cont1\"=\"cont2\" group by \"cod1\", \"cod_estu\", \"con1\", \"cont2\")" +
+                "WHERE \"cont2\"=\"cont3\")";
+
         try {
-            CallableStatement cs = conn.prepareCall("{? = call duplicatedSchedules(?, ?)}");
-            cs.setInt(2, schedule.getCodigoEstudiante());
-            cs.setInt(3, schedule.getConsecutivo());
-
-            cs.registerOutParameter(1, OracleTypes.CURSOR);
-            cs.execute();
-            ResultSet rs = ((OracleCallableStatement) cs).getCursor(1);
+            ResultSet rs = conn.createStatement().executeQuery(query);
             while (rs.next()) {
-                list.add(rs.getString(1));
+                String name = rs.getString(1);
+                name = name.replaceAll("null", "");
+                name = name.replaceAll("  ", " ");
+                list.add(name);
             }
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
         return list;
     }
 }

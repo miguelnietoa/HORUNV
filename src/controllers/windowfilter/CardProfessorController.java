@@ -1,8 +1,5 @@
 package controllers.windowfilter;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXToggleButton;
 import controllers.ScheduleController;
 import database.DatabaseManager;
@@ -12,10 +9,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
-import model.*;
+import model.Course;
+import model.Professor;
+import model.Subject;
+import model.User;
 
-import javax.swing.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;

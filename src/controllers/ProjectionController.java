@@ -6,8 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import model.User;
 import model.Subject;
+import model.User;
 
 import java.io.IOException;
 import java.net.URL;

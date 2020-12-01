@@ -19,7 +19,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import model.Course;
 import model.User;
-import model.Subject;
 
 import java.io.IOException;
 import java.net.URL;

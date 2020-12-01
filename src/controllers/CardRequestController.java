@@ -1,9 +1,5 @@
 package controllers;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import com.itextpdf.kernel.pdf.PageLabelNumberingStyle;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 import database.DatabaseManager;
@@ -11,10 +7,12 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import model.Request;
 import model.User;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class CardRequestController {
 

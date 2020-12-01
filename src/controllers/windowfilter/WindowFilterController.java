@@ -9,7 +9,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
-import model.*;
+import model.Course;
+import model.Professor;
+import model.Subject;
 
 import java.io.IOException;
 import java.net.URL;
