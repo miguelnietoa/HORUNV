@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXTreeView?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="391.0"
-            prefWidth="483.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
-   <JFXTreeView fx:id="treeViewProfessors" layoutX="5.0" layoutY="64.0" prefHeight="322.0" prefWidth="475.0"
-                showRoot="false" stylesheets="@styles/styles.css"/>
-   <Label fx:id="lblNameCourse" layoutX="36.0" layoutY="14.0" prefHeight="54.0" prefWidth="385.0"
-          text="Base de datos - IST142" textAlignment="CENTER">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="391.0" prefWidth="483.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <JFXTreeView fx:id="treeViewProfessors" layoutX="5.0" layoutY="64.0" prefHeight="322.0" prefWidth="475.0" showRoot="false" stylesheets="@styles/styles.css" />
+   <Label fx:id="lblNameCourse" prefHeight="68.0" prefWidth="475.0" style="-fx-font-size: 20px;" text="Base de datos - IST142" textAlignment="CENTER" wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <font>
-         <Font name="Serif Regular" size="40.0"/>
+         <Font size="24.0" />
       </font>
+      <padding>
+         <Insets left="10.0" />
+      </padding>
    </Label>
 </AnchorPane>

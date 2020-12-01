@@ -4,19 +4,16 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="49.0"
-            prefWidth="424.0" style="-fx-background-color: #9DD0FF;" xmlns="http://javafx.com/javafx/8.0.171"
-            xmlns:fx="http://javafx.com/fxml/1">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="49.0" prefWidth="424.0" style="-fx-background-color: #9DD0FF;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
     <userData>
         <fx:reference source="controller"/>
     </userData>
 
-    <Label fx:id="lblNameProfessor" layoutX="14.0" layoutY="11.0" prefHeight="27.0" prefWidth="331.0"
-           text="Luis Alejandro Llach Lopez">
+    <Label fx:id="lblNameProfessor" layoutX="14.0" layoutY="11.0" prefHeight="27.0" prefWidth="331.0" text="Luis Alejandro Llach Lopez">
         <font>
-            <Font name="Georgia" size="18.0"/>
+            <Font size="18.0" />
         </font>
     </Label>
-    <JFXToggleButton fx:id="toggleButtonEnable" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" layoutX="365.0"
-                     layoutY="-2.0" selected="true"/>
+    <JFXToggleButton fx:id="toggleButtonEnable" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" layoutX="365.0" layoutY="-2.0" selected="true" />
 </AnchorPane>
