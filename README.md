@@ -1,4 +1,7 @@
 # HORUNV
+HORUNV is a desktop application that makes it easy for students to create 
+their academic schedule according to their projection.
+
 
 ## Contributors
 <table>
@@ -12,13 +15,21 @@
 </table>
 
 ## Credits
+- [Login icon](src/assets/login.png) from [unDraw](https://undraw.co/search)
+- [Schedule icon](src/assets/schedule.png) from [unDraw](https://undraw.co/search)
 - [Negative icon](src/assets/negative.png) made by [Alfredo Hernandez](https://www.flaticon.com/authors/alfredo-hernandez "Alfredo Hernandez")
     from [www.flaticon.com](https://www.flaticon.com/ "Flaticon")
 - [Man icon](src/assets/man.png) made by [Freepik](https://www.flaticon.es/autores/freepik "Freepik") from [www.flaticon.es](https://www.flaticon.es/ "Flaticon")
 - [Woman icon](src/assets/woman.png) made by [Freepik](https://www.flaticon.com/authors/freepik "Freepik") from [www.flaticon.com](https://www.flaticon.com/ "Flaticon")
-- [Login icon](src/assets/login.png) from [unDraw](https://undraw.co/search)
-- [Schedule icon](src/assets/schedule.png) from [unDraw](https://undraw.co/search)
 - [Filled circle](src/assets/filled_circle.png) made by [Freepik](https://www.flaticon.es/autores/freepik "Freepik") from [www.flaticon.es](https://www.flaticon.es/ "Flaticon")
 - [Unfilled circle](src/assets/unfilled_circle.png) made by [Freepik](https://www.flaticon.es/autores/freepik "Freepik") from [www.flaticon.es](https://www.flaticon.es/ "Flaticon")
 - [Information](src/assets/Information.png) made by [Freepik](https://www.flaticon.com/authors/freepik "Freepik") from [](https://www.flaticon.com/ "Flaticon")
 - [Plus circle](src/assets/plus.png) made by [Freepik](https://www.flaticon.es/autores/freepik "Freepik") from [www.flaticon.es](https://www.flaticon.es/ "Flaticon")
+- [Right arrow](src/assets/right-arrow.png) and [right arrow](src/assets/right-arrow.png) hover
+- [Left arrow](src/assets/left-arrow.png) and [left arrow hover](src/assets/left-arrow-hover.png) made by [Google](https://www.flaticon.com/authors/google "Google") from [www.flaticon.com](https://www.flaticon.com/ "Flaticon") 
+- [Save icon](src/assets/save.png) made by [Freepik](https://www.flaticon.com/authors/freepik "Freepik") from [www.flaticon.com](https://www.flaticon.com/ "Flaticon")
+- [Compare icon](src/assets/compare.png) made by [Google](https://www.flaticon.com/authors/google "Google") from [www.flaticon.com](https://www.flaticon.com/ "Flaticon")
+- [Pdf icon](src/assets/pdf.png) made by [Freepik](https://www.flaticon.com/authors/freepik "Freepik") from [www.flaticon.com](https://www.flaticon.com/ "Flaticon")
+- [List icon](src/assets/list.png) made by [Freepik](https://www.flaticon.com/authors/freepik "Freepik") from [www.flaticon.com](https://www.flaticon.com/ "Flaticon")
+- [Notification icon](src/assets/notification.png) made by [Freepik](https://www.flaticon.com/authors/freepik "Freepik") from [www.flaticon.com](https://www.flaticon.com/ "Flaticon") 
+
