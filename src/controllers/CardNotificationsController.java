@@ -48,6 +48,7 @@ public class CardNotificationsController {
     private int selectedOption;
     private Request selectedRequest = null;
     private PossibleSchedule possible = null;
+
     @FXML
     void initialize() {
         this.comboBoxScheduleSelect.setOnAction(this::selectFromSchedulesComboBox);
@@ -60,11 +61,11 @@ public class CardNotificationsController {
         this.txtInData.setPromptText("Escriba el " + comboBoxType.getValue().toLowerCase());
     }
 
-    void selectFromSchedulesComboBox(ActionEvent event){
+    void selectFromSchedulesComboBox(ActionEvent event) {
         int index = comboBoxScheduleSelect.getSelectionModel().getSelectedIndex();
         if (index != -1) {
             this.possible = User.getPossibleSchedules().get(index);
-        }else{
+        } else {
             this.possible = null;
         }
     }
@@ -101,27 +102,27 @@ public class CardNotificationsController {
 
     @FXML
     void btnShareAction(ActionEvent event) {
-        if (possible != null){
-            if (this.selectedRequest!= null){
-                if (DatabaseManager.isShared(possible,selectedRequest)){
-                    sc.showMessage("Alerta","El horario seleccionado ya ha sido compartido con esta persona");
-                }else{
-                    boolean sw = DatabaseManager.updateConsecutivo(possible,selectedRequest);
-                    if (sw){
-                        sc.showMessage("Alerta","Horario compartido exitosamente!");
+        if (possible != null) {
+            if (this.selectedRequest != null) {
+                if (DatabaseManager.isShared(possible, selectedRequest)) {
+                    sc.showMessage("Alerta", "El horario seleccionado ya ha sido compartido con esta persona");
+                } else {
+                    boolean sw = DatabaseManager.updateConsecutivo(possible, selectedRequest);
+                    if (sw) {
+                        sc.showMessage("Alerta", "Horario compartido exitosamente!");
                         Platform.runLater(() -> {
                             this.listNotifications.getItems().remove(listNotifications.getItems().get(User.getRequests().indexOf(selectedRequest)));
                             User.getRequests().remove(selectedRequest);
                         });
-                    }else{
-                        sc.showMessage("Alerta","Error al compartir tu  horario.\nIntentalo nuevamente!");
+                    } else {
+                        sc.showMessage("Alerta", "Error al compartir tu  horario.\nIntentalo nuevamente!");
                     }
                 }
-            }else{
-                sc.showMessage("Advertencia","Debe seleccionar una solicitud a contestar!");
+            } else {
+                sc.showMessage("Advertencia", "Debe seleccionar una solicitud a contestar!");
             }
-        } else{
-            sc.showMessage("Advertencia","Debe seleccionar un horario para compartir!");
+        } else {
+            sc.showMessage("Advertencia", "Debe seleccionar un horario para compartir!");
         }
     }
 
@@ -130,7 +131,7 @@ public class CardNotificationsController {
         int index = this.listNotifications.getSelectionModel().getSelectedIndex();
         if (index != -1) {
             this.selectedRequest = User.getRequests().get(index);
-        }else{
+        } else {
             this.selectedRequest = null;
         }
     }
@@ -141,7 +142,7 @@ public class CardNotificationsController {
         addRequestsToList();
     }
 
-    private void addRequestsToList(){
+    private void addRequestsToList() {
         DatabaseManager.addRequests();
         Platform.runLater(() -> {
             for (Request request : User.getRequests()) {
@@ -163,9 +164,10 @@ public class CardNotificationsController {
             }
         });
     }
+
     public void buildRequestCard(Request request) {
-        CardRequestController c = new CardRequestController(request,this.listNotifications);
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardRequest.fxml"));
+        CardRequestController c = new CardRequestController(request, this.listNotifications);
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/components/cardRequest.fxml"));
         loader.setController(c);
         try {
             listNotifications.getItems().add(loader.load());

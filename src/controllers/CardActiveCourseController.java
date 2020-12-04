@@ -57,11 +57,11 @@ public class CardActiveCourseController implements Initializable {
     ScheduleController sc;
 
     public CardActiveCourseController(Course course,
-                                      JFXListView<AnchorPane> listViewSubjects, StackPane stackPane,ScheduleController sc) {
+                                      JFXListView<AnchorPane> listViewSubjects, StackPane stackPane, ScheduleController sc) {
         this.course = course;
         this.listViewSubjects = listViewSubjects;
         this.stackPane = stackPane;
-        this.sc=sc;
+        this.sc = sc;
     }
 
 
@@ -79,9 +79,9 @@ public class CardActiveCourseController implements Initializable {
         try {
             WindowFilterController wfc = new WindowFilterController(course.getSubject(), sc);
             JFXDialogLayout content = new JFXDialogLayout();
-            FXMLLoader parent = new FXMLLoader (getClass().getResource("../ui/windowFilter.fxml"));
+            FXMLLoader parent = new FXMLLoader(getClass().getClassLoader().getResource("ui/windowFilter.fxml"));
             parent.setController(wfc);
-            content.setBody( (Parent) parent.load());
+            content.setBody((Parent) parent.load());
             JFXDialog dialog = new JFXDialog(stackPane, content, JFXDialog.DialogTransition.RIGHT);
             dialog.show();
         } catch (IOException e) {
@@ -92,17 +92,17 @@ public class CardActiveCourseController implements Initializable {
     void btnRemoveOnAction(ActionEvent event) {
         if (course.getSubject().getPrerequisites().isEmpty()) {
             this.delete();
-        }else{
+        } else {
             String message = "Ten en cuenta que esta asignatura es prerrequisito de: \n";
             for (String prerequsite : course.getSubject().getPrerequisites()) {
-                message=message+"- "+prerequsite+"\n";
+                message = message + "- " + prerequsite + "\n";
             }
-            message=message+"Para tu proximo semestre.";
-            message("¿Desea eliminar esta asignatura?",message);
+            message = message + "Para tu proximo semestre.";
+            message("¿Desea eliminar esta asignatura?", message);
         }
     }
 
-    private void delete(){
+    private void delete() {
         course.getSubject().updateCourses();
         User.getSelectedSubjects().remove(course.getSubject());
         Platform.runLater(() -> this.listViewSubjects.getItems().remove(btnRemove.getParent()));
@@ -129,13 +129,13 @@ public class CardActiveCourseController implements Initializable {
         updateInfoCourse();
     }
 
-    public void updateInfoCourse(){
+    public void updateInfoCourse() {
         lblProfessor.setText(course.getProfessor().getFullname());
         lblCapacity.setText("Capacidad: " + course.getTotalStudents());
         lblNrc.setText("NRC: " + course.getNrc());
     }
 
-    private void message(String title, String message){
+    private void message(String title, String message) {
         JFXDialogLayout layout = new JFXDialogLayout();
         layout.setHeading(new Text(title));
         layout.setBody(new Text(message));
@@ -149,7 +149,7 @@ public class CardActiveCourseController implements Initializable {
         });
         buttonS.setStyle("-fx-background-color: red; -fx-text-fill: white");
         buttonN.setStyle("-fx-background-color: gray; -fx-text-fill: white");
-        layout.setActions(buttonS,buttonN);
+        layout.setActions(buttonS, buttonN);
         dialog.setContent(layout);
         dialog.show();
     }

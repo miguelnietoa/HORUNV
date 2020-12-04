@@ -21,8 +21,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
-    private final Image filledCircle = new Image("\\assets\\filled_circle.png");
-    private final Image unfilledCircle = new Image("\\assets\\unfilled_circle.png");
+    private final Image filledCircle = new Image(getClass().getClassLoader().getResourceAsStream("assets/filled_circle.png"));
+    private final Image unfilledCircle = new Image(getClass().getClassLoader().getResourceAsStream("assets/unfilled_circle.png"));
 
     @FXML
     private JFXTextField txtUsername;
@@ -93,10 +93,10 @@ public class LoginController implements Initializable {
                             Parent root;
                             Stage login = (Stage) btnLogin.getScene().getWindow();
                             try {
-                                root = FXMLLoader.load(getClass().getResource("../ui/schedule.fxml"));
+                                root = FXMLLoader.load(getClass().getClassLoader().getResource("ui/schedule.fxml"));
                                 schedule.setTitle("HORUNV - Arma tu horario");
                                 Scene scene = new Scene(root, login.getWidth(), login.getHeight());
-                                scene.getStylesheets().add(getClass().getResource("/ui/styles/application.css").toExternalForm());
+                                scene.getStylesheets().add(getClass().getClassLoader().getResource("ui/styles/application.css").toExternalForm());
                                 schedule.setScene(scene);
                                 schedule.sizeToScene();
                                 schedule.show();

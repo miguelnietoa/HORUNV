@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="HORUNV:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/HORUNV_jar</output-path>
+    <root id="archive" name="HORUNV.jar">
+      <element id="module-output" name="HORUNV" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/jfoenix-8.0.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/ojdbc8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/pdfa-7.1.13.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/io-7.1.13.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/kernel-7.1.13.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/layout-7.1.13.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/slf4j-api-1.7.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/slf4j-simple-1.7.9.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

@@ -37,7 +37,7 @@ public class ProjectionController implements Initializable {
     }
 
     public void buildCardSubject(Subject subject) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardSubjectProjection.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/components/cardSubjectProjection.fxml"));
         loader.setController(new CardSubjectProjectionController(subject, listViewSubjects, stackPane,sc));
         try {
             listViewProjection.getItems().add(loader.load());

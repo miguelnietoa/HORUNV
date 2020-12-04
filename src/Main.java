@@ -11,10 +11,10 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         DatabaseManager.getConnection();
-        Parent root = FXMLLoader.load(getClass().getResource("ui/Login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("ui/Login.fxml"));
         primaryStage.setTitle("HORUNV - Login");
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("/ui/styles/application.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getClassLoader().getResource("ui/styles/application.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.sizeToScene();
         primaryStage.show();

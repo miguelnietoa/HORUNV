@@ -33,7 +33,7 @@ public class WindowFilterController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         treeViewProfessors.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        lblNameCourse.setText(subject.getName()+"\n"+subject.getCode());
+        lblNameCourse.setText(subject.getName() + "\n" + subject.getCode());
         buildSubjectCard();
     }
 
@@ -46,16 +46,16 @@ public class WindowFilterController implements Initializable {
         root = new TreeItem<>(new AnchorPane());
         root.setExpanded(true);
         for (Professor professor : subject.getProfessors()) {
-            CardProfessorController c = new CardProfessorController(professor,sc,subject);
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardProfessor.fxml"));
+            CardProfessorController c = new CardProfessorController(professor, sc, subject);
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/components/cardProfessor.fxml"));
             loader.setController(c);
             try {
                 TreeItem<AnchorPane> treeItem = new TreeItem<>(loader.load());
                 root.getChildren().add(treeItem);
                 for (Course course : professor.getCourses()) {
                     if (course.getSubject() == subject) {
-                        FXMLLoader loader1 = new FXMLLoader(getClass().getResource("/ui/components/cardCourse.fxml"));
-                        CardCourseController c1= new CardCourseController(course,c,sc);
+                        FXMLLoader loader1 = new FXMLLoader(getClass().getClassLoader().getResource("ui/components/cardCourse.fxml"));
+                        CardCourseController c1 = new CardCourseController(course, c, sc);
                         loader1.setController(c1);
                         try {
                             AnchorPane course1 = loader1.load();

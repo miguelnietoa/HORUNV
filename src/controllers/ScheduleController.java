@@ -53,10 +53,10 @@ import java.util.stream.Collectors;
 
 public class ScheduleController implements Initializable {
 
-    private final Image leftOn = new Image("/assets/left-arrow-hover.png");
-    private final Image leftOff = new Image("/assets/left-arrow.png");
-    private final Image rightOn = new Image("/assets/right-arrow-hover.png");
-    private final Image rightOff = new Image("/assets/right-arrow.png");
+    private final Image leftOn = new Image(getClass().getClassLoader().getResourceAsStream("assets/left-arrow-hover.png"));
+    private final Image leftOff = new Image(getClass().getClassLoader().getResourceAsStream("assets/left-arrow.png"));
+    private final Image rightOn = new Image(getClass().getClassLoader().getResourceAsStream("assets/right-arrow-hover.png"));
+    private final Image rightOff = new Image(getClass().getClassLoader().getResourceAsStream("assets/right-arrow.png"));
     private boolean column0 = false;
 
     @FXML
@@ -136,9 +136,9 @@ public class ScheduleController implements Initializable {
         buildTableView();
         lblFullname.setText(User.getFullname());
         if (User.getGender() == 'M')
-            imageAvatar.setImage(new Image("\\assets\\man.png"));
+            imageAvatar.setImage(new Image(getClass().getClassLoader().getResourceAsStream("assets/man.png")));
         else
-            imageAvatar.setImage(new Image("\\assets\\woman.png"));
+            imageAvatar.setImage(new Image(getClass().getClassLoader().getResourceAsStream("assets/woman.png")));
 
     }
 
@@ -147,7 +147,7 @@ public class ScheduleController implements Initializable {
         try {
             JFXDialogLayout contentProjection = new JFXDialogLayout();
             ProjectionController c = new ProjectionController(listViewSubjects, stackPane, this);
-            FXMLLoader parent = new FXMLLoader(getClass().getResource("/ui/components/projection.fxml"));
+            FXMLLoader parent = new FXMLLoader(getClass().getClassLoader().getResource("ui/components/projection.fxml"));
             parent.setController(c);
             contentProjection.setBody((Parent) parent.load());
             contentProjection.setHeading(new Text("Proyección"));
@@ -172,10 +172,10 @@ public class ScheduleController implements Initializable {
         double w = schedule.getWidth();
         double h = schedule.getHeight();
         try {
-            root = FXMLLoader.load(getClass().getResource("../ui/storeSchedules.fxml"));
+            root = FXMLLoader.load(getClass().getClassLoader().getResource("ui/storeSchedules.fxml"));
             compareSchedules.setTitle("HORUNV - Almacén de Horarios");
             Scene scene = new Scene(root, w, h);
-            scene.getStylesheets().add(getClass().getResource("/ui/styles/application.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getClassLoader().getResource("ui/styles/application.css").toExternalForm());
             compareSchedules.setScene(scene);
             compareSchedules.sizeToScene();
             compareSchedules.showAndWait();
@@ -191,7 +191,7 @@ public class ScheduleController implements Initializable {
         try {
             JFXDialogLayout contentProjection = new JFXDialogLayout();
             CardNotificationsController c = new CardNotificationsController(this);
-            FXMLLoader parent = new FXMLLoader(getClass().getResource("/ui/components/cardNotifications.fxml"));
+            FXMLLoader parent = new FXMLLoader(getClass().getClassLoader().getResource("ui/components/cardNotifications.fxml"));
             parent.setController(c);
             contentProjection.setBody((Parent) parent.load());
             contentProjection.setHeading(new Text("Notificaciones"));
@@ -223,10 +223,10 @@ public class ScheduleController implements Initializable {
         Parent root;
         Stage schedule = (Stage) btnLogOut.getScene().getWindow();
         try {
-            root = FXMLLoader.load(getClass().getResource("../ui/Login.fxml"));
+            root = FXMLLoader.load(getClass().getClassLoader().getResource("ui/Login.fxml"));
             login.setTitle("HORUNV - Login");
             Scene scene = new Scene(root, schedule.getWidth(), schedule.getHeight());
-            scene.getStylesheets().add(getClass().getResource("/ui/styles/application.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getClassLoader().getResource("ui/styles/application.css").toExternalForm());
             login.setScene(scene);
             login.sizeToScene();
             login.show();
@@ -414,7 +414,7 @@ public class ScheduleController implements Initializable {
 
     public void buildSubjectCard(Course course) {
         CardActiveCourseController c = new CardActiveCourseController(course, listViewSubjects, stackPane, this);
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/components/cardActiveCourse.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/components/cardActiveCourse.fxml"));
         loader.setController(c);
         try {
             listViewSubjects.getItems().add(loader.load());
