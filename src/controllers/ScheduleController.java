@@ -524,6 +524,7 @@ public class ScheduleController implements Initializable {
     }
 
     public void savePDF(ActionEvent actionEvent) {
+        new File("./tempfiles").mkdir(); // create folder if does not exists
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos pdf (*.pdf)", "*.pdf"));
         File f = fileChooser.showSaveDialog(null);

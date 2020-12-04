@@ -1,9 +1,6 @@
 package controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
+import com.jfoenix.controls.*;
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import controllers.tablemodel.DragSelectionCellFactory;
 import controllers.tablemodel.HourRow;
@@ -18,6 +15,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import model.Course;
@@ -90,9 +89,36 @@ public class CompareSchedulesController implements Initializable {
     @FXML
     private JFXButton btnInfo1;
 
+    @FXML
+    private JFXColorPicker colorPicker1;
+
+    @FXML
+    private JFXColorPicker colorPicker2;
+
+    public static String color1;
+
+    public static String color2;
+
+    @FXML
+    void changeColor1(ActionEvent event) {
+        color1 = colorPicker1.getValue().toString().replaceFirst("0x", "#");
+        cbSchedule1.setFocusColor(colorPicker1.getValue());
+        cbSchedule1.setUnFocusColor(colorPicker1.getValue());
+        repaint();
+    }
+
+    @FXML
+    void changeColor2(ActionEvent event) {
+        color2 = colorPicker2.getValue().toString().replaceFirst("0x", "#");
+        cbSchedule2.setFocusColor(colorPicker2.getValue());
+        cbSchedule2.setUnFocusColor(colorPicker2.getValue());
+        repaint();
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         buildTableView();
+        color1 = color2 = null;
         cbSchedule1.setDisable(true);
         cbSchedule2.setDisable(true);
         new Thread() {
@@ -132,20 +158,20 @@ public class CompareSchedulesController implements Initializable {
         showDuplicated(cbSchedule2);
     }
 
-    private void showDuplicated(JFXComboBox combo){
+    private void showDuplicated(JFXComboBox combo) {
         PossibleSchedule schedule = getSelectedSchedule(combo);
-        if (schedule!=null){
+        if (schedule != null) {
             LinkedList<String> students = DatabaseManager.getStudentDuplicatedSchedule(schedule);
-            if (students.isEmpty()){
-                showMessage("Coincidencias de Horario","Ningun otro estudiante tiene un horario igual a este.");
-            }else {
+            if (students.isEmpty()) {
+                showMessage("Coincidencias de Horario", "Ningun otro estudiante tiene un horario igual a este.");
+            } else {
                 String message = "Los siguientes estudiantes tienen este mismo horario:\n";
                 for (String student : students) {
                     message = message + "- " + student + "\n";
                 }
                 showMessage("Coincidencias de Horario", message);
             }
-        }else {
+        } else {
             showMessage("Advertencia", "Por favor seleccione un horario para poder mostrar\ncon quien coincide.");
         }
     }
@@ -199,10 +225,10 @@ public class CompareSchedulesController implements Initializable {
 
     private void updateInfo(JFXComboBox<String> cb, Label lblName, Label lblOwner, Label lblCredits, JFXComboBox<String> cb2) {
         PossibleSchedule schedule = getSelectedSchedule(cb);
-        if(getSelectedSchedule(cb2)!=null && getSelectedSchedule(cb2).equals(schedule)){
-            showMessage("Advertencia","No puedes comparar el mismo horario.");
+        if (getSelectedSchedule(cb2) != null && getSelectedSchedule(cb2).equals(schedule)) {
+            showMessage("Advertencia", "No puedes comparar el mismo horario.");
             Platform.runLater(() -> cb.getSelectionModel().selectFirst());
-        }else{
+        } else {
             if (schedule == null) {
                 lblName.setText("Nombre: ");
                 lblOwner.setText("Dueño: ");
@@ -212,22 +238,26 @@ public class CompareSchedulesController implements Initializable {
                 lblOwner.setText("Dueño: " + DatabaseManager.getNameStudent(schedule.getCodigoEstudiante()));
                 lblCredits.setText("Créditos utilizados: " + schedule.calcTotalCredits());
             }
-            showDeleteSchedule();
-            if (getSelectedSchedule(cbSchedule1)!=null) {
-                showAddSchedule(getSelectedSchedule(cbSchedule1),"-1");
-            }
-            if (getSelectedSchedule(cbSchedule2)!=null){
-                showAddSchedule(getSelectedSchedule(cbSchedule2),"-2");
-            }
+            repaint();
         }
     }
 
     public void cbSchedule1OnAction(ActionEvent event) {
-        updateInfo(cbSchedule1, lblNameSchedule1, lblOwnerSchedule1, lblCreditsSchedule1,cbSchedule2);
+        updateInfo(cbSchedule1, lblNameSchedule1, lblOwnerSchedule1, lblCreditsSchedule1, cbSchedule2);
     }
 
     public void cbSchedule2OnAction(ActionEvent event) {
-        updateInfo(cbSchedule2, lblNameSchedule2, lblOwnerSchedule2, lblCreditsSchedule2,cbSchedule1);
+        updateInfo(cbSchedule2, lblNameSchedule2, lblOwnerSchedule2, lblCreditsSchedule2, cbSchedule1);
+    }
+
+    private void repaint() {
+        showDeleteSchedule();
+        if (getSelectedSchedule(cbSchedule1) != null) {
+            showAddSchedule(getSelectedSchedule(cbSchedule1), "-1");
+        }
+        if (getSelectedSchedule(cbSchedule2) != null) {
+            showAddSchedule(getSelectedSchedule(cbSchedule2), "-2");
+        }
     }
 
     public void showAddSchedule(PossibleSchedule schedule, String fromComboBox) {
@@ -237,9 +267,9 @@ public class CompareSchedulesController implements Initializable {
                     HourRow item = tableView.getItems().get(index[0]);
                     String val = item.getFromIndex(index[1]);
                     if (!val.isEmpty()) {
-                        item.setFromIndex(index[1], val + "\n" + c.getSubject().getCode()+fromComboBox);
+                        item.setFromIndex(index[1], val + "\n" + c.getSubject().getCode() + fromComboBox);
                     } else {
-                        item.setFromIndex(index[1], c.getSubject().getCode()+fromComboBox);
+                        item.setFromIndex(index[1], c.getSubject().getCode() + fromComboBox);
                     }
                 }
             }
