@@ -12,6 +12,8 @@ their academic schedule according to their projection. Some functionalities you 
 
 This application makes part of the final project of the Database subject at Universidad del Norte (Colombia), it was made using the libraries and software described below.
 
+![HORUNV](screenshot.png)
+
 ## Libraries and Software
 
 - IntelliJ Idea (IDE)
